@@ -1,6 +1,7 @@
 require(shiny)
 require(shinyjs)
 require(shinythemes)
+require(shinyBS)
 
 ui_files = list.files(path = "./ui", pattern = "*.R")
 ui_files = paste0("ui/", ui_files)
@@ -16,25 +17,22 @@ shinyUI(
     div(id = "app-content",
       navbarPage(
         title = div(img(src = "mlr_logo.png", height = 30)),
-        theme = shinytheme("flatly"),
+        theme = "templated-retrospect/assets/css/main.css", #shinytheme("flatly"),
         id = "top-nav",
-        windowTitle = "shinyMlr",
-        fluidPage(
-          sidebarLayout(
-            sidebarPanel(
-              sliderInput("bins",
-                          "Number of bins:",
-                          min = 1,
-                          max = 50,
-                          value = 30),
-              actionButton("tabBut", "View Table")
-            ),
+        windowTitle = "mlrPlayground"
+      ),
+      fluidPage(
+        sidebarLayout(
+          sidebarPanel(
+            actionButton("taskBut", "Define Task"),
+            actionButton("learnerBut", "Define Learner"),
+            actionButton("trainBut", "Define Learner")
+          ),
 
-            mainPanel(
-              plotOutput("distPlot"),
-              bsModal("modalExample", "Data Table", "tabBut", size = "large",
-                      dataTableOutput("distTable"))
-            )
+          mainPanel(
+            plotOutput("distPlot"),
+            bsModal("modalExample", "Data Table", "taskBut", size = "large",
+                    dataTableOutput("distTable"))
           )
         )
       )
