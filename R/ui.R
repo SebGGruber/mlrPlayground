@@ -11,10 +11,32 @@ for (i in seq_along(ui_files)) {
 
 shinyUI(
   tagList(
+    #shinythemes::themeSelector(),
     useShinyjs(),
     div(id = "app-content",
-      navbarPage(title = div(img(src = "new_shiny_logo.png", height = 35)),
-        theme = shinytheme("united"), id = "top-nav", windowTitle = "shinyMlr"
+      navbarPage(
+        title = div(img(src = "mlr_logo.png", height = 30)),
+        theme = shinytheme("flatly"),
+        id = "top-nav",
+        windowTitle = "shinyMlr",
+        fluidPage(
+          sidebarLayout(
+            sidebarPanel(
+              sliderInput("bins",
+                          "Number of bins:",
+                          min = 1,
+                          max = 50,
+                          value = 30),
+              actionButton("tabBut", "View Table")
+            ),
+
+            mainPanel(
+              plotOutput("distPlot"),
+              bsModal("modalExample", "Data Table", "tabBut", size = "large",
+                      dataTableOutput("distTable"))
+            )
+          )
+        )
       )
     )
   )
