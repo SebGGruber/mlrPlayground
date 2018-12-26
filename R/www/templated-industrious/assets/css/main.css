@@ -218,8 +218,16 @@ hr {
   hr.major {
     margin: 4rem 0; }
 
-input, select, textarea {
-  color: #555555; }
+input, textarea {
+  color: #555555;
+  transition: border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out, color 0.1s ease-in-out;
+}
+
+select {
+  color: #555555;
+  cursor: pointer;
+  transition: border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out, color 0.1s ease-in-out;
+}
 
 a {
   color: #ce1b28; }
@@ -242,7 +250,7 @@ hr {
 
 select:hover {
   border-color: #ce1b28;
-  transition: border-color 0.1s ease-in-out, box-shadow 1s ease-in-out, color 1s ease-in-out;
+
 }
 
 /* Inner */
@@ -1727,8 +1735,8 @@ ul.actions {
   border-bottom: none;
   position: relative; }
   .icon:before {
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
+    /*-moz-osx-font-smoothing: grayscale;*/
+    /*-webkit-font-smoothing: antialiased;*/
     font-family: FontAwesome;
     font-style: normal;
     font-weight: normal;

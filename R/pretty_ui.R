@@ -144,13 +144,10 @@ shinyUI(
                     )
                   ),
                   tags$br(),
-#                  tags$button(
-#                    id = "learnerButton",
-#                    class = "btn",
-#                    "SELECT LEARNER"
                   tags$select(
                     id = "learnerSelection",
                     style = "width: 200px; background-color: white; margin-left: auto; margin-right: auto;",
+                    tags$option(value = "", disabled = NA, selected = NA, "SELECT LEARNER"),
                     tags$option(value = "knn", "k-NN"),
                     tags$option(value = "randomforest", "Random Forest"),
                     tags$option(value = "linearmodel", "Linear Model")
