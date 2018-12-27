@@ -14,18 +14,26 @@ shinyUI(
   fluidPage(
     fluidRow(
       actionButton("taskBut", "Set task"),
-      selectInput("learner", label = "Select learner", choices = as.list(mlr::listLearners()$name[mlr::listLearners()$type == "classif"])),
+      textOutput("taskinfo"),
+      uiOutput("learnerSelection"),
       actionButton("paramBut", "Change parameters"),
       plotOutput("distPlot"),
       bsModal(
         "modalExample", "Task selection", "taskBut", size = "large",
         fluidRow(
-          selectInput(
-            "tasktype",
-            label = "Select task type",
-            choices = list("Regression", "Classification", "Clustering", "Multilabel", "Survival")
+          column(
+            5,
+            selectInput(
+              "tasktype",
+              label = "Select task type",
+              choices = list("Classification" = "classif", "Regression" = "regr", "Clustering" = "cluster", "Multilabel" = "multilabel", "Survival" = "surv")
+            ),
+            uiOutput("taskselection")
           ),
-          radioButtons("task", label = "Select task", choices = list("Dataset 1", "Dataset 2", "Dataset 3"))
+          column(
+            7,
+            plotlyOutput("datasetPlot")
+          )
         )
       )
     )
