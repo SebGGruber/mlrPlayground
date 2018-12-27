@@ -11,26 +11,23 @@ for (i in seq_along(ui_files)) {
 }
 
 shinyUI(
-  tagList(
-    useShinyjs(),
-    div(id = "app-content",
-        navbarPage(
-          title = div(img(src = "mlr_logo.png", height = 30)),
-          id = "top-nav",
-          windowTitle = "mlrPlayground"
-        ),
-        fluidPage(
-          fluidRow(
-            actionButton("taskBut", "Set Task"),
-            selectInput("learner", label = "Select learner", choices = as.list(mlr::listLearners()$name[mlr::listLearners()$type == "classif"])),
-            actionButton("paramBut", "Change parameters"),
-            plotOutput("distPlot"),
-            bsModal(
-              "modalExample", "Data Table", "taskBut", size = "large",
-              dataTableOutput("distTable"))
-            )
-          )
+  fluidPage(
+    fluidRow(
+      actionButton("taskBut", "Set task"),
+      selectInput("learner", label = "Select learner", choices = as.list(mlr::listLearners()$name[mlr::listLearners()$type == "classif"])),
+      actionButton("paramBut", "Change parameters"),
+      plotOutput("distPlot"),
+      bsModal(
+        "modalExample", "Task selection", "taskBut", size = "large",
+        fluidRow(
+          selectInput(
+            "tasktype",
+            label = "Select task type",
+            choices = list("Regression", "Classification", "Clustering", "Multilabel", "Survival")
+          ),
+          radioButtons("task", label = "Select task", choices = list("Dataset 1", "Dataset 2", "Dataset 3"))
         )
+      )
     )
   )
 )
