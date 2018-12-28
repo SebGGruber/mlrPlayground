@@ -85,7 +85,8 @@ shinyServer(function(input, output, session) {
 
       x1 = runif(400, -5, 5)
       x2 = runif(400, -5, 5)
-      class = ifelse((x1 < 0 | x2 < 0) & !(x1 < 0 & x2 < 0), "Class 1", "Class 2")
+      xor = (x1 < 0 | x2 < 0) & !(x1 < 0 & x2 < 0)
+      class = ifelse(xor, "Class 1", "Class 2")
 
       data = data.frame(x1, x2, class)
 
