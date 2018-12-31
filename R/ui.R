@@ -1,20 +1,40 @@
 require(shiny)
 require(shinyjs)
 require(shinythemes)
+require(shinyBS)
 
 ui_files = list.files(path = "./ui", pattern = "*.R")
 ui_files = paste0("ui/", ui_files)
 
 for (i in seq_along(ui_files)) {
-#  source(ui_files[i], local = TRUE)
+  #  source(ui_files[i], local = TRUE)
 }
 
 shinyUI(
-  tagList(
-    useShinyjs(),
-    div(id = "app-content",
-      navbarPage(title = div(img(src = "new_shiny_logo.png", height = 35)),
-        theme = shinytheme("united"), id = "top-nav", windowTitle = "shinyMlr"
+  fluidPage(
+    fluidRow(
+      actionButton("taskBut", "Set task"),
+      textOutput("taskinfo"),
+      uiOutput("learnerSelection"),
+      actionButton("paramBut", "Change parameters"),
+      plotOutput("distPlot"),
+      bsModal(
+        "modalExample", "Task selection", "taskBut", size = "large",
+        fluidRow(
+          column(
+            5,
+            selectInput(
+              "tasktype",
+              label = "Select task type",
+              choices = list("Classification" = "classif", "Regression" = "regr", "Clustering" = "cluster", "Multilabel" = "multilabel", "Survival" = "surv")
+            ),
+            uiOutput("taskselection")
+          ),
+          column(
+            7,
+            plotlyOutput("datasetPlot")
+          )
+        )
       )
     )
   )
