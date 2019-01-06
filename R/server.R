@@ -15,15 +15,7 @@ options(shiny.maxRequestSize = 9*1024^2)
 
 shinyServer(function(input, output, session) {
 
-  output$learnerSelection = renderUI({
-
-    selectInput(
-      "learner",
-      label = "Select learner",
-      choices = as.list(mlr::listLearners()$name[mlr::listLearners()$type == input$tasktype])
-    )
-
-  })
+  learner_amount = 1
 
   output$taskselection = renderUI({
 
@@ -57,12 +49,66 @@ shinyServer(function(input, output, session) {
   evalPloty = eventReactive(input$startTraining, {
 
     task_mlr    = mlr::makeClassifTask(data = input$task, target = "class")
-    learner_mlr = mlr::makeLearner(input$learner)
+    #learner_mlr = mlr::makeLearner(input$learner)
     rdesc       = mlr::makeResampleDesc("CV", iters = 2)
     results     = mlr::resample(learner_mlr, task_mlr, rdesc)
 
     plot_ly()
   })
+
+  omega = reactive({
+    #invalidateLater(1000, session)
+    input$addLearner
+    return(1:learner_amount)
+  })
+
+  # update non reactive value
+  observe({
+    omega()
+    learner_amount <<- learner_amount + 1 # sorry, bernd ;D
+  })
+
+
+  selected = reactive({
+
+    selection = lapply(omega(), function (i) {
+      input[[paste0("learner", i)]]
+    })
+
+    return(unlist(selection))
+  })
+
+
+  output$Dynamic = renderUI({
+
+    dynamic_selection_list = lapply(omega(), function(i) {
+      fluidRow(
+        column(
+          3,
+          selectInput(
+            inputId  = paste0("learner", i),
+            label    = paste("Learner", i),
+            choices  = as.list(mlr::listLearners()$name[mlr::listLearners()$type == input$tasktype]),
+            selected = isolate(selected()[i])
+          )
+        ),
+        column(
+          9,
+          actionButton(paste0("parameter", i), paste("Set learner", i, "parameters"))
+        ),
+        bsModal(
+          paste0("parameterPopup", i), "Parameter selection", paste0("parameter", i), size = "small",
+          fluidRow(
+            numericInput(paste0("parameterNumeric", i), "Example Hyperparameter 1", 1),
+            sliderInput(paste0("parameterSlider", i), "Example Hyperparameter 2", 0, 10, 5)
+          )
+        )
+      )
+    })
+
+    do.call(tagList, dynamic_selection_list)
+  })
+
 
   output$evaluationPlot = renderPlot({
 

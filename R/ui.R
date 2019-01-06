@@ -11,33 +11,31 @@ for (i in seq_along(ui_files)) {
 }
 
 shinyUI(
-  fluidPage(
-    fluidRow(
-      actionButton("taskBut", "Set task"),
-      textOutput("taskinfo"),
-      uiOutput("learnerSelection"),
-      actionButton("paramBut", "Change parameters"),
-      br(),
-      actionButton("addLearner", "Add Learner"),
-      br(),
-      actionButton("startTraining", "Train model"),
-      plotOutput("evaluationPlot"),
-      bsModal(
-        "modalExample", "Task selection", "taskBut", size = "large",
-        fluidRow(
-          column(
-            5,
-            selectInput(
-              "tasktype",
-              label = "Select task type",
-              choices = list("Classification" = "classif", "Regression" = "regr", "Clustering" = "cluster", "Multilabel" = "multilabel", "Survival" = "surv")
-            ),
-            uiOutput("taskselection")
+  basicPage(
+    hr(),
+    actionButton("taskBut", "Set task"),
+    textOutput("taskinfo"),
+    hr(),
+    uiOutput("Dynamic"),
+    actionButton("addLearner", "Add Learner"),
+    hr(),
+    actionButton("startTraining", "Train model"),
+    plotOutput("evaluationPlot"),
+    bsModal(
+      "modalExample", "Task selection", "taskBut", size = "large",
+      fluidRow(
+        column(
+          5,
+          selectInput(
+            "tasktype",
+            label = "Select task type",
+            choices = list("Classification" = "classif", "Regression" = "regr", "Clustering" = "cluster", "Multilabel" = "multilabel", "Survival" = "surv")
           ),
-          column(
-            7,
-            plotly::plotlyOutput("datasetPlot")
-          )
+          uiOutput("taskselection")
+        ),
+        column(
+          7,
+          plotly::plotlyOutput("datasetPlot")
         )
       )
     )
