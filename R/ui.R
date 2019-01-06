@@ -17,7 +17,11 @@ shinyUI(
       textOutput("taskinfo"),
       uiOutput("learnerSelection"),
       actionButton("paramBut", "Change parameters"),
-      plotOutput("distPlot"),
+      br(),
+      actionButton("addLearner", "Add Learner"),
+      br(),
+      actionButton("startTraining", "Train model"),
+      plotOutput("evaluationPlot"),
       bsModal(
         "modalExample", "Task selection", "taskBut", size = "large",
         fluidRow(
