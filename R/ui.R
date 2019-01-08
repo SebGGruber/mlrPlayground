@@ -19,8 +19,8 @@ shinyUI(
     uiOutput("Dynamic"),
     actionButton("addLearner", "Add Learner"),
     hr(),
-    actionButton("startTraining", "Train model"),
-    plotOutput("evaluationPlot"),
+#    actionButton("startTraining", "Train model"),
+    plotly::plotlyOutput("evaluationPlot", width = "50%", height = "450px"),
     bsModal(
       "modalExample", "Task selection", "taskBut", size = "large",
       fluidRow(
