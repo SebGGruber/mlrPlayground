@@ -5,6 +5,7 @@ require(shinyBS)
 require(DT)
 require(plotly)
 require(shinythemes)
+require(ggplot2)
 
 ui.files = list.files(path = "./ui",pattern = "*.R")
 ui.files = paste0("ui/", ui.files)
@@ -21,7 +22,7 @@ shinyUI
                 id = "app-content",
                 navbarPage
                 (
-                    "new_shiny_logo",
+                    "mlr",
                     # title = div(img(src = "new_shiny_logo.png",height = 35)),
                     # theme = shinytheme("united"), 
                     id = "top-nav",
@@ -76,7 +77,12 @@ shinyUI
                         "Record"
                         #tabpanel.record, 
                         
-                    )
+                    ),
+                   tabPanel(
+                       "Datasets",
+                       tabpanel.datasets
+                   )
+                    
                 )
              )
         )

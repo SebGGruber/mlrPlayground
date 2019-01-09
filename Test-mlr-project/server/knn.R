@@ -7,8 +7,7 @@
         if(is.null(inTrainFile))
             return(NULL)
         
-        train_file <-read.csv(inTrainFile$datapath,header=input$header,
-        sep=input$sep,quote=input$quote)
+        train_file <-read.csv(inTrainFile$datapath,header=input$header)
 
         if(input$disp_trainfile == "head"){
             return(head(train_file))
@@ -24,8 +23,7 @@
         if(is.null(inTestFile))
             return(NULL)
         
-        test_file <-read.csv(inTestFile$datapath,header=input$header,
-        sep=input$sep,quote=input$quote)
+        test_file <-read.csv(inTestFile$datapath,header=input$header)
 
         if(input$disp_testfile == "head"){
             return(head(test_file))
@@ -53,6 +51,15 @@ output$classification_knn_result <- renderTable({
         test_file <-read.csv(inTestFile$datapath,header=input$header,
         sep=input$sep,quote=input$quote)
 
-    model1<- knn(train=train_file[,2:5], test=test_file[,2:5], cl=train_file[,6], k=input$k_value)
-    return(model1)
+    
+    
+    if(is.na(input$k_value)){
+        return(NULL)
+    }else if(input$disp_resultfile == "head") {
+        model1<- knn(train=train_file[,2:5], test=test_file[,2:5], cl=train_file[,6], k=input$k_value)
+        return(head(model1))
+    }else{
+        model1<- knn(train=train_file[,2:5], test=test_file[,2:5], cl=train_file[,6], k=input$k_value)
+        return(model1)
+    }
 })

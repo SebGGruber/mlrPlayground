@@ -32,7 +32,7 @@ shinyUI(
           ),
           column(
             7,
-            plotlyOutput("datasetPlot")
+            plotly::plotlyOutput("datasetPlot")
           )
         )
       )

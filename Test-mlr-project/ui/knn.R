@@ -29,7 +29,11 @@ tabpanel.Classification_KNN = fluidPage(theme = shinytheme("united"),
                                                     choices = c(Head = "head",All = "all"),
                                                     selected = "head"),
 
-                                    numericInput("k_value", "K:", 1),
+                                    numericInput("k_value", "K:", NULL),
+
+                                    radioButtons("disp_resultfile","Result Display",
+                                                    choices = c(Head = "head",All = "all"),
+                                                    selected = "head"),
                                     submitButton("RUN")
                                 ),
                                

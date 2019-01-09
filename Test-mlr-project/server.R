@@ -1,4 +1,6 @@
 require("class")
+require(plotly)
+require(ggplot2)
 
 
 shinyServer(function(input,output){

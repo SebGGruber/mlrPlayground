@@ -30,7 +30,7 @@ shinyServer(function(input, output, session) {
     #print(input$tasktype)
 
     #if (input$tasktype == "" || input$tasktype == "classif") {
-      choices = list("Circle", "XOR")
+      choices = list("Circle", "XOR","Gaussian","Spiral","Linear ascend (2D)","Spiral ascend (3D)")
 
     #} else if (input$tasktype == "regr") {
     #  choices = list("Linear ascend (2D)")
@@ -98,7 +98,42 @@ shinyServer(function(input, output, session) {
       data = data.frame(x, y)
 
     }
+    ################################
+  # add Gaussian data sets
 
+    else if(input$task == "Gaussian"){
+      x1 = c(rnorm(200,2,1),rnorm(200,-2,1))
+      x2 = c(rnorm(200,2,1),rnorm(200,-2,1))
+      class = c(rep("Class 1", 200), rep("Class 2", 200)) 
+      data = data.frame(x1,x2,class)
+    }
+
+
+  #add Spiral data sets
+  else if(input$task == "Spiral"){
+    r = c(1:200) / 200 * 5
+    t = 1.75 * c(1:200)  / 200 * 2 * pi
+    x1 = c(r * sin(t), r * sin(t + pi))
+    x2 = c(r * cos(t), r * cos(t + pi))
+    class = c(rep("Class 1",200),rep("Class 2",200))
+    data = data.frame(x1,x2,class)
+  }
+
+  #add Spiral ascend (3D) data sets
+  else if(input$task == "Spiral ascend (3D)"){
+    z = rexp(200,1)*4
+    x = sin(z)
+    y = cos(z)
+    data = data.frame(x, y, z)
+  }
+
+
+
+
+
+
+
+    ################################
     if (input$tasktype == "classif") {
       plotly::plot_ly(
         data = data,
@@ -117,8 +152,19 @@ shinyServer(function(input, output, session) {
         y = ~y,
         type = "scatter",
         mode = "markers"
-      )
-
+      )}else if(input$tasktype == "multilabel"){
+      plotly::plot_ly(
+          data = data,
+          type = "scatter3d",
+          x = ~x,
+          y = ~y,
+          z = ~z,
+          marker = list(color = ~z, colorscale = c('#FFE1A1', '#683531'), showscale = TRUE)
+        )%>%
+          add_markers()%>%
+        layout(scene = list(xaxis = list(title = 'xaxis'),
+                            yaxis = list(title = 'yaxis'),
+                            zaxis = list(title = 'zaxis')))
     } else {
       plotly::plotly_empty()
     }
