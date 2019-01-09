@@ -10,7 +10,7 @@ data = data.frame(x1, x2, class)
 
 
 task_mlr    = mlr::makeClassifTask(data = data, target = "class")
-learner_mlr = mlr::makeLearner("classif.binomial")
+learner_mlr = mlr::makeLearner("classif.bartMachine")
 model       = mlr::train(learner_mlr, task_mlr)
 
 

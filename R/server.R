@@ -114,6 +114,7 @@ shinyServer(function(input, output, session) {
 
     #input$startTraining
     input$learner1
+    input$parameterSlider1
 
     set.seed(123)
 
@@ -162,10 +163,9 @@ shinyServer(function(input, output, session) {
       mode = "markers"
       ) %>%
       plotly::add_heatmap(
-        data = pred,
-        x = ~unique(x1),
-        y = ~unique(x2),
-        z = ~matrix(pred_matrix, nrow = sqrt(length(predictions)), byrow = TRUE),
+        x = ~unique(pred$x1),
+        y = ~unique(pred$x2),
+        z = ~matrix(pred$pred_matrix, nrow = sqrt(length(predictions)), byrow = TRUE),
         type = "heatmap",
         colors = colorRamp(c("red", "blue")),
         opacity = 0.2,
