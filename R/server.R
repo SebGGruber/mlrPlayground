@@ -15,6 +15,26 @@ options(shiny.maxRequestSize = 9*1024^2)
 
 shinyServer(function(input, output, session) {
 
+  values <- reactiveValues(shouldShow = TRUE)
+
+  observe({
+    input$parameter1
+    input$parameterDone
+#    if (!is.null(input$parameter1) && input$parameter1 == 0)
+    values$shouldShow = !isolate(values$shouldShow)
+    output$shouldShow <- reactive(isolate(values$shouldShow))
+    browser()
+
+  })
+
+  #output$shouldShow <- reactive(values$shouldShow)
+
+
+#  observe({
+#    if (is.null(input$parameterDone) || input$parameterDone == 0)
+#      values$shouldShow = "FALSE"
+#  })
+
   learner_amount = 1
 
   output$taskselection = renderUI({
@@ -45,16 +65,6 @@ shinyServer(function(input, output, session) {
 
   output$taskinfo = renderText(paste("Currently selected:", input$tasktype, "-", input$task))
 
-
-  evalPloty = eventReactive(input$startTraining, {
-
-    task_mlr    = mlr::makeClassifTask(data = input$task, target = "class")
-    #learner_mlr = mlr::makeLearner(input$learner)
-    rdesc       = mlr::makeResampleDesc("CV", iters = 2)
-    results     = mlr::resample(learner_mlr, task_mlr, rdesc)
-
-    plot_ly()
-  })
 
   omega = reactive({
     #invalidateLater(1000, session)
@@ -95,14 +105,14 @@ shinyServer(function(input, output, session) {
         column(
           9,
           actionButton(paste0("parameter", i), paste("Set learner", i, "parameters"))
-        ),
-        bsModal(
-          paste0("parameterPopup", i), "Parameter selection", paste0("parameter", i), size = "small",
-          fluidRow(
-            numericInput(paste0("parameterNumeric", i), "Example Hyperparameter 1", 1),
-            sliderInput(paste0("parameterSlider", i), "Example Hyperparameter 2", 0, 10, 5)
-          )
-        )
+        )#,
+#        bsModal(
+#          paste0("parameterPopup", i), "Parameter selection", paste0("parameter", i), size = "small",
+#          fluidRow(
+#            numericInput(paste0("parameterNumeric", i), "Example Hyperparameter 1", 1),
+#            sliderInput(paste0("parameterSlider", i), "Example Hyperparameter 2", 0, 10, 5)
+#          )
+#        )
       )
     })
 

@@ -13,14 +13,22 @@ for (i in seq_along(ui_files)) {
 shinyUI(
   basicPage(
     hr(),
-    actionButton("taskBut", "Set task"),
-    textOutput("taskinfo"),
+    conditionalPanel(
+      "output.shouldShow == false",
+      actionButton("taskBut", "Set task"),
+      textOutput("taskinfo"),
+      hr(),
+      uiOutput("Dynamic"),
+      actionButton("addLearner", "Add Learner")
+    ),
+#    conditionalPanel(
+#      "values.shouldShow != \"\" || values.shouldShow == \"TRUE\"",
+      actionButton("parameterDone", "Done"),
+      numericInput(paste0("parameterNumeric", i), "Example Hyperparameter 1", 1),
+      sliderInput(paste0("parameterSlider", i), "Example Hyperparameter 2", 0, 10, 5#)
+    ),
     hr(),
-    uiOutput("Dynamic"),
-    actionButton("addLearner", "Add Learner"),
-    hr(),
-#    actionButton("startTraining", "Train model"),
-    plotly::plotlyOutput("evaluationPlot", width = "50%", height = "450px"),
+    #plotly::plotlyOutput("evaluationPlot", width = "50%", height = "450px"),
     bsModal(
       "modalExample", "Task selection", "taskBut", size = "large",
       fluidRow(
