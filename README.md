@@ -6,6 +6,9 @@ Playground for the mlr package done in shiny
 ### Sebastian
 - user interface
 - frontend/backend logic
+- threshold setting
+- https://mlr.mlr-org.com/articles/tutorial/learning_curve.html
+
 
 ### Yuhao
 - mehr 2D datensätze (classification (wichtig), regression (wichtig), cluster (mittel), multilabel (niedrig), survival (niedrig)) (10 pro typ)
