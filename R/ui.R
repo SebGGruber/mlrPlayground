@@ -14,21 +14,21 @@ shinyUI(
   basicPage(
     hr(),
     conditionalPanel(
-      "output.shouldShow == false",
+      "output.shouldShow == true",
       actionButton("taskBut", "Set task"),
       textOutput("taskinfo"),
       hr(),
       uiOutput("Dynamic"),
       actionButton("addLearner", "Add Learner")
     ),
-#    conditionalPanel(
-#      "values.shouldShow != \"\" || values.shouldShow == \"TRUE\"",
+    conditionalPanel(
+      "output.shouldShow == false",
       actionButton("parameterDone", "Done"),
       numericInput(paste0("parameterNumeric", i), "Example Hyperparameter 1", 1),
-      sliderInput(paste0("parameterSlider", i), "Example Hyperparameter 2", 0, 10, 5#)
+      sliderInput(paste0("parameterSlider", i), "Example Hyperparameter 2", 0, 10, 5)
     ),
     hr(),
-    #plotly::plotlyOutput("evaluationPlot", width = "50%", height = "450px"),
+    plotly::plotlyOutput("evaluationPlot", width = "50%", height = "450px"),
     bsModal(
       "modalExample", "Task selection", "taskBut", size = "large",
       fluidRow(

@@ -22,13 +22,12 @@ shinyServer(function(input, output, session) {
     input$parameterDone
 #    if (!is.null(input$parameter1) && input$parameter1 == 0)
     values$shouldShow = !isolate(values$shouldShow)
-    output$shouldShow <- reactive(isolate(values$shouldShow))
-    browser()
+#    output$shouldShow <- reactive(isolate(values$shouldShow))
+#    browser()
 
   })
 
-  #output$shouldShow <- reactive(values$shouldShow)
-
+  output$shouldShow <- reactive(values$shouldShow)
 
 #  observe({
 #    if (is.null(input$parameterDone) || input$parameterDone == 0)
@@ -96,10 +95,11 @@ shinyServer(function(input, output, session) {
         column(
           3,
           selectInput(
-            inputId  = paste0("learner", i),
-            label    = paste("Learner", i),
-            choices  = as.list(mlr::listLearners()$name[mlr::listLearners()$type == input$tasktype]),
-            selected = isolate(selected()[i])
+            inputId   = paste0("learner", i),
+            label     = paste("Learner", i),
+            choices   = as.list(Choose = "", mlr::listLearners()$name[mlr::listLearners()$type == input$tasktype]),
+            selected  = isolate(selected()[i]),
+            selectize = TRUE
           )
         ),
         column(
@@ -245,5 +245,9 @@ shinyServer(function(input, output, session) {
 
   })
 
+  outputOptions(output, "shouldShow", suspendWhenHidden = FALSE)
+  outputOptions(output, "datasetPlot", suspendWhenHidden = FALSE)
+  outputOptions(output, "Dynamic", suspendWhenHidden = FALSE)
+  outputOptions(output, "taskselection", suspendWhenHidden = FALSE)
   session$onSessionEnded(stopApp)
 })
