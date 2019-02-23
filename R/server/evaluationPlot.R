@@ -1,0 +1,62 @@
+output$evaluationPlot = renderPlotly({
+
+  #input$startTraining
+  input$learner1
+  input$parameterSlider1
+
+  set.seed(123)
+
+  if (isolate(input$task) == "Circle") {
+
+    angle = runif(400, 0, 360)
+    radius_class1 = rexp(200, 1)
+    radius_class2 = rnorm(200, 16, 3)
+
+    data = data.frame(
+      x1 = sqrt(c(radius_class1, radius_class2)) * cos(2*pi*angle),
+      x2 = sqrt(c(radius_class1, radius_class2)) * sin(2*pi*angle),
+      class = c(rep("Class 1", 200), rep("Class 2", 200))
+    )
+
+  } else if (isolate(input$task) == "XOR") {
+
+    x1 = runif(400, -5, 5)
+    x2 = runif(400, -5, 5)
+    xor = (x1 < 0 | x2 < 0) & !(x1 < 0 & x2 < 0)
+    class = ifelse(xor, "Class 1", "Class 2")
+
+    data = data.frame(x1, x2, class)
+
+  }
+
+  task_mlr    = mlr::makeClassifTask(data = data, target = "class")
+  learner_mlr = mlr::makeLearner(mlr::listLearners()$class[mlr::listLearners()$name == input$learner1])
+  model       = mlr::train(learner_mlr, task_mlr)
+
+
+  pred = expand.grid(x1 = -50:50/10, x2 = -50:50/10)
+
+  predictions = predictLearner(learner_mlr, model, pred)
+
+  #pred = data.frame(x = unique(pred$x1), y = unique(pred$x2))
+  pred$pred_matrix = as.numeric(factor(predictions))
+
+  plotly::plot_ly(
+    data = data,
+    x = ~x1,
+    y = ~x2,
+    color = ~class,
+    colors = c("#2b8cbe", "#e34a33", "#2b8cbe", "#e34a33"),
+    type = "scatter",
+    mode = "markers"
+  ) %>%
+    plotly::add_heatmap(
+      x = ~unique(pred$x1),
+      y = ~unique(pred$x2),
+      z = ~matrix(pred$pred_matrix, nrow = sqrt(length(predictions)), byrow = TRUE),
+      type = "heatmap",
+      colors = colorRamp(c("red", "blue")),
+      opacity = 0.2,
+      showscale = FALSE
+    )
+})

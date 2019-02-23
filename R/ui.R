@@ -24,8 +24,11 @@ shinyUI(
     conditionalPanel(
       "output.shouldShow == false",
       actionButton("parameterDone", "Done"),
-      numericInput(paste0("parameterNumeric", i), "Example Hyperparameter 1", 1),
-      sliderInput(paste0("parameterSlider", i), "Example Hyperparameter 2", 0, 10, 5)
+      fluidRow(
+        column(3, sliderInput("param1", "Set Parameter1", 0, 10, 5)),
+        column(1, numericInput("minparam1", "Min", 0)),
+        column(1, numericInput("maxparam1", "Max", 10))
+      )
     ),
     hr(),
     plotly::plotlyOutput("evaluationPlot", width = "50%", height = "450px"),
@@ -39,7 +42,7 @@ shinyUI(
             label = "Select task type",
             choices = list("Classification" = "classif", "Regression" = "regr", "Clustering" = "cluster", "Multilabel" = "multilabel", "Survival" = "surv")
           ),
-          uiOutput("taskselection")
+          uiOutput("taskSelection")
         ),
         column(
           7,
