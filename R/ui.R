@@ -14,21 +14,17 @@ shinyUI(
   basicPage(
     hr(),
     conditionalPanel(
-      "output.shouldShow == true",
+      "output.showLearners == true",
       actionButton("taskBut", "Set task"),
       textOutput("taskinfo"),
       hr(),
-      uiOutput("Dynamic"),
+      uiOutput("dynamicLearners"),
       actionButton("addLearner", "Add Learner")
     ),
     conditionalPanel(
-      "output.shouldShow == false",
+      "output.showLearners == false",
       actionButton("parameterDone", "Done"),
-      fluidRow(
-        column(3, sliderInput("param1", "Set Parameter1", 0, 10, 5)),
-        column(1, numericInput("minparam1", "Min", 0)),
-        column(1, numericInput("maxparam1", "Max", 10))
-      )
+      uiOutput("dynamicParameters")
     ),
     hr(),
     plotly::plotlyOutput("evaluationPlot", width = "50%", height = "450px"),

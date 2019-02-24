@@ -22,7 +22,7 @@ shinyServer(function(input, output, session) {
 
   learner_amount = 1
 
-  omega = reactive({
+  learner_amount_enum = reactive({
     #invalidateLater(1000, session) #delay
     input$addLearner
     return(1:learner_amount)
@@ -30,61 +30,39 @@ shinyServer(function(input, output, session) {
 
   # update non reactive value
   observe({
-    omega()
+    learner_amount_enum()
     learner_amount <<- learner_amount + 1 # sorry, bernd ;D
   })
 
 
-  selected = reactive({
+  selected_learners = reactive({
 
-    selection = lapply(omega(), function (i) {
+    selection = lapply(learner_amount_enum(), function (i) {
       input[[paste0("learner", i)]]
     })
 
     return(unlist(selection))
   })
 
-  values = reactiveValues(shouldShow = TRUE)
+  # reactive: output$showLearners, output$showParam1, output$showParam2
+  source("server/showLogic.R", local = TRUE)
 
-  observe({
-    input$parameter1
-    input$parameterDone
-    #    if (!is.null(input$parameter1) && input$parameter1 == 0)
-    values$shouldShow = !isolate(values$shouldShow)
-    #    output$shouldShow <- reactive(isolate(values$shouldShow))
-    #    browser()
+  # rendering: output$dynamicLearners
+  source("server/dynamicLearners.R", local = TRUE)
 
-  })
+  output$dynamicParameters = renderUI({
 
-  output$shouldShow = reactive(values$shouldShow)
+    lapply(learner_amount_enum(), function(i) {
+      conditionalPanel(
+        paste0("output.showParam", i, " == false"),
 
-
-  output$Dynamic = renderUI({
-
-    dynamic_selection_list = lapply(omega(), function(i) {
-      fluidRow(
-        column(
-          3,
-          selectInput(
-            inputId   = paste0("learner", i),
-            label     = paste("Learner", i),
-            choices   = as.list(Choose = "", mlr::listLearners()$name[mlr::listLearners()$type == input$tasktype]),
-            selected  = isolate(selected()[i]),
-            selectize = TRUE
-          )
-        ),
-        column(
-          9,
-          actionButton(paste0("parameter", i), paste("Set learner", i, "parameters"))
+        fluidRow(
+          column(3, sliderInput("param1", "Set Parameter1", 0, 10, 5)),
+          column(1, numericInput("minparam1", "Min", 0)),
+          column(1, numericInput("maxparam1", "Max", 10))
         )
       )
     })
-
-    do.call(tagList, dynamic_selection_list)
-  })
-
-  output$Parameters = renderUI({
-
   })
 
   # rendering: output$evaluationPlot
@@ -94,9 +72,7 @@ shinyServer(function(input, output, session) {
   source("server/datasetPlot.R", local = TRUE)
 
   # force loading even when hidden
-  outputOptions(output, "shouldShow",    suspendWhenHidden = FALSE)
-  outputOptions(output, "datasetPlot",   suspendWhenHidden = FALSE)
-  outputOptions(output, "Dynamic",       suspendWhenHidden = FALSE)
-  outputOptions(output, "taskSelection", suspendWhenHidden = FALSE)
+  outputOptions(output, "datasetPlot",     suspendWhenHidden = FALSE)
+  outputOptions(output, "taskSelection",   suspendWhenHidden = FALSE)
   session$onSessionEnded(stopApp)
 })
