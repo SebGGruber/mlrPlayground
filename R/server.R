@@ -30,7 +30,20 @@ shinyServer(function(input, output, session) {
     #print(input$tasktype)
 
     #if (input$tasktype == "" || input$tasktype == "classif") {
-      choices = list("Circle", "XOR","Gaussian","Spiral","Linear ascend (2D)","Spiral ascend (3D)")
+      choices = list(
+        "Circle", 
+        "XOR",
+        "Gaussian",
+        "Spiral",
+        "Linear ascend (2D)",
+        "Log linear(2D)",
+        "Sine",
+        "Cosine",
+        "Tangent",
+        "Spiral ascend (3D)",
+        "Wavy surface (3D)",
+        "Sphere (3D)"
+        )
 
     #} else if (input$tasktype == "regr") {
     #  choices = list("Linear ascend (2D)")
@@ -90,16 +103,9 @@ shinyServer(function(input, output, session) {
 
       data = data.frame(x1, x2, class)
 
-    } else if (input$task == "Linear ascend (2D)") {
+    } 
 
-      x = rnorm(200, 0, 5)
-      y = 0.5 * x + rnorm(200, 0, 1)
-
-      data = data.frame(x, y)
-
-    }
-    ################################
-  # add Gaussian data sets
+    # add Gaussian data sets
 
     else if(input$task == "Gaussian"){
       x1 = c(rnorm(200,2,1),rnorm(200,-2,1))
@@ -109,23 +115,101 @@ shinyServer(function(input, output, session) {
     }
 
 
-  #add Spiral data sets
-  else if(input$task == "Spiral"){
+    #add Spiral data sets
+    else if(input$task == "Spiral"){
     r = c(1:200) / 200 * 5
     t = 1.75 * c(1:200)  / 200 * 2 * pi
     x1 = c(r * sin(t), r * sin(t + pi))
     x2 = c(r * cos(t), r * cos(t + pi))
     class = c(rep("Class 1",200),rep("Class 2",200))
     data = data.frame(x1,x2,class)
-  }
+    }
+    #add normal linear data sets
+    else if (input$task == "Linear ascend (2D)") {
 
-  #add Spiral ascend (3D) data sets
-  else if(input$task == "Spiral ascend (3D)"){
-    z = rexp(200,1)*4
-    x = sin(z)
-    y = cos(z)
-    data = data.frame(x, y, z)
-  }
+      x = rnorm(200, 0, 5)
+      y = 0.5 * x + rnorm(200, 0, 1)
+
+      data = data.frame(x, y)
+
+    }
+    # add Log function data sets
+    else if(input$task == "Log linear(2D)"){
+      x = rnorm(400, 0, 5)
+      y = log10(2 * x + rnorm(400, 0, 1))
+      
+      data = data.frame(x, y)
+    }
+  
+    #add trigonometric function: Sine data sets
+    else if(input$task == "Sine"){
+      x <- c(-200:200) * pi/100
+      y <- sin(x) + runif(401,-1,1) / 4
+
+      data <- data.frame(x,y)
+    }
+
+    #add Cosine ascend data sets
+    else if(input$task == "Cosine"){
+      x <- c(-200:200) * pi/100
+      y <-  cos(x) + c(1:401)/150 + runif(401,-1,1)/3
+
+      data <- data.frame(x,y)
+    }
+
+    #add Tangent data sets
+    else if(input$task == "Tangent"){
+      x <- c(-190:190) * pi/400
+      y<- tan(x) + rnorm(381,-1,1)
+
+      data <- data.frame(x,y)
+    }
+
+    ## 3D data sets ##
+    #add Spiral ascend (3D) data sets
+    else if(input$task == "Spiral ascend (3D)"){
+      z = rexp(200,1)*4
+      x = sin(z)
+      y = cos(z)
+      data = data.frame(x, y, z)
+    }
+
+    #add Wavy surface(3D) data sets
+    else if(input$task == "Wavy surface (3D)"){
+      x = c(-20:20) * pi / 10
+      y = rep(x,each=41)
+      z = sin(x)+sin(y)
+
+      data = data.frame(x,y,z)
+    }
+
+    #add data sets
+    else if(input$task == "Sphere (3D)"){
+      R = 2
+      alfa = runif(50,0,50)*pi
+      sita = runif(50,0,50)*pi*2
+
+      num_alfa = length(alfa)
+      num_sita = length(sita)
+      x <- matrix(0, num_alfa, num_sita)
+      y <- matrix(0, num_alfa, num_sita)
+      z <- matrix(0, num_alfa, num_sita)
+
+
+      for(i in c(1:num_alfa)){
+        for(j in c(1:num_sita)){
+          x[i,j] = R * sin(alfa[i]) * cos(sita[j])
+          y[i,j] = R * sin(alfa[i]) * sin(sita[j])
+          z[i,j] = R * cos(alfa[i])
+        }
+      }
+
+      x <- as.vector(x)
+      y <- as.vector(y)
+      z <- as.vector(z)
+
+      data <- data.frame(x,y,z)
+    }
 
 
 
@@ -133,7 +217,7 @@ shinyServer(function(input, output, session) {
 
 
 
-    ################################
+### parameter setting of plot_ly ###
     if (input$tasktype == "classif") {
       plotly::plot_ly(
         data = data,
