@@ -58,3 +58,6 @@ output$datasetPlot = renderPlotly({
   }
 
 })
+
+# force loading even when hidden
+outputOptions(output, "datasetPlot",     suspendWhenHidden = FALSE)

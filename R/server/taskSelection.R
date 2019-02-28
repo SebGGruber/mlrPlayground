@@ -22,3 +22,6 @@ output$taskSelection = renderUI({
 
   radioButtons("task", label = "Select task", choices = choices)
 })
+
+# force loading even when hidden
+outputOptions(output, "taskSelection",   suspendWhenHidden = FALSE)

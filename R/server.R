@@ -20,29 +20,8 @@ shinyServer(function(input, output, session) {
 
   output$taskinfo = renderText(paste("Currently selected:", input$tasktype, "-", input$task))
 
-  learner_amount = 1
-
-  learner_amount_enum = reactive({
-    #invalidateLater(1000, session) #delay
-    input$addLearner
-    return(1:learner_amount)
-  })
-
-  # update non reactive value
-  observe({
-    learner_amount_enum()
-    learner_amount <<- learner_amount + 1 # sorry, bernd ;D
-  })
-
-
-  selected_learners = reactive({
-
-    selection = lapply(learner_amount_enum(), function (i) {
-      input[[paste0("learner", i)]]
-    })
-
-    return(unlist(selection))
-  })
+  # rendering: output$addLearner
+  source("server/addLearner.R", local = TRUE)
 
   # reactive: output$showLearners, output$showParam1, output$showParam2
   source("server/showLogic.R", local = TRUE)
@@ -50,20 +29,8 @@ shinyServer(function(input, output, session) {
   # rendering: output$dynamicLearners
   source("server/dynamicLearners.R", local = TRUE)
 
-  output$dynamicParameters = renderUI({
-
-    lapply(learner_amount_enum(), function(i) {
-      conditionalPanel(
-        paste0("output.showParam", i, " == false"),
-
-        fluidRow(
-          column(3, sliderInput("param1", "Set Parameter1", 0, 10, 5)),
-          column(1, numericInput("minparam1", "Min", 0)),
-          column(1, numericInput("maxparam1", "Max", 10))
-        )
-      )
-    })
-  })
+  # rendering: output$dynamicParameters
+  source("server/dynamicParameters.R", local = TRUE)
 
   # rendering: output$evaluationPlot
   source("server/evaluationPlot.R", local = TRUE)
@@ -71,8 +38,5 @@ shinyServer(function(input, output, session) {
   # rendering: output$datasetPlot
   source("server/datasetPlot.R", local = TRUE)
 
-  # force loading even when hidden
-  outputOptions(output, "datasetPlot",     suspendWhenHidden = FALSE)
-  outputOptions(output, "taskSelection",   suspendWhenHidden = FALSE)
   session$onSessionEnded(stopApp)
 })

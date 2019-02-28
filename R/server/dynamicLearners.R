@@ -1,3 +1,12 @@
+selected_learners = reactive({
+
+  selection = lapply(learner_amount_enum(), function (i) {
+    input[[paste0("learner", i)]]
+  })
+
+  return(unlist(selection))
+})
+
 output$dynamicLearners = renderUI({
 
   lapply(learner_amount_enum(), function(i) {
