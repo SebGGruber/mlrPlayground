@@ -20,7 +20,7 @@ data = data.frame(
 
 
 task_mlr    = mlr::makeClassifTask(data = data, target = "class")
-learner_mlr = mlr::makeLearner("classif.randomForest")
+learner_mlr = mlr::makeLearner("classif.ada")
 
 plotLearnerPrediction(learner_mlr, task_mlr)
 

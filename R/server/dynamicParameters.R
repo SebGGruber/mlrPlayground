@@ -1,17 +1,19 @@
 #make_parameter_ui = function(learner){
 #  lapply(learner$par.set$pars,
-parameter_to_ui = function(parameter) {
+parameter_to_ui = function(parameter, learner_id) {
+
+  id = paste0(parameter$id, learner_id)
 
   if (!parameter$has.default) {
-    # don't know what to do without default :(
+    # don't know what to do without default (yet) :(
     NULL
 
   } else if (parameter$type %in% c("integer", "numeric")) {
 
-    id     = paste0("parameter_", parameter$id)
-    label  = paste( "Set",        parameter$id)
-    min_id = paste0("min_",       parameter$id)
-    max_id = paste0("max_",       parameter$id)
+    inp_id = paste0("parameter_", id)
+    label  = paste( "Set",        id)
+    min_id = paste0("min_",       id)
+    max_id = paste0("max_",       id)
     round  = if (parameter$type == "integer") TRUE else FALSE
 
     min_value = {
@@ -30,7 +32,7 @@ parameter_to_ui = function(parameter) {
 
     fluidRow(
       column(3, sliderInput(
-        id, label, input[[min_id]], input[[max_id]], parameter$default, round = round
+        inp_id, label, as.integer(input[[min_id]]), as.integer(input[[max_id]]), as.integer(parameter$default), round = round
       )),
       column(1, numericInput(min_id, "Min", min_value)),
       column(1, numericInput(max_id, "Max", max_value))
@@ -38,33 +40,32 @@ parameter_to_ui = function(parameter) {
 
   } else if (parameter$type == "discrete") {
 
-    id     = paste0("parameter_", parameter$id)
-    label  = paste( "Set",        parameter$id)
-    selectInput(id, label, parameter$values, parameter$default)
+    inp_id = paste0("parameter_", id)
+    label  = paste( "Set",        id)
+    selectInput(inp_id, label, parameter$values, parameter$default)
 
   } else if (parameter$type == "logical") {
 
-    id     = paste0("parameter_", parameter$id)
-    label  = paste( "Set",        parameter$id)
-    checkboxInput(id, label, parameter$default)
+    inp_id = paste0("parameter_", id)
+    label  = paste( "Set",        id)
+    checkboxInput(inp_id, label, parameter$default)
 
   }
 }
 
 output$dynamicParameters = renderUI({
 
+  req(learner_amount_enum())
+  # for each learner
   lapply(learner_amount_enum(), function(i) {
+    # setup dummy learner to get parameter list
+    lrn_name = input[[paste0("learner", i)]]
+    learner_mlr = makeLearner(listLearners()$class[listLearners()$name == lrn_name])
+
+    # compute (hidden) parameter panel
     conditionalPanel(
-      paste0("output.showParam", i, " == false"),
-      lapply({
-
-      })
-
-      fluidRow(
-        column(3, sliderInput("param1", "Set Parameter1", 0, 10, 5)),
-        column(1, numericInput("minparam1", "Min", 0)),
-        column(1, numericInput("maxparam1", "Max", 10))
-      )
+      paste0("output.showParam", i, " == true"),
+      lapply(learner_mlr$par.set$pars, function(par) parameter_to_ui(par, i))
     )
   })
 })

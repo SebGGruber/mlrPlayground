@@ -1,7 +1,8 @@
 output$evaluationPlot = renderPlotly({
 
   #input$startTraining
-  input$learner1
+  req(input$learner1)
+  req(input$task)
 
   set.seed(123)
 
@@ -28,9 +29,9 @@ output$evaluationPlot = renderPlotly({
 
   }
 
-  task_mlr    = mlr::makeClassifTask(data = data, target = "class")
-  learner_mlr = mlr::makeLearner(mlr::listLearners()$class[mlr::listLearners()$name == input$learner1])
-  model       = mlr::train(learner_mlr, task_mlr)
+  task_mlr    = makeClassifTask(data = data, target = "class")
+  learner_mlr = makeLearner(listLearners()$class[listLearners()$name == input$learner1])
+  model       = train(learner_mlr, task_mlr)
 
 
   pred = expand.grid(x1 = -50:50/10, x2 = -50:50/10)
@@ -65,6 +66,7 @@ output$evaluationPlot2 = renderPlotly({
 
   #input$startTraining
   req(input$learner2)
+  req(input$task)
 
   set.seed(123)
 

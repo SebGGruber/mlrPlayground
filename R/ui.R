@@ -19,7 +19,10 @@ shinyUI(
       textOutput("taskinfo"),
       hr(),
       uiOutput("dynamicLearners"),
-      uiOutput("addLearner")
+      conditionalPanel(
+        "output.learner_amount < 2",
+        actionButton("addLearner", "add Learner")
+      )
     ),
     conditionalPanel(
       "output.showLearners == false",

@@ -1,5 +1,6 @@
 selected_learners = reactive({
 
+  req(learner_amount_enum())
   selection = lapply(learner_amount_enum(), function (i) {
     input[[paste0("learner", i)]]
   })
@@ -9,6 +10,8 @@ selected_learners = reactive({
 
 output$dynamicLearners = renderUI({
 
+  req(learner_amount_enum())
+  #req(selected_learners())
   lapply(learner_amount_enum(), function(i) {
     fluidRow(
       column(
