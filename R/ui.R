@@ -26,7 +26,7 @@ shinyUI(
             selectInput(
               "tasktype",
               label = "Select task type",
-              choices = list("Classification" = "classif", "Regression" = "regr", "Clustering" = "cluster", "Multilabel" = "multilabel", "Survival" = "surv")
+              choices = list("Classification" = "classif", "Classification 3D" = "classif_3d","Regression" = "regr","Regression 3D" = "regr_3d", "Clustering" = "cluster", "Multilabel" = "multilabel", "Survival" = "surv")
             ),
             uiOutput("taskselection")
           ),
