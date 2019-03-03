@@ -22,14 +22,14 @@ shinyUI(
       conditionalPanel(
         "output.learner_amount < 2",
         actionButton("addLearner", "add Learner")
-      )
+      ),
+      hr()
     ),
     conditionalPanel(
       "output.showLearners == false",
       actionButton("parameterDone", "Done"),
       uiOutput("dynamicParameters")
     ),
-    hr(),
     column(
       6,
       plotly::plotlyOutput("evaluationPlot", width = "100%", height = "450px")
@@ -39,7 +39,7 @@ shinyUI(
       plotly::plotlyOutput("evaluationPlot2", width = "100%", height = "450px")
     ),
     bsModal(
-      "modalExample", "Task selection", "taskBut", size = "large",
+      "taskselection", "Task selection", "taskBut", size = "large",
       fluidRow(
         column(
           5,

@@ -11,10 +11,12 @@ parameter_to_ui = function(parameter, learner_id) {
   } else if (parameter$type %in% c("integer", "numeric")) {
 
     inp_id = paste0("parameter_", id)
-    label  = paste( "Set",        id)
+    label  = parameter$id #paste( "Set",        parameter$id)
+    mod_id = paste0("mod_",       id)
+    btn_id = paste0("btn_",       id)
     min_id = paste0("min_",       id)
     max_id = paste0("max_",       id)
-    round  = if (parameter$type == "integer") TRUE else FALSE
+    step   = if (parameter$type == "integer") 1 else NULL
 
     min_value = {
       if (is.infinite(parameter$lower))
@@ -31,25 +33,34 @@ parameter_to_ui = function(parameter, learner_id) {
     }
 
     fluidRow(
-      column(3, sliderInput(
-        inp_id, label, as.integer(input[[min_id]]), as.integer(input[[max_id]]), as.integer(parameter$default), round = round
+      column(3, helpText(label)),
+      column(4, sliderInput(
+        inp_id, NULL, as.integer(input[[min_id]]), as.integer(input[[max_id]]), as.integer(parameter$default), step = step
       )),
-      column(1, numericInput(min_id, "Min", min_value)),
-      column(1, numericInput(max_id, "Max", max_value))
+      actionButton(btn_id, "Min/Max"),
+      bsModal(mod_id, "Set slider boundaries", btn_id, size = "small", fluidRow(
+        numericInput(min_id, "Parameter Min", min_value),
+        numericInput(max_id, "Parameter Max", max_value)
+      ))
     )
 
   } else if (parameter$type == "discrete") {
 
     inp_id = paste0("parameter_", id)
-    label  = paste( "Set",        id)
-    selectInput(inp_id, label, parameter$values, parameter$default)
+    label  = parameter$id #paste( "Set", parameter$id)
+    fluidRow(
+      column(3, helpText(label)),
+      column(4, selectInput(inp_id, NULL, parameter$values, parameter$default))
+    )
 
   } else if (parameter$type == "logical") {
 
     inp_id = paste0("parameter_", id)
-    label  = paste( "Set",        id)
-    checkboxInput(inp_id, label, parameter$default)
-
+    label  = parameter$id #paste( "Set", parameter$id)
+    fluidRow(
+      column(3, helpText(label)),
+      column(4, checkboxInput(inp_id, NULL, parameter$default))
+    )
   }
 }
 
@@ -61,11 +72,25 @@ output$dynamicParameters = renderUI({
     # setup dummy learner to get parameter list
     lrn_name = input[[paste0("learner", i)]]
     learner_mlr = makeLearner(listLearners()$class[listLearners()$name == lrn_name])
-
+    # sort parameter list by parameter type
+    par_list = learner_mlr$par.set$pars[order(sapply(learner_mlr$par.set$pars, function(par) par$type))]
+    ui_list  = lapply(par_list, function(par) parameter_to_ui(par, i))
+    # indeces of first half
+#    split_index1 = 1:round(length(ui_list)/3)
+    ui_split = split(ui_list, cut(seq_along(ui_list), 3, labels = FALSE))
     # compute (hidden) parameter panel
     conditionalPanel(
       paste0("output.showParam", i, " == true"),
-      lapply(learner_mlr$par.set$pars, function(par) parameter_to_ui(par, i))
+      fluidRow(
+        # split into two columns
+        column(4, ui_split[[1]]),
+        column(4, ui_split[[2]]),
+        column(4, ui_split[[3]])
+      ),
+      style = "overflow-y:scroll; overflow-x:hidden; max-height: 300px"
     )
   })
 })
+
+# force loading even when hidden
+outputOptions(output, "dynamicParameters", suspendWhenHidden = FALSE)
