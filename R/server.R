@@ -12,6 +12,19 @@ for (i in seq_along(server_files)) {
 # setting this option. Here we'll raise limit to 9MB.
 options(shiny.maxRequestSize = 9*1024^2)
 
+# the amount of test data sets
+# amount = 200 
+
+# test ration of all data sets
+# ration = 1
+# train_amount = amout * ration
+# test_amount = amount * (1 - ration)
+
+
+# noisy
+
+
+
 shinyServer(function(input, output, session) {
 
   output$learnerSelection = renderUI({
@@ -59,7 +72,17 @@ shinyServer(function(input, output, session) {
         "3.Clustering Dataset 3",
         "4.Clustering Dataset 4",
         "5.Clustering Dataset 5",
-        "6.Clustering Dataset 6"
+        "6.Clustering Dataset 6",
+
+      #Multilabel
+        "1.Spiral ascend (3D)",
+        "2.Wavy surface (3D)",
+        "3.Sphere (3D)",
+
+      #Survival
+        "1.Exponential Decrement",
+        "2.Mountain Peak",
+        "3.Wave"
         )
 
     #} else if (input$tasktype == "regr") {
@@ -457,7 +480,7 @@ shinyServer(function(input, output, session) {
 
   ### add multilabel data sets(3D)
     #1.add Spiral ascend (3D) data sets
-    else if(input$task == "Spiral ascend (3D)"){
+    else if(input$task == "1.Spiral ascend (3D)"){
       z = rexp(200,1)*4
       x = sin(z)
       y = cos(z)
@@ -466,7 +489,7 @@ shinyServer(function(input, output, session) {
     }
 
     #2.add Wavy surface(3D) data sets
-    else if(input$task == "Wavy surface (3D)"){
+    else if(input$task == "2.Wavy surface (3D)"){
       x = c(-20:20) * pi / 10
       y = rep(x,each=41)
       z = sin(x)+sin(y)
@@ -474,8 +497,8 @@ shinyServer(function(input, output, session) {
       data = data.frame(x,y,z)
     }
 
-    #3.add data sets
-    else if(input$task == "Sphere (3D)"){
+    #3.add Sphere data sets
+    else if(input$task == "3.Sphere (3D)"){
       R = 2
       alfa = runif(50,0,50)*pi
       sita = runif(50,0,50)*pi*2
@@ -490,23 +513,70 @@ shinyServer(function(input, output, session) {
 
       for(i in c(1:num_alfa)){
         for(j in c(1:num_sita)){
-          x[i,j] = R * sin(alfa[i]) * cos(sita[j]) + runif()
+          x[i,j] = R * sin(alfa[i]) * cos(sita[j])
           y[i,j] = R * sin(alfa[i]) * sin(sita[j])
           z[i,j] = R * cos(alfa[i])
-          if(z[i,j]>=0){
-            class[i][j] = "Class 1"
-          }else{
-            class[i][j] = "Class 2"
-          }
         }
       }
       x <- as.vector(x)
       y <- as.vector(y)
       z <- as.vector(z)
-      class <- as.vector(class)
-      data <- data.frame(x,y,z,class)
+     
+      data <- data.frame(x,y,z)
     }
 
+  ## add Survival data sets
+    #1. add Exponential Decrement data sets
+    else if(input$task == "1.Exponential Decrement"){
+      x = c(1:51)
+      t1 = round(rexp(50,1)/6,2)
+      y1 = c(1,sort(t1,TRUE))
+
+      t2 = round((rexp(50,1)-0.6)/6,2)
+      y2 = c(1,sort(abs(t2),TRUE))
+
+      data <- data.frame(x,y1,y2)
+    }
+
+    #2. add Mountain Peak data sets
+    else if(input$task == "2.Mountain Peak"){
+      x = c(1:26) * 4
+      t1 = round(runif(25,1,100),0)/100
+      s1 = sort(t1,TRUE) * pi
+      y1 = c(0,sin(s1))
+
+      t2 = round(runif(25,1,100),0)/100
+      s2 = sort(t2,TRUE) * pi
+      y2 = c(0,sin(s2)*0.8)
+
+      data <- data.frame(x,y1,y2)
+    }
+
+  #3. add Wave data sets
+    else if(input$task == "3.Wave"){
+      x = c(1:91)
+      t1 = c(round(runif(30,10,90),0)/100 ,round(runif(30,110,190),0)/100 ,round(runif(30,210,290),0)/100)
+      s1 = sort(t1,TRUE) * pi
+      y1 = c(1,abs(sin(s1)))
+
+      t2 = c(round(runif(30,-40,40),0)/100 ,round(runif(30,60,140),0)/100 ,round(runif(30,160,240),0)/100)
+      s2 = sort(t2,TRUE) * pi
+      y2 = c(1,abs(cos(s2))*0.6)
+
+      data <- data.frame(x,y1,y2)
+    }
+
+  #4. add Log data sets
+    else if(input$task == "4.Log"){
+      x = c(1:91)
+      t1 = c(round(runif(30,10,90),0)/100 ,round(runif(30,110,190),0)/100 ,round(runif(30,210,290),0)/100)
+      s1 = sort(t1,TRUE) * pi
+      y1 = c(1,abs(sin(s1)))
+
+      t2 = c(round(runif(30,-40,40),0)/100 ,round(runif(30,60,140),0)/100 ,round(runif(30,160,240),0)/100)
+      s2 = sort(t2,TRUE) * pi
+      y2 = c(1,abs(cos(s2))*0.6)
+    }
 
 ### parameter setting of plot_ly ###
     if (input$tasktype == "classif") {
@@ -585,7 +655,30 @@ shinyServer(function(input, output, session) {
         layout(scene = list(xaxis = list(title = 'xaxis'),
                             yaxis = list(title = 'yaxis'),
                             zaxis = list(title = 'zaxis')))
-    } else {
+    }
+    else if (input$tasktype == "surv") {
+      plot_ly(
+        data, 
+        x = ~x, 
+        y = ~y1, 
+        line = list(
+          color = "blue", 
+          shape = "hv"
+        ), 
+        mode = "lines", 
+        type = "scatter"
+      ) %>%
+        
+      add_trace(
+        y = ~y2,
+        name = 'trace 2',
+        line = list(
+        color = "red"
+        ),
+        mode ='lines'
+      )
+    }
+     else {
       plotly::plotly_empty()
     }
 
