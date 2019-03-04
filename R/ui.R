@@ -13,16 +13,33 @@ for (i in seq_along(ui_files)) {
 shinyUI(
   basicPage(
     hr(),
-    actionButton("taskBut", "Set task"),
-    textOutput("taskinfo"),
-    hr(),
-    uiOutput("Dynamic"),
-    actionButton("addLearner", "Add Learner"),
-    hr(),
-    actionButton("startTraining", "Train model"),
-    plotOutput("evaluationPlot"),
+    conditionalPanel(
+      "output.showLearners == true",
+      actionButton("taskBut", "Set task"),
+      textOutput("taskinfo"),
+      hr(),
+      uiOutput("dynamicLearners"),
+      conditionalPanel(
+        "output.learner_amount < 2",
+        actionButton("addLearner", "add Learner")
+      ),
+      hr()
+    ),
+    conditionalPanel(
+      "output.showLearners == false",
+      actionButton("parameterDone", "Done"),
+      uiOutput("dynamicParameters")
+    ),
+    column(
+      6,
+      plotly::plotlyOutput("evaluationPlot", width = "100%", height = "450px")
+    ),
+    column(
+      6,
+      plotly::plotlyOutput("evaluationPlot2", width = "100%", height = "450px")
+    ),
     bsModal(
-      "modalExample", "Task selection", "taskBut", size = "large",
+      "taskselection", "Task selection", "taskBut", size = "large",
       fluidRow(
         column(
           5,
@@ -31,7 +48,7 @@ shinyUI(
             label = "Select task type",
             choices = list("Classification" = "classif", "Regression" = "regr", "Clustering" = "cluster", "Multilabel" = "multilabel", "Survival" = "surv")
           ),
-          uiOutput("taskselection")
+          uiOutput("taskSelection")
         ),
         column(
           7,
