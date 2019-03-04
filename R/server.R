@@ -1,6 +1,7 @@
 require(mlr)
 require(plotly)
 require(ada)
+require(shinyBS)
 
 server_files = list.files(path = "./servers", pattern="*.R")
 server_files = paste0("servers/", server_files)

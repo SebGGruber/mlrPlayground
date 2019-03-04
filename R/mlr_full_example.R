@@ -22,6 +22,8 @@ data = data.frame(
 task_mlr    = mlr::makeClassifTask(data = data, target = "class")
 learner_mlr = mlr::makeLearner("classif.ada")
 
+lrn = setHyperPars(lrn,par.vals=tr$x)
+
 plotLearnerPrediction(learner_mlr, task_mlr)
 
 model       = mlr::train(learner_mlr, task_mlr)

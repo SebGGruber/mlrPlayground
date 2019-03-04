@@ -31,6 +31,18 @@ output$evaluationPlot = renderPlotly({
 
   task_mlr    = makeClassifTask(data = data, target = "class")
   learner_mlr = makeLearner(listLearners()$class[listLearners()$name == input$learner1])
+  # get hyperparameter from input
+  par.vals = {
+    has_default = sapply(learner_mlr$par.set$pars, function(par) par$has.default)
+    names = names(learner_mlr$par.set$pars)[has_default]
+    values = lapply(names, function(par) input[[paste0("parameter_", par, 1)]])
+    values = lapply(values, function(val) if (is.character(val) & !is.na(as.integer(val))) as.integer(val) else val)
+    names(values) = names
+
+    values
+  }
+  #browser()
+  learner_mlr = setHyperPars(learner_mlr, par.vals = par.vals)
   model       = train(learner_mlr, task_mlr)
 
 
@@ -40,7 +52,6 @@ output$evaluationPlot = renderPlotly({
 
   #pred = data.frame(x = unique(pred$x1), y = unique(pred$x2))
   pred$pred_matrix = as.numeric(factor(predictions))
-
   plotly::plot_ly(
     data = data,
     x = ~x1,
@@ -95,6 +106,16 @@ output$evaluationPlot2 = renderPlotly({
 
   task_mlr    = mlr::makeClassifTask(data = data, target = "class")
   learner_mlr = mlr::makeLearner(mlr::listLearners()$class[mlr::listLearners()$name == input$learner2])
+  # get hyperparameter from input
+  par.vals = {
+    has_default = sapply(learner_mlr$par.set$pars, function(par) par$has.default)
+    names = names(learner_mlr$par.set$pars)[has_default]
+    values = lapply(names, function(par) input[[paste0("parameter_", par, 2)]])
+    values = lapply(values, function(val) if (is.character(val) & !is.na(as.integer(val))) as.integer(val) else val)
+    names(values) = names
+    values
+  }
+  learner_mlr = setHyperPars(learner_mlr, par.vals = par.vals)
   model       = mlr::train(learner_mlr, task_mlr)
 
 

@@ -35,7 +35,7 @@ parameter_to_ui = function(parameter, learner_id) {
     fluidRow(
       column(3, helpText(label)),
       column(4, sliderInput(
-        inp_id, NULL, as.integer(input[[min_id]]), as.integer(input[[max_id]]), as.integer(parameter$default), step = step
+        inp_id, NULL, as.integer(input[[min_id]]), as.numeric(input[[max_id]]), parameter$default, step = step
       )),
       actionButton(btn_id, "Min/Max"),
       bsModal(mod_id, "Set slider boundaries", btn_id, size = "small", fluidRow(
@@ -87,7 +87,7 @@ output$dynamicParameters = renderUI({
         column(4, ui_split[[2]]),
         column(4, ui_split[[3]])
       ),
-      style = "overflow-y:scroll; overflow-x:hidden; max-height: 300px"
+      style = "overflow-y:scroll; overflow-x:hidden; max-height: 400px"
     )
   })
 })
