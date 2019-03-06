@@ -1,127 +1,41 @@
-require(mlr)
-require(plotly)
+values = reactiveValues(data = NULL, learner_1 = NULL, learner_2 = NULL)
 
-server_files = list.files(path = "./servers", pattern="*.R")
-server_files = paste0("servers/", server_files)
+observe({
 
-for (i in seq_along(server_files)) {
-#  source(server_files[i], local = TRUE)
-}
+  req(input$task)
 
-# By default, the file size limit is 5MB. It can be changed by
-# setting this option. Here we'll raise limit to 9MB.
-options(shiny.maxRequestSize = 9*1024^2)
+  seed = 123 # TODO
+  set.seed(seed)
 
-# set the amount of test data sets
-amount = 200 
+  values$data = {
+    if (input$task == "Circle") {
 
-# by noisy size change data sets
-size_noisy = 3
-noisy_rnom = rnorm(amount,0,1) / size_noisy
-noisy_rexp = rexp(amount, 1) / size_noisy
-noisy_runif = runif(amount,0,1) / size_noisy
+      angle = runif(400, 0, 360)
+      radius_class1 = rexp(200, 1)
+      radius_class2 = rnorm(200, 16, 3)
 
-shinyServer(function(input, output, session) {
+      data.frame(
+        x1 = sqrt(c(radius_class1, radius_class2)) * cos(2*pi*angle),
+        x2 = sqrt(c(radius_class1, radius_class2)) * sin(2*pi*angle),
+        class = c(rep("Class 1", 200), rep("Class 2", 200))
+      )
 
-  output$learnerSelection = renderUI({
+    } else if (input$task == "XOR") {
 
-    selectInput(
-      "learner",
-      label = "Select learner",
-      choices = as.list(mlr::listLearners()$name[mlr::listLearners()$type == input$tasktype])
-    )
+      x1 = runif(400, -5, 5)
+      x2 = runif(400, -5, 5)
+      xor = (x1 < 0 | x2 < 0) & !(x1 < 0 & x2 < 0)
+      class = ifelse(xor, "Class 1", "Class 2")
 
-  })
+      data.frame(x1, x2, class)
 
-  output$taskselection = renderUI({
+    } else if (input$task == "Linear ascend (2D)") {
 
-    #req(input$tasktype)
-    #print(input$tasktype)
+      x = rnorm(200, 0, 5)
+      y = 0.5 * x + rnorm(200, 0, 1)
 
-    #if (input$tasktype == "" || input$tasktype == "classif") {
-      choices = list(
-
-      #Classification
-        "1.Circle", 
-        "2.Two-Circle",
-        "3.Two-Circle-2",
-        "4.XOR",
-        "5.Gaussian",
-        "6.Across Spiral",
-        "7.Opposite Arc",
-        "8.Cross Sector",
-        "9.Wavy surface (3D)",
-        "10.Sphere (3D)",
-        
-      #Regression
-        "1.Linear ascend",
-        "2.Log linear",
-        "3.Sine",
-        "4.Ascend Cosine",
-        "5.Tangent",
-        "6.Sigmoid",
-        "7.Circle",
-        "8.Spiral",
-        "9.Parabola To Right",
-        "10.Spiral ascend (3D)",
-        
-      #Cluster
-        "1.Clustering Dataset 1",
-        "2.Clustering Dataset 2",
-        "3.Clustering Dataset 3",
-        "4.Clustering Dataset 4",
-        "5.Clustering Dataset 5",
-        "6.Clustering Dataset 6",
-
-      #Multilabel
-        "1.Spiral ascend (3D)",
-        "2.Wavy surface (3D)",
-        "3.Sphere (3D)",
-
-      #Survival
-        "1.Exponential Decrement",
-        "2.Mountain Peak",
-        "3.Wave"
-        )
-
-    #} else if (input$tasktype == "regr") {
-    #  choices = list("Linear ascend (2D)")
-
-    #} else if (input$tasktype == "cluster") {
-    #  choices = list()
-
-    #} else if (input$tasktype == "multilabel") {
-    #  choices = list()
-
-    #} else if (input$tasktype == "surv") {
-    #  choices = list()
-
-    #}
-
-    radioButtons("task", label = "Select task", choices = choices)
-  })
-
-
-  output$taskinfo = renderText(paste("Currently selected:", input$tasktype, "-", input$task))
-
-
-  output$distPlot = renderPlot({
-    x    = faithful[, 2]
-    bins = seq(min(x), max(x), length.out = 11)
-
-    # draw the histogram with the specified number of bins
-    hist(x, breaks = bins, col = 'darkgray', border = 'white')
-
-  })
-
-
-  output$datasetPlot = renderPlotly({
-
-    req(input$task)
-    set.seed(123)
-  ##add classification datasets 
-    #1.add Circle data sets
-    if (input$task == "1.Circle") {
+      data.frame(x, y)
+    } else if (input$task == "1.Circle") {
       angle = runif(400, 0, 360)
       radius_class1 = rexp(amount, 1)
       radius_class2 = rnorm(amount, 16, 3)
@@ -156,11 +70,7 @@ shinyServer(function(input, output, session) {
       x2 = sqrt(c(radius_class1, radius_class2)) * sin(2*pi*angle)
       class = ifelse(x2 > 0, "Class 1", "Class 2")
 
-      data = data.frame(
-        x1,
-        x2,
-        class
-      )
+      data = data.frame(x1, x2, class)
 
     }
 
@@ -369,7 +279,7 @@ shinyServer(function(input, output, session) {
       data = data.frame(x, y, z)
     }
   ### add clustering data sets
-  #1. add Clustering Dataset 1
+    #1. add Clustering Dataset 1
     else if(input$task == "1.Clustering Dataset 1"){
       x1 = rnorm(amount, 0, 5) + noisy_rexp
       x2 = rexp(amount,1) + noisy_rexp
@@ -384,7 +294,7 @@ shinyServer(function(input, output, session) {
       data = data.frame(x, y)
     }
 
-  #2. add Clustering Dataset 2
+    #2. add Clustering Dataset 2
     else if(input$task == "2.Clustering Dataset 2"){
       r = c(101:amount) / 200 * 5
       t = 1.75 * c(101:amount)  / 200 * 2 * pi
@@ -394,7 +304,7 @@ shinyServer(function(input, output, session) {
       data = data.frame(x, y)
     }
 
-  #3. add Clustering Dataset 3
+    #3. add Clustering Dataset 3
     else if(input$task == "3.Clustering Dataset 3"){
       angle = runif(amount * 2, 0, 360)
       radius_class1 = rexp(amount, 1)
@@ -407,7 +317,7 @@ shinyServer(function(input, output, session) {
       data = data.frame(x, y)
     }
 
-  #4. add Clustering Dataset 4
+    #4. add Clustering Dataset 4
     else if(input$task == "4.Clustering Dataset 4"){
       angle = runif(amount * 2, 0, 360)
       radius_class1 = rnorm(amount, 8, 3)
@@ -543,122 +453,5 @@ shinyServer(function(input, output, session) {
 
       data <- data.frame(x, y1, y2)
     }
-
-  #4. add Log data sets
-    else if(input$task == "4.Log"){
-      x = c(1 : 91)
-      t1 = c(round(runif(30, 10, 90), 0) / 100, round(runif(30, 110, 190), 0) / 100, round(runif(30, 210, 290), 0) / 100)
-      s1 = sort(t1,TRUE) * pi
-      y1 = c(1, abs(sin(s1)))
-
-      t2 = c(round(runif(30, -40, 40), 0) / 100, round(runif(30, 60, 140), 0) / 100, round(runif(30, 160, 240), 0) / 100)
-      s2 = sort(t2,TRUE) * pi
-      y2 = c(1, abs(cos(s2)) * 0.6)
-    }
-
-### parameter setting of plot_ly ###
-    if (input$tasktype == "classif") {
-      plotly::plot_ly(
-        data = data,
-        x = ~x1,
-        y = ~x2,
-        color = ~class,
-        colors = c("#2b8cbe", "#e34a33"),
-        type = "scatter",
-        mode = "markers"
-      )
-    } 
-    else if (input$tasktype == "classif_3d") {
-      plotly::plot_ly(
-          data = data,
-          type = "scatter3d",
-          x = ~x,
-          y = ~y,
-          z = ~z,
-          color = ~class,
-          colors = c("#2b8cbe", "#e34a33")
-      )%>%
-          add_markers()%>%
-          layout(scene = list(xaxis = list(title = 'xaxis'),
-                              yaxis = list(title = 'yaxis'),
-                              zaxis = list(title = 'zaxis')))
-    }
-    else if (input$tasktype == "regr") {
-      plotly::plot_ly(
-        data = data,
-        x = ~x,
-        y = ~y,
-        type = "scatter",
-        mode = "markers"
-      )
-    }
-    else if (input$tasktype == "regr_3d") {
-      plotly::plot_ly(
-          data = data,
-          type = "scatter3d",
-          x = ~x,
-          y = ~y,
-          z = ~z
-      )%>%
-          add_markers()%>%
-          layout(scene = list(xaxis = list(title = 'xaxis'),
-                              yaxis = list(title = 'yaxis'),
-                              zaxis = list(title = 'zaxis')))
-    }
-    else if (input$tasktype == "cluster") {
-      plotly::plot_ly(
-        data = data,
-        x = ~x,
-        y = ~y,
-        marker = list(
-          size = 10,
-          color = 'rgba(255, 182, 193, .9)',
-          line = list(color = 'rgba(152, 0, 0, .8)',
-          width = 1)
-        ),
-        type = "scatter",
-        mode = "markers"
-      )
-    }
-    else if(input$tasktype == "multilabel"){
-    plotly::plot_ly(
-        data = data,
-        type = "scatter3d",
-        x = ~x,
-        y = ~y,
-        z = ~z,
-        marker = list(color = ~z, colorscale = c('#FFE1A1', '#683531'), showscale = TRUE)
-    )%>%
-        add_markers()%>%
-        layout(scene = list(xaxis = list(title = 'xaxis'),
-                            yaxis = list(title = 'yaxis'),
-                            zaxis = list(title = 'zaxis')))
-    }
-    else if (input$tasktype == "surv") {
-      plot_ly(
-        data, 
-        x = ~x, 
-        y = ~y1, 
-        line = list(
-          color = "blue", 
-          shape = "hv"
-        ), 
-        mode = "lines", 
-        type = "scatter"
-      ) %>%   
-      add_trace(
-        y = ~y2,
-        name = 'trace 2',
-        line = list(
-        color = "red"
-        ),
-        mode ='lines'
-      )
-    }
-    else {
-      plotly::plotly_empty()
-    }
-  })
-
-  session$onSessionEnded(stopApp)
+  }
 })
