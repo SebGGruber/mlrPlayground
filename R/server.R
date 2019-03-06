@@ -1,7 +1,6 @@
 require(mlr)
 require(plotly)
 require(ada)
-require(shinyBS)
 
 server_files = list.files(path = "./servers", pattern="*.R")
 server_files = paste0("servers/", server_files)
@@ -16,10 +15,11 @@ options(shiny.maxRequestSize = 9*1024^2)
 
 shinyServer(function(input, output, session) {
 
-  # rendering: output$taskSelection
-  source("server/taskSelection.R", local = TRUE)
+  # reactive:
+  source("server/reactiveValues.R", local = TRUE)
 
-  output$taskinfo = renderText(paste("Currently selected:", input$tasktype, "-", input$task))
+  # rendering: output$taskSelection, output$taskinfo
+  source("server/taskSelection.R", local = TRUE)
 
   # rendering: output$addLearner
   source("server/addLearner.R", local = TRUE)
