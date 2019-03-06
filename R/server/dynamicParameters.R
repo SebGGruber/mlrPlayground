@@ -1,6 +1,4 @@
-#make_parameter_ui = function(learner){
-#  lapply(learner$par.set$pars,
-parameter_to_ui = function(parameter, learner_id) {
+min_max_modals = function(parameter, learner_id) {
 
   id = paste0(parameter$id, learner_id)
 
@@ -10,13 +8,10 @@ parameter_to_ui = function(parameter, learner_id) {
 
   } else if (parameter$type %in% c("integer", "numeric")) {
 
-    inp_id = paste0("parameter_", id)
-    label  = parameter$id #paste( "Set",        parameter$id)
     mod_id = paste0("mod_",       id)
     btn_id = paste0("btn_",       id)
     min_id = paste0("min_",       id)
     max_id = paste0("max_",       id)
-    step   = if (parameter$type == "integer") 1 else NULL
 
     min_value = {
       if (is.infinite(parameter$lower))
@@ -32,16 +27,36 @@ parameter_to_ui = function(parameter, learner_id) {
         parameter$upper
     }
 
+    bsModal(mod_id, "Set slider boundaries", btn_id, size = "small", fluidRow(
+      numericInput(min_id, "Parameter Min", min_value, width = "80%"),
+      numericInput(max_id, "Parameter Max", max_value, width = "80%")
+    ))
+  }
+}
+
+parameter_to_ui = function(parameter, learner_id) {
+
+  id = paste0(parameter$id, learner_id)
+
+  if (!parameter$has.default) {
+    # don't know what to do without default (yet) :(
+    NULL
+
+  } else if (parameter$type %in% c("integer", "numeric")) {
+
+    inp_id = paste0("parameter_", id)
+    label  = parameter$id #paste( "Set",        parameter$id)
+    btn_id = paste0("btn_",       id)
+    min_id = paste0("min_",       id)
+    max_id = paste0("max_",       id)
+    step   = if (parameter$type == "integer") 1 else NULL
+
     fluidRow(
       column(3, helpText(label)),
       column(4, sliderInput(
         inp_id, NULL, as.integer(input[[min_id]]), as.numeric(input[[max_id]]), parameter$default, step = step
       )),
-      actionButton(btn_id, "Min/Max"),
-      bsModal(mod_id, "Set slider boundaries", btn_id, size = "small", fluidRow(
-        numericInput(min_id, "Parameter Min", min_value),
-        numericInput(max_id, "Parameter Max", max_value)
-      ))
+      actionButton(btn_id, "Min/Max")
     )
 
   } else if (parameter$type == "discrete") {
@@ -64,19 +79,39 @@ parameter_to_ui = function(parameter, learner_id) {
   }
 }
 
+# render bsModals for the min/max values of each slider
+output$min_max_modals = renderUI({
+
+  req(learner_amount_enum())
+  # for each learner
+  lapply(learner_amount_enum(), function(i) {
+
+    name = paste0("learner_", i)
+    # react to "input" instead of "values" here, because we do only want
+    # an execution when the learner name changes - not its hyperparameters
+    req(input[[name]])
+    learner = req(isolate(values[[name]]))
+#browser()
+    lapply(learner$par.set$pars, function(par) min_max_modals(par, i))
+  })
+})
+
+
 output$dynamicParameters = renderUI({
 
   req(learner_amount_enum())
   # for each learner
   lapply(learner_amount_enum(), function(i) {
-    # setup dummy learner to get parameter list
-    lrn_name = input[[paste0("learner", i)]]
-    learner_mlr = makeLearner(listLearners()$class[listLearners()$name == lrn_name])
+
+    name = paste0("learner_", i)
+    # react to "input" instead of "values" here, because we do only want
+    # an execution when the learner name changes - not its hyperparameters
+    req(input[[name]])
+    learner = req(isolate(values[[name]]))
     # sort parameter list by parameter type
-    par_list = learner_mlr$par.set$pars[order(sapply(learner_mlr$par.set$pars, function(par) par$type))]
+    par_list = learner$par.set$pars[order(sapply(learner$par.set$pars, function(par) par$type))]
+    # for each parameter
     ui_list  = lapply(par_list, function(par) parameter_to_ui(par, i))
-    # indeces of first half
-#    split_index1 = 1:round(length(ui_list)/3)
     ui_split = split(ui_list, cut(seq_along(ui_list), 3, labels = FALSE))
     # compute (hidden) parameter panel
     conditionalPanel(
@@ -93,4 +128,4 @@ output$dynamicParameters = renderUI({
 })
 
 # force loading even when hidden
-outputOptions(output, "dynamicParameters", suspendWhenHidden = FALSE)
+outputOptions(output, "min_max_modals", suspendWhenHidden = FALSE)

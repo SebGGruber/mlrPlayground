@@ -31,7 +31,8 @@ shinyUI(
     ),
     conditionalPanel(
       "output.showLearners == false",
-      actionButton("parameterDone", "Done"),
+      actionButton("parameterDone", "Back"),
+      uiOutput("min_max_modals"),
       withSpinner(
         uiOutput("dynamicParameters")
       )
@@ -39,13 +40,13 @@ shinyUI(
     column(
       6,
       withSpinner(
-        plotly::plotlyOutput("evaluationPlot", width = "100%", height = "450px")
+        plotly::plotlyOutput("evaluationPlot_1", width = "100%", height = "450px")
       )
     ),
     column(
       6,
       withSpinner(
-        plotly::plotlyOutput("evaluationPlot2", width = "100%", height = "450px")
+        plotly::plotlyOutput("evaluationPlot_2", width = "100%", height = "450px")
       )
     ),
     bsModal(

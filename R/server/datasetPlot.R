@@ -1,13 +1,13 @@
 output$datasetPlot = renderPlotly({
 
-  req(values$data)
+  data = req(values$data)
   #req(input$task)
   # we only want execution when the data changed
   tasktype = isolate(input$tasktype)
 
   if (tasktype == "classif") {
     plotly::plot_ly(
-      data   = values$data,
+      data   = data,
       x      = ~x1,
       y      = ~x2,
       color  = ~class,
@@ -18,7 +18,7 @@ output$datasetPlot = renderPlotly({
 
   } else if (tasktype == "regr") {
     plotly::plot_ly(
-      data = values$data,
+      data = data,
       x    = ~x,
       y    = ~y,
       type = "scatter",
