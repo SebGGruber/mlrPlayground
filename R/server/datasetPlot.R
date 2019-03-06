@@ -34,12 +34,12 @@ output$datasetPlot = renderPlotly({
       )
   
   } else if (tasktype == "regr") {
-      plotly::plot_ly(
-        data = values$data,
-        x    = ~x,
-        y    = ~y,
-        type = "scatter",
-        mode = "markers"
+    plotly::plot_ly(
+      data = values$data,
+      x    = ~x,
+      y    = ~y,
+      type = "scatter",
+      mode = "markers"
     )
 
   } else if (input$tasktype == "regr_3d") {
