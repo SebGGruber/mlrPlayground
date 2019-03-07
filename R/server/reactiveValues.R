@@ -1,12 +1,12 @@
 values = reactiveValues(data = NULL, learner_1 = NULL, learner_2 = NULL)
 
 # set the amount of test data sets
-amount = 200 
+amount      = 200 
 
 # by noisy size change data sets
-size_noisy = 3
-noisy_rnom = rnorm(amount,0,1) / size_noisy
-noisy_rexp = rexp(amount, 1) / size_noisy
+size_noisy  = 3
+noisy_rnom  = rnorm(amount,0,1) / size_noisy
+noisy_rexp  = rexp(amount, 1) / size_noisy
 noisy_runif = runif(amount,0,1) / size_noisy
 
 
