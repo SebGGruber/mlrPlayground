@@ -31,6 +31,9 @@ min_max_modals = function(parameter, learner_id) {
       numericInput(min_id, "Parameter Min", min_value, width = "80%"),
       numericInput(max_id, "Parameter Max", max_value, width = "80%")
     ))
+
+  } else {
+    NULL
   }
 }
 
@@ -76,6 +79,9 @@ parameter_to_ui = function(parameter, learner_id) {
       column(3, helpText(label)),
       column(4, checkboxInput(inp_id, NULL, parameter$default))
     )
+
+  } else {
+    NULL
   }
 }
 
@@ -112,7 +118,13 @@ output$dynamicParameters = renderUI({
     par_list = learner$par.set$pars[order(sapply(learner$par.set$pars, function(par) par$type))]
     # for each parameter
     ui_list  = lapply(par_list, function(par) parameter_to_ui(par, i))
-    ui_split = split(ui_list, cut(seq_along(ui_list), 3, labels = FALSE))
+    ui_split = {
+      # if there are more than 2 parameters, split the UI into 3 columns
+      if (length(ui_list) > 2)
+        split(ui_list, cut(seq_along(ui_list), 3, labels = FALSE))
+      else
+        list(ui_list, NULL, NULL)
+    }
     # compute (hidden) parameter panel
     conditionalPanel(
       paste0("output.showParam", i, " == true"),

@@ -51,9 +51,20 @@ observe({
 
 # create learner based on selected learner
 observe({
-  learner          = req(input$learner_1)
-  values$learner_1 = makeLearner(
-    listLearners()$class[listLearners()$name == learner]
+  learner = req(input$learner_1)
+  tryCatch({
+    values$learner_1 = makeLearner(
+      listLearners()$class[listLearners()$name == learner & listLearners()$type == input$tasktype]
+    )},
+    error = function(e) {
+      content = paste(
+        "Please install package(s):",
+        paste(listLearners()$package[listLearners()$name == learner & listLearners()$type == input$tasktype], collapse = ", ")
+      )
+      createAlert(
+        session, "learner_error", title = "Can't create learner!", content = content, append = FALSE
+      )
+    }
   )
 })
 
@@ -76,8 +87,15 @@ observe({
 # create learner based on selected learner
 observe({
   learner          = req(input$learner_2)
-  values$learner_2 = makeLearner(
-    listLearners()$class[listLearners()$name == learner]
+  tryCatch({
+    values$learner_2 = makeLearner(
+      listLearners()$class[listLearners()$name == learner & listLearners()$type == input$tasktype]
+    )},
+    error = function(e) {
+      createAlert(
+        session, "learner_error", title = "Can't create learner!", content = e, append = FALSE
+      )
+    }
   )
 })
 

@@ -17,11 +17,21 @@ data = data.frame(
 
 #data = data.frame(x1, x2, class)
 
+learner_mlr = mlr::makeLearner("classif.adaboostm1")
 
+paste(
+  "Please install package(s):",
+  paste(listLearners()$package[listLearners()$short.name == "bst"], collapse = ", ")
+)
 
 task_mlr    = mlr::makeClassifTask(data = data, target = "class")
-learner_mlr = mlr::makeLearner("classif.ada")
-
+tryCatch(
+  learner_mlr = mlr::makeLearner("classif.boosting"),
+  error = function(e) {
+    createAlert(session, "learner_error", title = "Can't create learner!",
+                content = e, append = FALSE)
+  }
+)
 lrn = setHyperPars(lrn,par.vals=tr$x)
 
 plotLearnerPrediction(learner_mlr, task_mlr)

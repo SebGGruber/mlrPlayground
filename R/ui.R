@@ -20,6 +20,7 @@ shinyUI(
       actionButton("taskBut", "Set task"),
       textOutput("taskinfo"),
       hr(),
+      bsAlert("learner_error"),
       withSpinner(
         uiOutput("dynamicLearners")
       ),
@@ -32,10 +33,10 @@ shinyUI(
     conditionalPanel(
       "output.showLearners == false",
       actionButton("parameterDone", "Back"),
-      uiOutput("min_max_modals"),
       withSpinner(
         uiOutput("dynamicParameters")
-      )
+      ),
+      uiOutput("min_max_modals")
     ),
     column(
       6,
