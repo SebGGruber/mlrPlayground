@@ -120,10 +120,10 @@ output$dynamicParameters = renderUI({
     ui_list  = lapply(par_list, function(par) parameter_to_ui(par, i))
     ui_split = {
       # if there are more than 2 parameters, split the UI into 3 columns
-      if (length(ui_list) > 2)
-        split(ui_list, cut(seq_along(ui_list), 3, labels = FALSE))
+      if (length(ui_list) > 4)
+        split(ui_list, cut(seq_along(ui_list), 2, labels = FALSE))
       else
-        list(ui_list, NULL, NULL)
+        list(ui_list, NULL)
     }
     # compute (hidden) parameter panel
     conditionalPanel(
@@ -131,10 +131,9 @@ output$dynamicParameters = renderUI({
       fluidRow(
         # split into two columns
         column(4, ui_split[[1]]),
-        column(4, ui_split[[2]]),
-        column(4, ui_split[[3]])
+        column(4, ui_split[[2]])
       ),
-      style = "overflow-y:scroll; overflow-x:hidden; max-height: 400px"
+      style = "overflow-y:scroll; overflow-x:hidden; max-height: 800px; min-height: 800px"
     )
   })
 })

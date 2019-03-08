@@ -1,5 +1,5 @@
 require(shiny)
-require(shinyjs)
+#require(shinyjs)
 require(shinythemes)
 require(shinyBS)
 require(shinycssloaders)
@@ -14,60 +14,90 @@ for (i in seq_along(ui_files)) {
 
 shinyUI(
   basicPage(
-    hr(),
-    conditionalPanel(
-      "output.showLearners == true",
-      actionButton("taskBut", "Set task"),
-      textOutput("taskinfo"),
+    column(
+      6,
       hr(),
-      bsAlert("learner_error"),
-      withSpinner(
-        uiOutput("dynamicLearners")
+      hr(),
+      conditionalPanel(
+        "output.showLearners == true",
+        actionButton("taskBut", "Set task"),
+        textOutput("taskinfo"),
+        hr(),
+        bsAlert("learner_error"),
+        withSpinner(
+          uiOutput("dynamicLearners")
+        ),
+        conditionalPanel(
+          "output.learner_amount < 2",
+          actionButton("addLearner", "add Learner")
+        ),
+        hr()
       ),
       conditionalPanel(
-        "output.learner_amount < 2",
-        actionButton("addLearner", "add Learner")
+        "output.showLearners == false",
+        actionButton("parameterDone", "Back"),
+        withSpinner(
+          uiOutput("dynamicParameters")
+        ),
+        uiOutput("min_max_modals")
       ),
-      hr()
-    ),
-    conditionalPanel(
-      "output.showLearners == false",
-      actionButton("parameterDone", "Back"),
-      withSpinner(
-        uiOutput("dynamicParameters")
-      ),
-      uiOutput("min_max_modals")
-    ),
-    column(
-      6,
-      withSpinner(
-        plotly::plotlyOutput("evaluationPlot_1", width = "100%", height = "450px")
-      )
-    ),
-    column(
-      6,
-      withSpinner(
-        plotly::plotlyOutput("evaluationPlot_2", width = "100%", height = "450px")
-      )
-    ),
-    bsModal(
-      "taskselection", "Task selection", "taskBut", size = "large",
-      fluidRow(
-        column(
-          5,
-          selectInput(
-            "tasktype",
-            label = "Select task type",
-            choices = list("Classification" = "classif", "Regression" = "regr", "Clustering" = "cluster", "Multilabel" = "multilabel", "Survival" = "surv")
+      bsModal(
+        "taskselection", "Task selection", "taskBut", size = "large",
+        fluidRow(
+          column(
+            5,
+            selectInput(
+              "tasktype",
+              label = "Select task type",
+              choices = list("Classification" = "classif", "Regression" = "regr", "Clustering" = "cluster", "Multilabel" = "multilabel", "Survival" = "surv")
+            ),
+            withSpinner(
+              uiOutput("taskSelection")
+            )
           ),
+          column(
+            7,
+            withSpinner(
+              plotly::plotlyOutput("datasetPlot")
+            )
+          )
+        )
+      )
+    ),
+    column(
+      6,
+      tabsetPanel(
+        type = "tabs",
+        tabPanel(
+          "Predictions",
+          helpText("Learner 1:"),
           withSpinner(
-            uiOutput("taskSelection")
+            plotly::plotlyOutput("evaluationPlot_1", width = "100%", height = "450px")
+          ),
+          conditionalPanel(
+            "output.learner_amount > 1",
+            helpText("Learner 2:"),
+            withSpinner(
+              plotly::plotlyOutput("evaluationPlot_2", width = "100%", height = "450px")
+            )
           )
         ),
-        column(
-          7,
+        tabPanel(
+          "Learning Curve",
           withSpinner(
-            plotly::plotlyOutput("datasetPlot")
+            plotOutput("learningCurve", width = "100%", height = "450px")
+          )
+        ),
+        tabPanel(
+          "Benchmark",
+          withSpinner(
+            plotOutput("benchmarkPlot", width = "100%", height = "450px")
+          )
+        ),
+        tabPanel(
+          "ROC",
+          withSpinner(
+            plotOutput("ROCPlot", width = "100%", height = "450px")
           )
         )
       )

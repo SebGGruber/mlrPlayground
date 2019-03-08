@@ -9,7 +9,7 @@ modified_req = function(x){
     req(x)
 }
 
-values = reactiveValues(data = NULL, learner_1 = NULL, learner_2 = NULL)
+values = reactiveValues(data = NULL, task = NULL, learner_1 = NULL, learner_2 = NULL)
 
 observe({
 
@@ -48,6 +48,14 @@ observe({
     }
   }
 })
+
+
+# create task based on selected data
+observe({
+  data        = req(values$data)
+  values$task = makeClassifTask(data = data, target = "class")
+})
+
 
 # create learner based on selected learner
 observe({

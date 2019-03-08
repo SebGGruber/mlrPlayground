@@ -2,10 +2,9 @@ output_plot = function(i) {
   #input$startTraining
   learner = paste0("learner_", i)
   learner = req(values[[learner]])
-  data    = req(values$data)
+  #data    = req(values$data)
 
-  # TODO: test for better runtime by extracting the following line
-  task    = makeClassifTask(data = data, target = "class")
+  task    = req(values$task)
   model   = train(learner, task)
 
 
@@ -32,7 +31,8 @@ output_plot = function(i) {
       colors = colorRamp(c("red", "blue")),
       opacity = 0.2,
       showscale = FALSE
-    )
+    ) %>%
+    plotly::layout(xaxis = list(title = ""), yaxis = list(title = ""))
 }
 
 output$evaluationPlot_1 = renderPlotly({

@@ -34,10 +34,19 @@ shinyServer(function(input, output, session) {
   source("server/dynamicParameters.R", local = TRUE)
 
   # rendering: output$evaluationPlot
-  source("server/evaluationPlot.R", local = TRUE)
+  source("server/predictionPlot.R", local = TRUE)
 
   # rendering: output$datasetPlot
   source("server/datasetPlot.R", local = TRUE)
+
+  # rendering: output$learningCurve
+  source("server/learningCurve.R", local = TRUE)
+
+  # rendering: output$benchmarkPlot
+  source("server/benchmarkPlot.R", local = TRUE)
+
+  # rendering: output$ROCPlot
+  source("server/ROCPlot.R", local = TRUE)
 
   session$onSessionEnded(stopApp)
 })
