@@ -39,12 +39,12 @@ observe({
 
       data.frame(x1, x2, class)
 
-    } else if (task == "Linear ascend (2D)") {
+    #} else if (task == "Linear ascend (2D)") {
 
-      x = rnorm(200, 0, 5)
-      y = 0.5 * x + rnorm(200, 0, 1)
+    #  x = rnorm(200, 0, 5)
+    #  y = 0.5 * x + rnorm(200, 0, 1)
 
-      data.frame(x, y)
+    #  data.frame(x, y)
     }
   }
 })
@@ -81,12 +81,12 @@ observe({
   learner          = req(values$learner_1)
   values$learner_1 = {
 
-    has_default = sapply(learner$par.set$pars, function(par) par$has.default)
-    names       = names(learner$par.set$pars)[has_default]
+    is_valid = sapply(learner$par.set$pars, function(par) par$has.default & par$tunable)
+    names       = names(learner$par.set$pars)[is_valid]
+    #browser()
     par.vals    = lapply(names,    function(par) modified_req(input[[paste0("parameter_", par, 1)]]))
     par.vals    = lapply(par.vals, function(val) if (is.character(val) & !is.na(as.integer(val))) as.integer(val) else val)
     names(par.vals) = names
-    #browser()
 
     setHyperPars(learner, par.vals = par.vals)
   }
@@ -112,8 +112,8 @@ observe({
   learner          = req(values$learner_2)
   values$learner_2 = {
 
-    has_default = sapply(learner$par.set$pars, function(par) par$has.default)
-    names       = names(learner$par.set$pars)[has_default]
+    is_valid = sapply(learner$par.set$pars, function(par) par$has.default & par$tunable)
+    names       = names(learner$par.set$pars)[is_valid]
     par.vals    = lapply(names,    function(par) modified_req(input[[paste0("parameter_", par, 2)]]))
     par.vals    = lapply(par.vals, function(val) if (is.character(val) & !is.na(as.integer(val))) as.integer(val) else val)
     names(par.vals) = names

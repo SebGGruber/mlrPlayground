@@ -16,11 +16,15 @@ output$dynamicLearners = renderUI({
     fluidRow(
       column(
         3,
-        selectInput(
+        selectInput( #selectizeInput(
           inputId   = paste0("learner_", i),
           label     = paste("Learner", i),
           choices   = as.list(Choose = "", mlr::listLearners()$name[mlr::listLearners()$type == input$tasktype]),
           selected  = isolate(selected_learners()[i]),
+          #options = list(
+          #  placeholder = 'Please select an option below',
+          #  onInitialize = I('function() { this.setValue(""); }')
+          #)#,
           selectize = TRUE
         )
       ),

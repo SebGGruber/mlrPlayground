@@ -49,7 +49,7 @@ shinyUI(
             selectInput(
               "tasktype",
               label = "Select task type",
-              choices = list("Classification" = "classif", "Regression" = "regr", "Clustering" = "cluster", "Multilabel" = "multilabel", "Survival" = "surv")
+              choices = list("Classification" = "classif")#, "Regression" = "regr", "Clustering" = "cluster", "Multilabel" = "multilabel", "Survival" = "surv")
             ),
             withSpinner(
               uiOutput("taskSelection")

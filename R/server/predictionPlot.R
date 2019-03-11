@@ -1,8 +1,8 @@
 output_plot = function(i) {
-  #input$startTraining
+
   learner = paste0("learner_", i)
   learner = req(values[[learner]])
-  #data    = req(values$data)
+  data    = req(values$data)
 
   task    = req(values$task)
   model   = train(learner, task)

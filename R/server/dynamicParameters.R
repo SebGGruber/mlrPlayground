@@ -2,7 +2,7 @@ min_max_modals = function(parameter, learner_id) {
 
   id = paste0(parameter$id, learner_id)
 
-  if (!parameter$has.default) {
+  if (!parameter$has.default | !parameter$tunable) {
     # don't know what to do without default (yet) :(
     NULL
 
@@ -41,7 +41,7 @@ parameter_to_ui = function(parameter, learner_id) {
 
   id = paste0(parameter$id, learner_id)
 
-  if (!parameter$has.default) {
+  if (!parameter$has.default | !parameter$tunable) {
     # don't know what to do without default (yet) :(
     NULL
 
@@ -130,8 +130,8 @@ output$dynamicParameters = renderUI({
       paste0("output.showParam", i, " == true"),
       fluidRow(
         # split into two columns
-        column(4, ui_split[[1]]),
-        column(4, ui_split[[2]])
+        column(6, ui_split[[1]]),
+        column(6, ui_split[[2]])
       ),
       style = "overflow-y:scroll; overflow-x:hidden; max-height: 800px; min-height: 800px"
     )
