@@ -1,12 +1,17 @@
 # mlrPlayground
 Interactive machine learning playground for the mlr package done in shiny.
 
+
 Select predefined (but tunable) tasks:
-![alt text](https://imgur.com/N2LshkV)
+
+![Screenshot](https://i.imgur.com/N2LshkV.png)
+
 
 
 Select learner (plus its hyperparameters) and plot prediction plane:
-![alt text](https://imgur.com/QZoUExQ)
+
+![Screenshot](https://i.imgur.com/QZoUExQ.png)
+
 
 
 ## How to start:
