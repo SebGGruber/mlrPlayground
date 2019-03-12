@@ -1,5 +1,23 @@
 # mlrPlayground
-Playground for the mlr package done in shiny
+Interactive machine learning playground for the mlr package done in shiny.
+
+Select predefined (but tunable) tasks:
+![alt text](https://imgur.com/N2LshkV)
+
+
+Select learner (plus its hyperparameters) and plot prediction plane:
+![alt text](https://imgur.com/QZoUExQ)
+
+
+## How to start:
+Use this link (currently only represents branch 'sebastian'):
+http://sebastian-gruber.shinyapps.io/mlrPlayground
+
+###### Or:
+Open the file R/server.R or R/ui.R in Rstudio and press the "start app" button.
+
+###### Or:
+Execute ``shiny::startApp('R/')`` in the project folder.
 
 ## TODO
 
