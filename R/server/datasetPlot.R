@@ -1,41 +1,13 @@
 output$datasetPlot = renderPlotly({
 
-  req(input$task)
-  set.seed(123)
+  req(values$data)
+  #req(input$task)
+  # we only want execution when the data changed
+  tasktype = isolate(input$tasktype)
 
-  if (input$task == "Circle") {
-
-    angle = runif(400, 0, 360)
-    radius_class1 = rexp(200, 1)
-    radius_class2 = rnorm(200, 16, 3)
-
-    data = data.frame(
-      x1 = sqrt(c(radius_class1, radius_class2)) * cos(2*pi*angle),
-      x2 = sqrt(c(radius_class1, radius_class2)) * sin(2*pi*angle),
-      class = c(rep("Class 1", 200), rep("Class 2", 200))
-    )
-
-  } else if (input$task == "XOR") {
-
-    x1 = runif(400, -5, 5)
-    x2 = runif(400, -5, 5)
-    xor = (x1 < 0 | x2 < 0) & !(x1 < 0 & x2 < 0)
-    class = ifelse(xor, "Class 1", "Class 2")
-
-    data = data.frame(x1, x2, class)
-
-  } else if (input$task == "Linear ascend (2D)") {
-
-    x = rnorm(200, 0, 5)
-    y = 0.5 * x + rnorm(200, 0, 1)
-
-    data = data.frame(x, y)
-
-  }
-
-  if (input$tasktype == "classif") {
+  if (tasktype == "classif") {
     plotly::plot_ly(
-      data   = data,
+      data   = values$data,
       x      = ~x1,
       y      = ~x2,
       color  = ~class,
@@ -44,20 +16,110 @@ output$datasetPlot = renderPlotly({
       mode   = "markers"
     )
 
-  } else if (input$tasktype == "regr") {
+  } else if (input$tasktype == "classif_3d") {
+      plotly::plot_ly(
+        data = values$data,
+        type = "scatter3d",
+        x    = ~x,
+        y    = ~y,
+        z    = ~z,
+        color = ~class,
+        colors = c("#2b8cbe", "#e34a33")
+      )%>%
+      add_markers()%>%
+      layout(scene = list(
+        xaxis = list(title = 'xaxis'),
+        yaxis = list(title = 'yaxis'),
+        zaxis = list(title = 'zaxis'))
+      )
+  
+  } else if (tasktype == "regr") {
     plotly::plot_ly(
-      data = data,
+      data = values$data,
       x    = ~x,
       y    = ~y,
       type = "scatter",
       mode = "markers"
     )
 
+  } else if (input$tasktype == "regr_3d") {
+      plotly::plot_ly(
+        data = values$data,
+        type = "scatter3d",
+        x    = ~x,
+        y    = ~y,
+        z    = ~z
+      )%>%
+      add_markers()%>%
+      layout(scene = list(
+        xaxis = list(title = 'xaxis'),
+        yaxis = list(title = 'yaxis'),
+        zaxis = list(title = 'zaxis'))
+      )
+
+  }else if (input$tasktype == "cluster") {
+      plotly::plot_ly(
+        data   = values$data,
+        x      = ~x,
+        y      = ~y,
+        marker = list(
+          size  = 10,
+          color = 'rgba(255, 182, 193, .9)',
+          line  = list(
+            color = 'rgba(152, 0, 0, .8)',
+            width = 1
+          )
+        ),
+        type   = "scatter",
+        mode   = "markers"
+      )
+
+  }else if(input$tasktype == "multilabel"){
+    plotly::plot_ly(
+      data   = values$data,
+      type   = "scatter3d",
+      x      = ~x,
+      y      = ~y,
+      z      = ~z,
+      marker = list(
+          color      = ~z, 
+          colorscale = c('#FFE1A1', '#683531'), 
+          showscale  = TRUE)
+    )%>%
+    add_markers()%>%
+    layout(scene = list(
+      xaxis = list(title = 'xaxis'),
+      yaxis = list(title = 'yaxis'),
+      zaxis = list(title = 'zaxis')))
+    }
+    else if (input$tasktype == "surv") {
+      plot_ly(
+        data = values$data, 
+        x    = ~x, 
+        y    = ~y1, 
+        line = list(
+          color = "blue", 
+          shape = "hv"
+        ), 
+        mode = "lines", 
+        type = "scatter"
+      ) %>%   
+      add_trace(
+        y    = ~y2,
+        name = 'trace 2',
+        line = list(
+          color = "red"
+        ),
+        mode ='lines'
+      )        
   } else {
     plotly::plotly_empty()
   }
 
 })
+
+# small info text in the UI
+output$taskinfo = renderText(paste("Currently selected:", input$tasktype, "-", input$task))
 
 # force loading even when hidden
 outputOptions(output, "datasetPlot",     suspendWhenHidden = FALSE)

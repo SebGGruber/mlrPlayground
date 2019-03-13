@@ -2,6 +2,8 @@ require(shiny)
 require(shinyjs)
 require(shinythemes)
 require(shinyBS)
+require(shinycssloaders)
+
 
 ui_files = list.files(path = "./ui", pattern = "*.R")
 ui_files = paste0("ui/", ui_files)
@@ -18,7 +20,9 @@ shinyUI(
       actionButton("taskBut", "Set task"),
       textOutput("taskinfo"),
       hr(),
-      uiOutput("dynamicLearners"),
+      withSpinner(
+        uiOutput("dynamicLearners")
+      ),
       conditionalPanel(
         "output.learner_amount < 2",
         actionButton("addLearner", "add Learner")
@@ -28,15 +32,21 @@ shinyUI(
     conditionalPanel(
       "output.showLearners == false",
       actionButton("parameterDone", "Done"),
-      uiOutput("dynamicParameters")
+      withSpinner(
+        uiOutput("dynamicParameters")
+      )
     ),
     column(
       6,
-      plotly::plotlyOutput("evaluationPlot", width = "100%", height = "450px")
+      withSpinner(
+        plotly::plotlyOutput("evaluationPlot", width = "100%", height = "450px")
+      )
     ),
     column(
       6,
-      plotly::plotlyOutput("evaluationPlot2", width = "100%", height = "450px")
+      withSpinner(
+        plotly::plotlyOutput("evaluationPlot2", width = "100%", height = "450px")
+      )
     ),
     bsModal(
       "taskselection", "Task selection", "taskBut", size = "large",
@@ -46,13 +56,17 @@ shinyUI(
           selectInput(
             "tasktype",
             label = "Select task type",
-            choices = list("Classification" = "classif", "Regression" = "regr", "Clustering" = "cluster", "Multilabel" = "multilabel", "Survival" = "surv")
+            choices = list("Classification" = "classif", "Classification 3D" = "classif_3d","Regression" = "regr","Regression 3D" = "regr_3d", "Clustering" = "cluster", "Multilabel" = "multilabel", "Survival" = "surv")
           ),
-          uiOutput("taskSelection")
+          withSpinner(
+            uiOutput("taskSelection")
+          )
         ),
         column(
           7,
-          plotly::plotlyOutput("datasetPlot")
+          withSpinner(
+            plotly::plotlyOutput("datasetPlot")
+          )
         )
       )
     )

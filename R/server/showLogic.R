@@ -1,32 +1,32 @@
-# only works for two learners
+# only works for two learners atm
 # make the list length reactive for arbitrary amount of learners
-values = reactiveValues(showLearners = TRUE, showParam1 = FALSE, showParam2 = FALSE)
+show = reactiveValues(learners = TRUE, param1 = FALSE, param2 = FALSE)
 
 #
 observe({
   req(input$parameter1)
-  values$showLearners = FALSE
-  values$showParam1 = TRUE
+  show$learners = FALSE
+  show$param1 = TRUE
 })
 
 #
 observe({
   req(input$parameter2)
-  values$showLearners = FALSE
-  values$showParam2 = TRUE
+  show$learners = FALSE
+  show$param2 = TRUE
 })
 
-# invert showParam1 whenever "set learner 1 parameter" or "done" button is pressed
+#
 observe({
   req(input$parameterDone)
-  values$showLearners = TRUE
-  values$showParam1 = FALSE
-  values$showParam2 = FALSE
+  show$learners = TRUE
+  show$param1 = FALSE
+  show$param2 = FALSE
 })
 
-output$showLearners = reactive(values$showLearners)
-output$showParam1 = reactive(values$showParam1)
-output$showParam2 = reactive(values$showParam2)
+output$showLearners = reactive(show$learners)
+output$showParam1   = reactive(show$param1)
+output$showParam2   = reactive(show$param2)
 
 # force loading even when hidden
 outputOptions(output, "showLearners", suspendWhenHidden = FALSE)
