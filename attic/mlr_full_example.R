@@ -64,3 +64,4 @@ plotly::plot_ly(
 #results     = mlr::resample(learner_mlr, task_mlr, rdesc)
 
 #learningcurve = generateLearningCurveData(learner_mlr, task_mlr)
+listLearners()[listLearners()$short.name == "featureless", ]
