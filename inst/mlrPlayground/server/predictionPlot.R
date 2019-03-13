@@ -34,6 +34,15 @@ output_plot = function(i) {
   pred = create_predictions(i)
 
   plotly::plot_ly(
+    x = ~unique(pred$x1),
+    y = ~unique(pred$x2),
+    z = ~matrix(pred$pred_matrix, nrow = sqrt(length(pred$pred_matrix)), byrow = TRUE),
+    type = "heatmap",
+    colors = colorRamp(c("red", "blue")),
+    opacity = 0.2,
+    showscale = FALSE
+  ) %>%
+  plotly::add_trace(
     data = data,
     x = ~x1,
     y = ~x2,
@@ -42,16 +51,7 @@ output_plot = function(i) {
     type = "scatter",
     mode = "markers"
   ) %>%
-    plotly::add_heatmap(
-      x = ~unique(pred$x1),
-      y = ~unique(pred$x2),
-      z = ~matrix(pred$pred_matrix, nrow = sqrt(length(pred$pred_matrix)), byrow = TRUE),
-      type = "heatmap",
-      colors = colorRamp(c("red", "blue")),
-      opacity = 0.2,
-      showscale = FALSE
-    ) %>%
-    plotly::layout(xaxis = list(title = ""), yaxis = list(title = ""))
+  plotly::layout(xaxis = list(title = ""), yaxis = list(title = ""))
 }
 
 output$predictionPlot_1 = renderPlotly({
