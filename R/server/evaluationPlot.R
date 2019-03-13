@@ -29,6 +29,17 @@ output$evaluationPlot = renderPlotly({
   #pred = data.frame(x = unique(pred$x1), y = unique(pred$x2))
   pred$pred_matrix = as.numeric(factor(predictions))
   plotly::plot_ly(
+  x = ~unique(pred$x1),
+  y = ~unique(pred$x2),
+  z = ~matrix(pred$pred_matrix, nrow = sqrt(length(predictions)), byrow = TRUE),
+  type = "heatmap",
+  colors = colorRamp(c("red", "blue")),
+  opacity = 0.2,
+  showscale = FALSE,
+  
+) %>%
+  plotly::add_trace(
+    
     data = data,
     x = ~x1,
     y = ~x2,
@@ -36,16 +47,7 @@ output$evaluationPlot = renderPlotly({
     colors = c("#2b8cbe", "#e34a33", "#2b8cbe", "#e34a33"),
     type = "scatter",
     mode = "markers"
-  ) %>%
-    plotly::add_heatmap(
-      x = ~unique(pred$x1),
-      y = ~unique(pred$x2),
-      z = ~matrix(pred$pred_matrix, nrow = sqrt(length(predictions)), byrow = TRUE),
-      type = "heatmap",
-      colors = colorRamp(c("red", "blue")),
-      opacity = 0.2,
-      showscale = FALSE
-    )
+  )
 })
 
 
@@ -78,7 +80,18 @@ output$evaluationPlot2 = renderPlotly({
   #pred = data.frame(x = unique(pred$x1), y = unique(pred$x2))
   pred$pred_matrix = as.numeric(factor(predictions))
 
-  plotly::plot_ly(
+plotly::plot_ly(
+  x = ~unique(pred$x1),
+  y = ~unique(pred$x2),
+  z = ~matrix(pred$pred_matrix, nrow = sqrt(length(predictions)), byrow = TRUE),
+  type = "heatmap",
+  colors = colorRamp(c("red", "blue")),
+  opacity = 0.2,
+  showscale = FALSE,
+  
+) %>%
+  plotly::add_trace(
+    
     data = data,
     x = ~x1,
     y = ~x2,
@@ -86,14 +99,6 @@ output$evaluationPlot2 = renderPlotly({
     colors = c("#2b8cbe", "#e34a33", "#2b8cbe", "#e34a33"),
     type = "scatter",
     mode = "markers"
-  ) %>%
-    plotly::add_heatmap(
-      x = ~unique(pred$x1),
-      y = ~unique(pred$x2),
-      z = ~matrix(pred$pred_matrix, nrow = sqrt(length(predictions)), byrow = TRUE),
-      type = "heatmap",
-      colors = colorRamp(c("red", "blue")),
-      opacity = 0.2,
-      showscale = FALSE
-    )
+  )
+
 })
