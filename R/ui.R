@@ -72,32 +72,32 @@ shinyUI(
           "Predictions",
           helpText("Learner 1:"),
           withSpinner(
-            plotly::plotlyOutput("evaluationPlot_1", width = "100%", height = "450px")
+            plotly::plotlyOutput("predictionPlot_1", width = "90%", height = "450px")
           ),
           conditionalPanel(
             "output.learner_amount > 1",
             helpText("Learner 2:"),
             withSpinner(
-              plotly::plotlyOutput("evaluationPlot_2", width = "100%", height = "450px")
+              plotly::plotlyOutput("predictionPlot_2", width = "90%", height = "450px")
             )
           )
         ),
         tabPanel(
           "Learning Curve",
           withSpinner(
-            plotOutput("learningCurve", width = "100%", height = "450px")
+            plotOutput("learningCurve", width = "90%", height = "450px")
           )
         ),
         tabPanel(
           "Benchmark",
           withSpinner(
-            plotOutput("benchmarkPlot", width = "100%", height = "450px")
+            plotOutput("benchmarkPlot", width = "90%", height = "450px")
           )
         ),
         tabPanel(
           "ROC",
           withSpinner(
-            plotOutput("ROCPlot", width = "100%", height = "450px")
+            plotOutput("ROCPlot", width = "90%", height = "450px")
           )
         )
       )
