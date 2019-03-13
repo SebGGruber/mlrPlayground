@@ -1,8 +1,14 @@
 # TODO testthat
 create_predictions = function(i) {
+  #' @description Function to generate the predictions based on learner and task
+  #' @param i Index of the learner to generate the predictions for
+  #' @return List of three elements describing the predictions in a grid-like style:
+  #'     $x1: Values of first axis
+  #'     $x2: Values of second axis
+  #'     $pred_matrix: Matrix containing predictions
+
   learner = paste0("learner_", i)
   learner = req(values[[learner]])
-  data    = req(values$data)
 
   task    = req(values$task)
   model   = train(learner, task)
@@ -18,8 +24,13 @@ create_predictions = function(i) {
   return(pred)
 }
 
-output_plot = function(i) {
 
+output_plot = function(i) {
+  #' @description Function to generate the prediction plot
+  #' @param i Index of the learner to generate the plot for
+  #' @return Plotly plot object
+
+  data = req(values$data)
   pred = create_predictions(i)
 
   plotly::plot_ly(

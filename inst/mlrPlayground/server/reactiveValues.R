@@ -83,7 +83,6 @@ observe({
 
     is_valid = sapply(learner$par.set$pars, function(par) par$has.default & par$tunable)
     names       = names(learner$par.set$pars)[is_valid]
-    #browser()
     par.vals    = lapply(names,    function(par) modified_req(input[[paste0("parameter_", par, 1)]]))
     par.vals    = lapply(par.vals, function(val) if (is.character(val) & !is.na(as.integer(val))) as.integer(val) else val)
     names(par.vals) = names
