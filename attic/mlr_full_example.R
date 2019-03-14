@@ -17,7 +17,7 @@ data = data.frame(
 
 #data = data.frame(x1, x2, class)
 
-learner_mlr = mlr::makeLearner("classif.ada")
+learner_mlr = mlr::makeLearner("classif.extraTrees")
 
 paste(
   "Please install package(s):",
