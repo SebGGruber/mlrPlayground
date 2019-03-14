@@ -23,7 +23,7 @@ for (package in required_packages)
 options(shiny.maxRequestSize = 9*1024^2)
 
 # READ AND PARSE CONFIG
-text      = read.csv(file = "../../learner.config", quote = "", header = FALSE, sep = "\n")
+text      = read.csv(file = "learner.config", quote = "", header = FALSE, sep = "\n")
 fst_index = which(text$V1 == "### Valid learners")
 snd_index = which(text$V1 == "### Hyperparameter definitions")
 # list of valid learners (factor format)

@@ -58,6 +58,7 @@ parameter_to_ui = function(parameter, i, learner) {
 
   id = paste0(parameter$id, i)
   input_width    = 4
+  helpText_width = 5
 
   inp_id = paste0("parameter_", id)
   label  = {
@@ -72,7 +73,7 @@ parameter_to_ui = function(parameter, i, learner) {
       parameter$id
   }
   helpText_col = column(
-    4,
+    helpText_width,
     # align the helptext to the right side of the column
     helpText(label, style = "float:right;")
   )

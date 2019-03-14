@@ -35,7 +35,9 @@ update_hyperparameters = function(learner, i){
   #' @description Function updating hyperparameters reactively of a learner given index i
   #' @param i Index of the learner to update
   #' @return mlr learner object
-  is_valid = sapply(learner$par.set$pars, function(par) par$has.default & par$tunable)
+
+  valid_types = c("integer", "numeric", "discrete", "logical")
+  is_valid    = sapply(learner$par.set$pars, function(par) par$has.default & par$tunable & par$type %in% valid_types)
   names       = names(learner$par.set$pars)[is_valid]
   par.vals    = lapply(names,    function(par) modified_req(input[[paste0("parameter_", par, i)]]))
   par.vals    = lapply(par.vals, function(val) if (is.character(val) & !is.na(as.integer(val))) as.integer(val) else val)
