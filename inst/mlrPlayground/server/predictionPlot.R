@@ -17,7 +17,7 @@ create_predictions = function(i) {
   pred = expand.grid(x1 = -50:50 / 10, x2 = -50:50 / 10)
 
   predictions = predictLearner(learner, model, pred)
-
+  pred$class = predictions
   #pred = data.frame(x = unique(pred$x1), y = unique(pred$x2))
   pred$pred_matrix = as.numeric(factor(predictions))
 
@@ -34,22 +34,25 @@ output_plot = function(i) {
   pred = create_predictions(i)
 
   plotly::plot_ly(
-    x = ~unique(pred$x1),
-    y = ~unique(pred$x2),
-    z = ~matrix(pred$pred_matrix, nrow = sqrt(length(pred$pred_matrix)), byrow = TRUE),
-    type = "heatmap",
-    colors = colorRamp(c("red", "blue")),
-    opacity = 0.2,
-    showscale = FALSE
-  ) %>%
+  data    = data,
+  x       = ~x1,
+  y       = ~x2,
+  color   = ~class,
+  colors  = c("#2b8cbe", "#e34a33", "#2b8cbe", "#e34a33"),
+  type    = "scatter",
+  mode    = "markers"
+  
+) %>%
   plotly::add_trace(
-    data = data,
-    x = ~x1,
-    y = ~x2,
-    color = ~class,
-    colors = c("#2b8cbe", "#e34a33", "#2b8cbe", "#e34a33"),
-    type = "scatter",
-    mode = "markers"
+    x         = ~unique(pred$x1),
+    y         = ~unique(pred$x2),
+    z         = ~matrix(pred$pred_matrix, nrow = sqrt(length(pred$pred_matrix)), byrow = TRUE),
+    type      = "heatmap",
+    text      = ~matrix(pred$class, nrow = sqrt(length(pred$pred_matrix)), byrow = TRUE),
+    colors    = colorRamp(c("blue","red")),
+    opacity   = 0.2,
+    hoverinfo = "x+y+text+skip",
+    showscale = FALSE
   ) %>%
   plotly::layout(xaxis = list(title = ""), yaxis = list(title = ""))
 }
