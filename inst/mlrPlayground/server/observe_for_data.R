@@ -46,8 +46,8 @@ observe({
 
       x = rnorm(200, 0, 5)
       y = 0.5 * x + rnorm(200, 0, 1)
-
-      data.frame(x, y)
+      class = c(rep("Class 1", 400))
+      data.frame(x, y, class)
 
       ##add classification datasets
       #1.add Circle data sets
@@ -67,8 +67,8 @@ observe({
     } else if (input$task == "2.Two-Circle") {
 
       angle         = runif(amount * 2, 0, 360)
-      radius_class1 = rnorm(amount, 32, 3)
-      radius_class2 = rnorm(amount, 10, 3)
+      radius_class1 = rnorm(amount, 6, 1)
+      radius_class2 = rnorm(amount, 16, 3)
 
       data.frame(
         x1    = sqrt(c(radius_class1, radius_class2)) * cos(2*pi*angle),
@@ -80,8 +80,8 @@ observe({
     } else if (input$task == "3.Two-Circle-2") {
 
       angle         = runif(amount * 2, 0, 360)
-      radius_class1 = rnorm(amount, 32, 3)
-      radius_class2 = rnorm(amount, 10, 3)
+      radius_class1 = rnorm(amount, 6, 1)
+      radius_class2 = rnorm(amount, 16, 3)
       x1            = sqrt(c(radius_class1, radius_class2)) * cos(2*pi*angle)
       x2            = sqrt(c(radius_class1, radius_class2)) * sin(2*pi*angle)
       class         = ifelse(x2 > 0, "Class 1", "Class 2")
@@ -101,7 +101,7 @@ observe({
       #5.add Gaussian data sets
     } else if(input$task == "5.Gaussian"){
 
-      x1    = c(rnorm(amount, 2, 1), rnorm(amount, -2, 1))
+      x1    = c(rnorm(amount, 2, 1), rnorm(amount, -2, 1)) - 0.5
       x2    = c(rnorm(amount, 2, 1), rnorm(amount, -2, 1))
       class = c(rep("Class 1", amount), rep("Class 2", amount))
 
@@ -112,8 +112,8 @@ observe({
 
       r     = c(1 : amount) / amount * 5
       angle = 1.75 * c(1 : amount)  / amount * 2 * pi
-      x1    = c(r * sin(angle) + rexp_scope, r * sin(angle + pi) + rexp_scope)
-      x2    = c(r * cos(angle) + rexp_scope, r * cos(angle + pi) + rexp_scope)
+      x1    = c(r * sin(angle) + rnom_scope, r * sin(angle + pi) + rnom_scope) * 4 / 5
+      x2    = c(r * cos(angle) + rnom_scope, r * cos(angle + pi) + rnom_scope) 
       class = c(rep("Class 1",amount),rep("Class 2",amount))
 
       data.frame(x1, x2, class)
@@ -123,8 +123,11 @@ observe({
 
       range1 = c(0 : (amount - 1)) * pi / 200
       range2 = c(100 : (amount + 99)) * pi / 200
-      x1     = c(range1, range2) + rexp_scope
-      x2     = c(sin(range1) + runif(amount,-1,1) / 4,sin(range2+pi/2) + runif(amount,-1,1) / 4) + rexp_scope
+      x1     = c(range1, range2) + rexp_scope - 2
+
+      arc1   = sin(range1) + runif(amount,-1,1) / 4
+      arc2   = sin(range2+pi/2) + runif(amount,-1,1) / 4
+      x2     = c(arc1, arc2) * 2 + rexp_scope
       class  = c(rep("Class 1", amount), rep("Class 2", amount))
 
       data.frame(x1, x2, class)
@@ -132,28 +135,27 @@ observe({
       #8.add Cross Sector data sets
     } else if (input$task == "8.Cross Sector") {
 
-      angle         = runif(amount, 0, 36)
-      radius_class1 = rexp(amount, 1)
-      radius_class2 = rexp(amount, 2)
-      for(i in c(0:9)){
+      part          = c(0 : 9)
+      angle         = runif(amount * 5, 0, 36)
+      angle_class1  = 2 * pi * (angle + 36 * 2 * part) / 360
+      angle_class2  = 2 * pi * (angle  + 36 * (2 * part + 1)) / 360
+      radius_class1 = rexp(amount * 5, 1)
+      radius_class2 = rexp(amount * 5, 2)
+      
+      x1_class1     = sqrt(radius_class1) * cos(angle_class1)
+      x1_class2     = sqrt(radius_class2) * cos(angle_class2)
+      x1            = c(x1_class1, x1_class2)
+      
+      x2_class1     = sqrt(radius_class1) * sin(angle_class1)
+      x2_class2     = sqrt(radius_class2) * sin(angle_class2)
+      x2            = c(x2_class1, x2_class2)
+      class         = c(rep("Class 1", 1000), rep("Class 2", 1000))
 
-        point1 = c(sqrt(radius_class1) * cos(2*pi*(angle+36 * 2 * i)/360), sqrt(radius_class2) * cos(2*pi*(angle+36 * (2 * i + 1))/360))
-        point2 = c(sqrt(radius_class1) * sin(2*pi*(angle+36 * 2 * i)/360), sqrt(radius_class2) * sin(2*pi*(angle+36 * (2 * i + 1))/360))
-        if(i == 0){
-
-          x1 = point1
-          x2 = point2
-          class = c(rep("Class 1", 200), rep("Class 2", 200))
-
-        }else{
-
-          x1 = c(x1, point1)
-          x2 = c(x2, point2)
-          class = c(class,rep("Class 1", 200), rep("Class 2", 200))
-        }
-      }
-
-      data.frame(x1,x2,class)
+      data.frame(
+        x1          = x1 * 2, 
+        x2          = x2 * 2, 
+        class
+      )
 
       #9.add Wavy surface(3D) data sets
     } else if(input$task == "9.Wavy surface (3D)"){
