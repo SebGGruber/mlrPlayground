@@ -13,12 +13,7 @@ output$taskSelection = renderUI({
       "5.Gaussian",
       "6.Across Spiral",
       "7.Opposite Arc",
-      "8.Cross Sector"
-    )
-
-  } else if (input$tasktype == "classif_3d") {
-    choices = list(
-    #Classification 3D
+      "8.Cross Sector",
       "9.Wavy surface (3D)",
       "10.Sphere (3D)"
     )
@@ -34,12 +29,7 @@ output$taskSelection = renderUI({
       "6.Sigmoid",
       "7.Circle",
       "8.Spiral",
-      "9.Parabola To Right"
-    )
-
-  } else if (input$tasktype == "regr_3d") {
-    choices = list(
-    #Regression 3D
+      "9.Parabola To Right",
       "10.Spiral ascend (3D)"
     )
 
