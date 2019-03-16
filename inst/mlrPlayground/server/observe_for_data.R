@@ -46,7 +46,7 @@ observe({
 
       x = rnorm(200, 0, 5)
       y = 0.5 * x + rnorm(200, 0, 1)
-      class = c(rep("Class 1", 400))
+      
       data.frame(x, y, class)
 
       ##add classification datasets
