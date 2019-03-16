@@ -44,22 +44,6 @@ output$taskSelection = renderUI({
       "6.Clustering Dataset 6"
     )
 
-  } else if (input$tasktype == "multilabel") {
-    choices = list(
-    #Multilabel
-      "1.Spiral ascend (3D)",
-      "2.Wavy surface (3D)",
-      "3.Sphere (3D)"
-    )
-
-  } else if (input$tasktype == "surv") {
-    choices = list(
-    #Survival
-      "1.Exponential Decrement",
-      "2.Mountain Peak",
-      "3.Wave"
-    )
-
   }
 
   radioButtons("task", label = "Select task", choices = choices)

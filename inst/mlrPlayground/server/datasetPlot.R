@@ -73,45 +73,7 @@ output$datasetPlot = renderPlotly({
         type   = "scatter",
         mode   = "markers"
       )
-
-  }else if(input$tasktype == "multilabel"){
-    plotly::plot_ly(
-      data   = values$data,
-      type   = "scatter3d",
-      x      = ~x,
-      y      = ~y,
-      z      = ~z,
-      marker = list(
-          color      = ~z, 
-          colorscale = c('#FFE1A1', '#683531'), 
-          showscale  = TRUE)
-    )%>%
-    add_markers()%>%
-    layout(scene = list(
-      xaxis = list(title = 'xaxis'),
-      yaxis = list(title = 'yaxis'),
-      zaxis = list(title = 'zaxis')))
-    }
-    else if (input$tasktype == "surv") {
-      plot_ly(
-        data = values$data, 
-        x    = ~x, 
-        y    = ~y1, 
-        line = list(
-          color = "blue", 
-          shape = "hv"
-        ), 
-        mode = "lines", 
-        type = "scatter"
-      ) %>%   
-      add_trace(
-        y    = ~y2,
-        name = 'trace 2',
-        line = list(
-          color = "red"
-        ),
-        mode ='lines'
-      )        
+        
   } else {
     plotly::plotly_empty()
   }
