@@ -33,7 +33,7 @@ output$datasetPlot = renderPlotly({
         zaxis = list(title = 'zaxis'))
       )
   
-  } else if (tasktype == "regr" && ncol(data) == 3) {
+  } else if (tasktype == "regr" && ncol(data) == 2) {
     plotly::plot_ly(
       data = values$data,
       x    = ~x,
@@ -42,7 +42,7 @@ output$datasetPlot = renderPlotly({
       mode = "markers"
     )
 
-  } else if (tasktype == "regr" && ncol(data) == 4) {
+  } else if (tasktype == "regr" && ncol(data) == 3) {
       plotly::plot_ly(
         data = values$data,
         type = "scatter3d",
