@@ -11,18 +11,23 @@ required_packages = c(
   "shinycssloaders",
   "shinyBS",
   "shinythemes",
-  "class"
+  "class",
+  "R6",
+  "assertthat"
 )
 
 for (package in required_packages)
   require(package, character.only = TRUE)
 
 
+source("R6System/LearningProcess.R", local = TRUE)
+source("R6System/ClassifLearningProcess.R", local = TRUE)
+
 # By default, the file size limit is 5MB. It can be changed by
 # setting this option. Here we'll raise limit to 9MB.
 options(shiny.maxRequestSize = 9*1024^2)
 
-# READ AND PARSE CONFIG
+# READ AND PARSE CONFIG (TODO: put into function)
 text      = read.csv(file = "learner.config", quote = "", header = FALSE, sep = "\n")
 fst_index = which(text$V1 == "### Valid learners")
 snd_index = which(text$V1 == "### Hyperparameter definitions")
@@ -38,3 +43,6 @@ param_df = lapply(param_df, as.character)
 param_df[c("short.name", "param.name", "new.name")] = lapply(param_df[c("short.name", "param.name", "new.name")], trimws)
 # character to integer (don't skip as.character here!!!)
 param_df[c("new.min", "new.max", "new.default")] = lapply(param_df[c("new.min", "new.max", "new.default")], as.integer)
+
+# init process variable, so req(process) doesn't crash during start
+process = NULL

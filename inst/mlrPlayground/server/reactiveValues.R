@@ -10,15 +10,14 @@ modified_req = function(x){
     req(x)
 }
 
-create_learner = function(i) {
+#create_learner = function(i) {
   #
-  name    = paste0("learner_", i)
-  learner = req(input[[name]])
+#  name    = paste0("learner_", i)
+#  learner = req(input[[name]])
 #  tryCatch({
-#  browser()
-    values[[name]] = makeLearner(
-      listLearners()$class[listLearners()$short.name == learner & listLearners()$type == input$tasktype]
-    )#},
+#    values[[name]] = makeLearner(
+#      listLearners()$class[listLearners()$short.name == learner & listLearners()$type == input$tasktype]
+#    )#},
     #error = function(e) {
     #  content = paste(
     #    "Please install package(s):",
@@ -29,7 +28,19 @@ create_learner = function(i) {
     #  )
     #}
   #)
-}
+#}
+
+
+#makeTask = function(data, tasktype) {
+
+#  if (tasktype == "classif")
+#    makeClassifTask(data = data, target = "class")
+#  else if (tasktype == "regr")
+#    makeRegrTask(data = data, target = "y")
+#  else if (tasktype == "cluster")
+#    makeClusterTask(data = data)
+#}
+
 
 update_hyperparameters = function(learner, i){
   #' @description Function updating hyperparameters reactively of a learner given index i
@@ -47,37 +58,52 @@ update_hyperparameters = function(learner, i){
 }
 
 
-values = reactiveValues(data = NULL, task = NULL, learner_1 = NULL, learner_2 = NULL, learner_choices = NULL)
+observe({
+  # this creates a new R6 class whenever the tasktype is loaded/changed
+  tasktype = req(input$tasktype)
+  # assign on global scope
+  if (tasktype == "classif")
+    process <<- ClassifLearningProcess$new()
+
+})
+
+values = reactiveValues( learner_choices = NULL) #data = NULL, task = NULL,data = NULL, process_1 = NULL, process_2 = NULL,
 
 # observer modifying reactively values$data based on relevant inputs
 source("server/observe_for_data.R", local = TRUE)
 
 
 # create task based on selected data
-observe({
-  data        = req(values$data)
-  values$task = makeClassifTask(data = data, target = "class")
-})
+#observe({
+#  data      = req(process$data$train.set)
+#  tasktype  = req(input$tasktype)
+#  isolate(process_1$initTask(data))
+#})
 
 
 # create learner 1 based on selected learner
 observe({
-  create_learner(1)
+  learner = req(input$learner_1)
+  process$initLearner(learner, 1)
+  #create_learner(1)
 })
 
 # update learner 1 based on selected parameters
 observe({
-  learner          = req(values$learner_1)
-  values$learner_1 = update_hyperparameters(learner, 1)
+  learner = req(process$learners[["1"]])
+
+  process$learners[["1"]] = update_hyperparameters(learner, 1)
 })
 
 # create learner 2 based on selected learner
 observe({
-  create_learner(2)
+  learner = req(input$learner_2)
+  process$initLearner(learner, 2)
 })
 
 # update learner 2 based on selected parameters
 observe({
-  learner          = req(values$learner_2)
-  values$learner_2 = update_hyperparameters(learner, 2)
+  learner = req(process$learners[["2"]])
+
+  process$learners[["2"]] = update_hyperparameters(learner, 2)
 })

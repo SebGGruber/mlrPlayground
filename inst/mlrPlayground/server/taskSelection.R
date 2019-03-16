@@ -1,12 +1,12 @@
 output$taskSelection = renderUI({
 
-  #req(input$tasktype)
+  req(input$tasktype)
   #print(input$tasktype)
 
   if (input$tasktype == "" || input$tasktype == "classif") {
-    choices = list("Circle", "XOR",
+    choices = list(#"Circle", "XOR",
     #Classification
-      "1.Circle", 
+      "1.Circle",
       "2.Two-Circle",
       "3.Two-Circle-2",
       "4.XOR",

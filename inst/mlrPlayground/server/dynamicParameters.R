@@ -132,12 +132,14 @@ output$min_max_modals = renderUI({
   # for each learner
   lapply(learner_amount_enum(), function(i) {
 
+    # Must use string to index into reactivevalues
+    i = as.character(i)
+
     lrn = paste0("learner_", i)
     # react to "input" instead of "values" here, because we do only want
     # an execution when the learner name changes - not its hyperparameters
     req(input[[lrn]])
-    learner = req(isolate(values[[lrn]]))
-#browser()
+    learner = req(isolate(process$learners[[i]]))
     lapply(learner$par.set$pars, function(par) min_max_modals(par, i, learner))
   })
 })
@@ -149,17 +151,20 @@ output$dynamicParameters = renderUI({
   # for each learner
   lapply(learner_amount_enum(), function(i) {
 
+    # Must use string to index into reactivevalues
+    i = as.character(i)
+
     lrn = paste0("learner_", i)
     # react to "input" instead of "values" here, because we do only want
     # an execution when the learner name changes - not its hyperparameters
     req(input[[lrn]])
-    learner = req(isolate(values[[lrn]]))
+    learner = req(isolate(process$learners[[i]]))
     # sort parameter list by parameter type
     par_list = learner$par.set$pars[order(sapply(learner$par.set$pars, function(par) par$type))]
     # for each parameter
     ui_list  = lapply(par_list, function(par) parameter_to_ui(par, i, learner))
+    # if there are more than 4 parameters, split the parameters into 2 columns
     ui_split = {
-      # if there are more than 2 parameters, split the UI into 3 columns
       if (length(ui_list) > 4)
         split(ui_list, cut(seq_along(ui_list), 2, labels = FALSE))
       else

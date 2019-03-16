@@ -1,12 +1,38 @@
-selected_learners = reactive({
+select_learner_ui = function(i, choices) {
+  #' @description function defining the UI for learner with index i
+  #' @param i Index of the learner for identification purposes
+  #' @param choices Named list of valid learners to choose from
+  #' @return UI element
 
-  req(learner_amount_enum())
-  selection = lapply(learner_amount_enum(), function (i) {
-    input[[paste0("learner_", i)]]
-  })
+  # can't do reactive value selections by indexing
+  i = as.character(i)
+  fluidRow(
+    column(
+      3,
+      selectInput( #selectizeInput(
+        inputId   = paste0("learner_", i),
+        label     = paste("Learner", i),
+        choices   = choices,
+        selected  = isolate(process$learners[[i]]$short.name),
+        selectize = TRUE
+      )
+    ),
+    column(
+      9,
+      actionButton(paste0("parameter", i), paste("Set learner", i, "parameters"))
+    )
+  )
+}
 
-  return(unlist(selection))
-})
+#selected_learners = reactive({
+#
+#  req(learner_amount_enum())
+#  selection = lapply(learner_amount_enum(), function (i) {
+#    input[[paste0("learner_", i)]]
+#  })
+
+#  return(unlist(selection))
+#})
 
 observe({
   tasktype   = req(input$tasktype)
@@ -29,29 +55,7 @@ output$dynamicLearners = renderUI({
 
   req(learner_amount_enum())
   choices = req(values$learner_choices)
-  #req(selected_learners())
-  lapply(learner_amount_enum(), function(i) {
-    fluidRow(
-      column(
-        3,
-        selectInput( #selectizeInput(
-          inputId   = paste0("learner_", i),
-          label     = paste("Learner", i),
-          choices   = choices,
-          selected  = isolate(selected_learners()[i]),
-          #options = list(
-          #  placeholder = 'Please select an option below',
-          #  onInitialize = I('function() { this.setValue(""); }')
-          #)#,
-          selectize = TRUE
-        )
-      ),
-      column(
-        9,
-        actionButton(paste0("parameter", i), paste("Set learner", i, "parameters"))
-      )
-    )
-  })
+  lapply(learner_amount_enum(), function(i) select_learner_ui(i, choices))
 })
 
 # force loading even when hidden
