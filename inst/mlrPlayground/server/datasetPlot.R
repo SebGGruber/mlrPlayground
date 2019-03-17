@@ -5,7 +5,7 @@ output$datasetPlot = renderPlotly({
   # we only want execution when the data changed
   tasktype = isolate(input$tasktype)
 
-  if (tasktype == "classif") {
+  if (tasktype == "classif" && ncol(data) == 3) {
     plotly::plot_ly(
       data   = data,
       x      = ~x1,
@@ -16,7 +16,7 @@ output$datasetPlot = renderPlotly({
       mode   = "markers"
     )
 
-  } else if (input$tasktype == "classif_3d") {
+  } else if (tasktype == "classif" && ncol(data) == 4) {
       plotly::plot_ly(
         data = values$data,
         type = "scatter3d",
@@ -33,16 +33,16 @@ output$datasetPlot = renderPlotly({
         zaxis = list(title = 'zaxis'))
       )
   
-  } else if (tasktype == "regr") {
+  } else if (tasktype == "regr" && ncol(data) == 2) {
     plotly::plot_ly(
-      data = data,
+      data = values$data,
       x    = ~x,
       y    = ~y,
       type = "scatter",
       mode = "markers"
     )
 
-  } else if (input$tasktype == "regr_3d") {
+  } else if (tasktype == "regr" && ncol(data) == 3) {
       plotly::plot_ly(
         data = values$data,
         type = "scatter3d",
@@ -73,45 +73,7 @@ output$datasetPlot = renderPlotly({
         type   = "scatter",
         mode   = "markers"
       )
-
-  }else if(input$tasktype == "multilabel"){
-    plotly::plot_ly(
-      data   = values$data,
-      type   = "scatter3d",
-      x      = ~x,
-      y      = ~y,
-      z      = ~z,
-      marker = list(
-          color      = ~z, 
-          colorscale = c('#FFE1A1', '#683531'), 
-          showscale  = TRUE)
-    )%>%
-    add_markers()%>%
-    layout(scene = list(
-      xaxis = list(title = 'xaxis'),
-      yaxis = list(title = 'yaxis'),
-      zaxis = list(title = 'zaxis')))
-    }
-    else if (input$tasktype == "surv") {
-      plot_ly(
-        data = values$data, 
-        x    = ~x, 
-        y    = ~y1, 
-        line = list(
-          color = "blue", 
-          shape = "hv"
-        ), 
-        mode = "lines", 
-        type = "scatter"
-      ) %>%   
-      add_trace(
-        y    = ~y2,
-        name = 'trace 2',
-        line = list(
-          color = "red"
-        ),
-        mode ='lines'
-      )        
+        
   } else {
     plotly::plotly_empty()
   }
