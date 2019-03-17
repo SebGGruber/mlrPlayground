@@ -1,3 +1,13 @@
+#' @title LearningProcess
+#' @format \code{\link{R6Class}} object
+#' @description
+#' An abstract \code{\link{R6Class}} to represent an learning process (dataset, task, learners, predictions)
+#' @section Methods:
+#' \describe{
+#'   \item{learn(iter)}{[\code{function}] \cr todo}
+#'   \item{plotPerf()}{[\code{function}] \cr todo}
+#' }
+#' @return [\code{\link{LearningProcess}}].
 
 LearningProcess = R6Class(
   classname = "LearningProcess",

@@ -8,18 +8,35 @@ app = shinyApp(
                                                          min = 1,
                                                          max = 50,
                                                          value = 30),
-                  actionButton("tabBut", "View Table")
+                  #actionButton("tabBut", "View Table")
+                  uiOutput("btn")
                 ),
 
                 mainPanel(
                     plotOutput("distPlot"),
-                    bsModal("modalExample", "Data Table", "tabBut", size = "large",
-                                             dataTableOutput("distTable"))
+                    uiOutput("modal")
                   )
             )
         ),
     server =
       function(input, output, session) {
+
+        output$btn <- renderUI({
+          actionButton("tabBut", "View Table")
+        })
+
+        lapply(1, function(i) {
+          observeEvent(input$tabBut, {
+            toggleModal(session, "modalExample", "open")
+          })
+
+        })
+
+        output$modal <- renderUI({
+          bsModal("modalExample", "Data Table", "tabBut", size = "large",
+                  dataTableOutput("distTable"))
+        })
+
 
             output$distPlot <- renderPlot({
 

@@ -17,7 +17,7 @@ data = data.frame(
 
 #data = data.frame(x1, x2, class)
 
-learner_mlr = mlr::makeLearner("classif.ranger")
+learner_mlr = mlr::makeLearner("classif.extraTrees")
 task_mlr    = makeClassifTask(data = data, target = "class")
 
 rdesc = makeResampleDesc("Holdout", split = 0.5)

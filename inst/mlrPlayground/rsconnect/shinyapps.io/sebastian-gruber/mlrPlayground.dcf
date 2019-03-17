@@ -4,10 +4,9 @@ username:
 account: sebastian-gruber
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
-appId: 780480
-bundleId: 1930347
+appId: 795406
+bundleId: 1945893
 url: https://sebastian-gruber.shinyapps.io/mlrPlayground/
-when: 1552301053.91691
+when: 1552852289.13147
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: app.R|dui.R|mlr_full_example.R|self_referencing_ui.R|shinyBS_alerts.R|shinyBS_buttons.R|shinyBS_collapse.R|shinyBS_modals.R|shinyBS_popups.R
