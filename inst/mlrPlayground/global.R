@@ -20,8 +20,13 @@ for (package in required_packages)
   require(package, character.only = TRUE)
 
 
-source("R6System/LearningProcess.R", local = TRUE)
-source("R6System/ClassifLearningProcess.R", local = TRUE)
+source("R6Classes/LearningProcess.R",          local = TRUE)
+source("R6Classes/ClassifLearningProcess.R",   local = TRUE)
+source("R6Classes/Classif3dLearningProcess.R", local = TRUE)
+source("R6Classes/RegrLearningProcess.R",      local = TRUE)
+source("R6Classes/Regr3dLearningProcess.R",    local = TRUE)
+source("R6Classes/ClusterLearningProcess.R",   local = TRUE)
+
 
 # By default, the file size limit is 5MB. It can be changed by
 # setting this option. Here we'll raise limit to 9MB.

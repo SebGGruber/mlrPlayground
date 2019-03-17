@@ -1,27 +1,24 @@
-RegrLearningProcess = R6Class(
-  classname = "RegrLearningProcess",
-  inherit = LearningProcess,
+Regr3dLearningProcess = R6Class(
+  classname = "Regr3dLearningProcess",
+  inherit = RegrLearningProcess,
 
   public = list(
-
-    setData = function(data, train.ratio) {
-      super$setData(data, train.ratio)
-      self$task$train = makeRegrTask(data = self$data$train.set, target = "y")
-    },
-
-    initLearner = function(short.name, i) {
-      super$initLearner(short.name, i, "regr")
-    },
 
     getDataPlot = function() {
       #' @description Method transforming the data into an interactive plot
       #' @return plotly plot object
       plotly::plot_ly(
         data = self$data$train.set,
+        type = "scatter3d",
         x    = ~x,
         y    = ~y,
-        type = "scatter",
-        mode = "markers"
+        z    = ~z
+      ) %>%
+      add_markers() %>%
+      layout(scene = list(
+        xaxis = list(title = 'xaxis'),
+        yaxis = list(title = 'yaxis'),
+        zaxis = list(title = 'zaxis'))
       )
     },
 
@@ -57,16 +54,16 @@ RegrLearningProcess = R6Class(
         x = ~pred$x,
         y = ~pred$y,
         type = "line",
-#        colors = colorRamp(c("red", "blue")),
-#        opacity = 0.2,
+        #        colors = colorRamp(c("red", "blue")),
+        #        opacity = 0.2,
         showscale = FALSE
       ) %>%
         plotly::add_trace(
           data = self$data$train.set,
           x = ~x,
           y = ~y,
-  #        color = ~class,
-  #        colors = c("#2b8cbe", "#e34a33", "#2b8cbe", "#e34a33"),
+          #        color = ~class,
+          #        colors = c("#2b8cbe", "#e34a33", "#2b8cbe", "#e34a33"),
           type = "scatter",
           mode = "markers"
         ) %>%

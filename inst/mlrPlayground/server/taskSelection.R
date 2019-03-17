@@ -13,18 +13,13 @@ output$taskSelection = renderUI({
       "5.Gaussian",
       "6.Across Spiral",
       "7.Opposite Arc",
-      "8.Cross Sector"
-    )
-
-  } else if (input$tasktype == "classif_3d") {
-    choices = list(
-    #Classification 3D
+      "8.Cross Sector",
       "9.Wavy surface (3D)",
       "10.Sphere (3D)"
     )
 
   }else if (input$tasktype == "regr") {
-    choices = list("Linear ascend (2D)",
+    choices = list(#"Linear ascend (2D)",
     #Regression
       "1.Linear ascend",
       "2.Log linear",
@@ -34,12 +29,7 @@ output$taskSelection = renderUI({
       "6.Sigmoid",
       "7.Circle",
       "8.Spiral",
-      "9.Parabola To Right"
-    )
-
-  } else if (input$tasktype == "regr_3d") {
-    choices = list(
-    #Regression 3D
+      "9.Parabola To Right",
       "10.Spiral ascend (3D)"
     )
 
@@ -52,22 +42,6 @@ output$taskSelection = renderUI({
       "4.Clustering Dataset 4",
       "5.Clustering Dataset 5",
       "6.Clustering Dataset 6"
-    )
-
-  } else if (input$tasktype == "multilabel") {
-    choices = list(
-    #Multilabel
-      "1.Spiral ascend (3D)",
-      "2.Wavy surface (3D)",
-      "3.Sphere (3D)"
-    )
-
-  } else if (input$tasktype == "surv") {
-    choices = list(
-    #Survival
-      "1.Exponential Decrement",
-      "2.Mountain Peak",
-      "3.Wave"
     )
 
   }

@@ -33,6 +33,10 @@ observe({
   # assign on global scope
   if (tasktype == "classif")
     process <<- ClassifLearningProcess$new()
+  else if (tasktype == "regr")
+    process <<- RegrLearningProcess$new()
+  else if (tasktype == "cluster")
+    process <<- ClusterLearningProcess$new()
 
 })
 
