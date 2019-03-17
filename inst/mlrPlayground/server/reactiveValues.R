@@ -10,37 +10,6 @@ modified_req = function(x){
     req(x)
 }
 
-#create_learner = function(i) {
-  #
-#  name    = paste0("learner_", i)
-#  learner = req(input[[name]])
-#  tryCatch({
-#    values[[name]] = makeLearner(
-#      listLearners()$class[listLearners()$short.name == learner & listLearners()$type == input$tasktype]
-#    )#},
-    #error = function(e) {
-    #  content = paste(
-    #    "Please install package(s):",
-    #    paste(listLearners()$package[listLearners()$name == learner & listLearners()$type == input$tasktype], collapse = ", ")
-    #  )
-    #  createAlert(
-    #    session, "learner_error", title = "Can't create learner!", content = content, append = FALSE
-    #  )
-    #}
-  #)
-#}
-
-
-#makeTask = function(data, tasktype) {
-
-#  if (tasktype == "classif")
-#    makeClassifTask(data = data, target = "class")
-#  else if (tasktype == "regr")
-#    makeRegrTask(data = data, target = "y")
-#  else if (tasktype == "cluster")
-#    makeClusterTask(data = data)
-#}
-
 
 update_hyperparameters = function(learner, i){
   #' @description Function updating hyperparameters reactively of a learner given index i
@@ -71,14 +40,6 @@ values = reactiveValues( learner_choices = NULL) #data = NULL, task = NULL,data 
 
 # observer modifying reactively values$data based on relevant inputs
 source("server/observe_for_data.R", local = TRUE)
-
-
-# create task based on selected data
-#observe({
-#  data      = req(process$data$train.set)
-#  tasktype  = req(input$tasktype)
-#  isolate(process_1$initTask(data))
-#})
 
 
 # create learner 1 based on selected learner
