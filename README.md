@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/SebGruber1996/mlrPlayground.svg?token=aseAdkuRs3BN4g6uWRsf&branch=sebastian)](https://travis-ci.com/SebGruber1996/mlrPlayground)
+[![Build Status](https://travis-ci.com/SebGruber1996/mlrPlayground.svg?token=aseAdkuRs3BN4g6uWRsf&branch=dev)](https://travis-ci.com/SebGruber1996/mlrPlayground)
 
 # mlrPlayground
 Interactive machine learning playground for the mlr package done in shiny.
