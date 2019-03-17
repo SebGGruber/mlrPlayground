@@ -4,12 +4,12 @@ Version: 0.1.0.0000
 Authors@R: c(
     person(given = "Sebastian",
            family = "Gruber",
-           role = "aut",
+           role = c("aut", "cre"),
            email = "gruber_sebastian@t-online.de"),
     person(given = "Yuhao",
-           family = "",
-           role = "aut",
-           email = "")
+           family = "Wang",
+           role = c("aut", "cre"),
+           email = "wangyuhaodeutsch@gmail.com")
     )
 Description: Package containing the mlrPlayground app for interactive machine learning tasks.
 License: BSD_2_clause + file LICENSE
