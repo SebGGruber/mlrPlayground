@@ -17,7 +17,11 @@ data = data.frame(
 
 #data = data.frame(x1, x2, class)
 
-learner_mlr = mlr::makeLearner("classif.ada")
+learner_mlr = mlr::makeLearner("classif.ranger")
+task_mlr    = makeClassifTask(data = data, target = "class")
+
+rdesc = makeResampleDesc("Holdout", split = 0.5)
+results     = mlr::resample(learner_mlr, task_mlr, rdesc)
 
 paste(
   "Please install package(s):",
@@ -64,3 +68,4 @@ plotly::plot_ly(
 #results     = mlr::resample(learner_mlr, task_mlr, rdesc)
 
 #learningcurve = generateLearningCurveData(learner_mlr, task_mlr)
+listLearners()[listLearners()$short.name == "featureless", ]

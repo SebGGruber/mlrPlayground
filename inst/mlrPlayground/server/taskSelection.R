@@ -1,12 +1,12 @@
 output$taskSelection = renderUI({
 
-  #req(input$tasktype)
+  req(input$tasktype)
   #print(input$tasktype)
 
   if (input$tasktype == "" || input$tasktype == "classif") {
-    choices = list("Circle", "XOR",
+    choices = list(#"Circle", "XOR",
     #Classification
-      "1.Circle", 
+      "1.Circle",
       "2.Two-Circle",
       "3.Two-Circle-2",
       "4.XOR",
@@ -19,7 +19,7 @@ output$taskSelection = renderUI({
     )
 
   }else if (input$tasktype == "regr") {
-    choices = list("Linear ascend (2D)",
+    choices = list(#"Linear ascend (2D)",
     #Regression
       "1.Linear ascend",
       "2.Log linear",

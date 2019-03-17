@@ -1,13 +1,13 @@
 output$ROCPlot = renderPlot({
 
-  task     = req(values$task)
-  learner_1 = setPredictType(req(values$learner_1), "prob")
+  task     = req(process$task$train)
+  learner_1 = setPredictType(req(process$learners[["1"]]), "prob")
 
 
   learners = list(learner_1)
 
-  if (!is.null(values$learner_2))
-    learners[[2]] = setPredictType(req(values$learner_2), "prob")
+  if (!is.null(process$learners[["2"]]))
+    learners[[2]] = setPredictType(req(process$learners[["2"]]), "prob")
 
   rdesc = makeResampleDesc("CV", iters = 2L)
   meas = list(acc, ber)

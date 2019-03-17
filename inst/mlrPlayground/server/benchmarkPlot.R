@@ -1,10 +1,13 @@
 output$benchmarkPlot = renderPlot({
 
-  task     = req(values$task)
-  learners = list(req(values$learner_1))
+  task     = req(process$task$train)
+  learner_1 = setPredictType(req(process$learners[["1"]]), "prob")
 
-  if (!is.null(values$learner_2))
-    learners[[2]] = values$learner_2
+  learners = list(learner_1)
+
+  if (!is.null(process$learners[["2"]]))
+    learners[[2]] = setPredictType(req(process$learners[["2"]]), "prob")
+
 
   rdesc = makeResampleDesc("CV", iters = 2L)
   meas = list(acc, ber)
