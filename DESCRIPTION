@@ -8,7 +8,7 @@ Authors@R: c(
            email = "gruber_sebastian@t-online.de"),
     person(given = "Yuhao",
            family = "Wang",
-           role = c("aut", "cre"),
+           role = c("aut"),
            email = "wangyuhaodeutsch@gmail.com")
     )
 Description: Package containing the mlrPlayground app for interactive machine learning tasks.
