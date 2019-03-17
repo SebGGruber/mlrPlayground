@@ -16,8 +16,7 @@ train.ratio = 0.5
 
 observe({
 
-  #req(input$tasktype)
-  # check if "process" is already initialized as class (NOT REACTIVE)
+  # check if "process" is already initialized as class instance (NOT REACTIVE)
   req(process$data)
   task = req(input$task)
 
@@ -401,92 +400,6 @@ observe({
 
     }
 
-      ### add multilabel data sets(3D)
-      #1.add Spiral ascend (3D) data sets
-#    } else if(task == "1.Spiral ascend (3D)"){
-#
-#      z = rexp(amount,1)*4
-#      x = sin(z)
-#      y = cos(z)
-
-#      data.frame(x, y, z)
-
-      #2.add Wavy surface(3D) data sets
-#    } else if(task == "2.Wavy surface (3D)"){
-
-#      x = c((-amount / 10) : (amount / 10)) * pi / 10
-#      y = rep(x, each=41)
-#      z = sin(x) + sin(y) + (rnom_scope * 2)
-
-#      data.frame(x,y,z)
-
-      #3.add Sphere data sets
-#    } else if(task == "3.Sphere (3D)"){
-
-#      R        = 2
-#      alfa     = runif(amount / 4, 0, 50) * pi
-#      sita     = runif(amount / 4, 0, 50) * pi * 2
-
-#      num_alfa = length(alfa)
-#      num_sita = length(sita)
-#      x        = matrix(0, num_alfa, num_sita)
-#      y        = matrix(0, num_alfa, num_sita)
-#      z        = matrix(0, num_alfa, num_sita)
-#      class    = matrix(0, num_alfa, num_sita)
-
-#      for(i in c(1:num_alfa)){
-#        for(j in c(1:num_sita)){
-#          x[i,j] = R * sin(alfa[i]) * cos(sita[j])
-#          y[i,j] = R * sin(alfa[i]) * sin(sita[j])
-#          z[i,j] = R * cos(alfa[i])
-#        }
-#      }
-#      x = as.vector(x + (rexp_scope * 2))
-#      y = as.vector(y + (rexp_scope))
-#      z = as.vector(z)
-
-#      data.frame(x, y, z)
-
-      ## add Survival data sets
-      #1. add Exponential Decrement data sets
-#    } else if(task == "1.Exponential Decrement"){
-
-#      x  = c(1 : (amount/4 + 1))
-#      t1 = round(rexp(amount / 4, 1) / 6, 2)
-#      y1 = c(1, sort(t1, TRUE))
-
-#      t2 = round((rexp(amount / 4, 1) - 0.6) / 6, 2)
-#      y2 = c(1, sort(abs(t2), TRUE))
-
-#      data.frame(x,y1,y2)
-
-      #2. add Mountain Peak data sets
-#    } else if(task == "2.Mountain Peak"){
-
-#      x  = c(1 : (round(amount /  8, 0) + 1)) * 4
-#      t1 = round(runif(round(amount / 8, 0), 1, 100), 0) / 100
-#      s1 = sort(t1, TRUE) * pi
-#      y1 = c(0.1, sin(s1))
-
-#      t2 = round(runif(round(amount/8, 0),1,100),0)/100
-#      s2 = sort(t2, TRUE) * pi
-#      y2 = c(0.1, sin(s2) * 0.8)
-
-#      data.frame(x, y1,  y2)
-
-      #3. add Wave data sets
-#    } else if(task == "3.Wave"){
-
-#      x  = c(1:91)
-#      t1 = c(round(runif(30,10,90),0)/100 ,round(runif(30, 110, 190),0) / 100 ,round(runif(30, 210, 290), 0) / 100)
-#      s1 = sort(t1,TRUE) * pi
-#      y1 = c(0.2,abs(sin(s1)))
-
-#      t2 = c(round(runif(30, -40, 40), 0) /100 ,round(runif(30, 60, 140),0) / 100 ,round(runif(30, 160, 240),0) / 100)
-#      s2 = sort(t2,TRUE) * pi
-#      y2 = c(0.2,abs(cos(s2)) * 0.6)
-
-#      data.frame(x, y1, y2)
   }
 
   process$setData(data, train.ratio)
