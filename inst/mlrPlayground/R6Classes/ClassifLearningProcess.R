@@ -39,7 +39,7 @@ ClassifLearningProcess = R6Class(
 
       learner = self$learners[[i]]
       model   = train(learner, self$task$train)
-      pred    = expand.grid(x = -50:50 / 10, y = -50:50 / 10)
+      pred    = expand.grid(x1 = -50:50 / 10, x2 = -50:50 / 10)
 
       predictions      = predictLearner(learner, model, pred)
       pred$class       = predictions
@@ -68,8 +68,8 @@ ClassifLearningProcess = R6Class(
 
       ) %>%
         plotly::add_trace(
-          x         = ~unique(pred$x),
-          y         = ~unique(pred$y),
+          x         = ~unique(pred$x1),
+          y         = ~unique(pred$x2),
           z         = ~matrix(pred$predictions, nrow = sqrt(length(pred$predictions)), byrow = TRUE),
           type      = "heatmap",
           text      = ~matrix(pred$class, nrow = sqrt(length(pred$predictions)), byrow = TRUE),

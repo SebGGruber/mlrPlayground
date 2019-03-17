@@ -4,8 +4,8 @@
 #' An abstract \code{\link{R6Class}} to represent an learning process (dataset, task, learners, predictions)
 #' @section Methods:
 #' \describe{
-#'   \item{learn(iter)}{[\code{function}] \cr Run iter number of Episodes}
-#'   \item{plotPerf()}{[\code{function}] \cr plot performance}
+#'   \item{learn(iter)}{[\code{function}] \cr todo}
+#'   \item{plotPerf()}{[\code{function}] \cr todo}
 #' }
 #' @return [\code{\link{LearningProcess}}].
 

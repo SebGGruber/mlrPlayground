@@ -16,10 +16,11 @@ update_hyperparameters = function(learner, i){
   #' @param i Index of the learner to update
   #' @return mlr learner object
 
+  tasktype    = req(input$tasktype)
   valid_types = c("integer", "numeric", "discrete", "logical")
   is_valid    = sapply(learner$par.set$pars, function(par) par$has.default & par$tunable & par$type %in% valid_types)
   names       = names(learner$par.set$pars)[is_valid]
-  par.vals    = lapply(names,    function(par) modified_req(input[[paste0("parameter_", par, i)]]))
+  par.vals    = lapply(names,    function(par) modified_req(input[[paste0("parameter_", par, i, tasktype)]]))
   par.vals    = lapply(par.vals, function(val) if (is.character(val) & !is.na(as.integer(val))) as.integer(val) else val)
   names(par.vals) = names
 
@@ -48,6 +49,7 @@ source("server/observe_for_data.R", local = TRUE)
 
 # create learner 1 based on selected learner
 observe({
+  req(input$tasktype)
   learner = req(input$learner_1)
   process$initLearner(learner, 1)
   #create_learner(1)
@@ -62,6 +64,7 @@ observe({
 
 # create learner 2 based on selected learner
 observe({
+  req(input$tasktype)
   learner = req(input$learner_2)
   process$initLearner(learner, 2)
 })

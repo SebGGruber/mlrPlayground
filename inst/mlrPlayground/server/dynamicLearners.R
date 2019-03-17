@@ -24,15 +24,6 @@ select_learner_ui = function(i, choices) {
   )
 }
 
-#selected_learners = reactive({
-#
-#  req(learner_amount_enum())
-#  selection = lapply(learner_amount_enum(), function (i) {
-#    input[[paste0("learner_", i)]]
-#  })
-
-#  return(unlist(selection))
-#})
 
 observe({
   tasktype   = req(input$tasktype)
@@ -50,6 +41,7 @@ observe({
 
   values$learner_choices = choices
 })
+
 
 output$dynamicLearners = renderUI({
 
