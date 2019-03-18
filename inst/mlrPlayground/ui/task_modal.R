@@ -19,7 +19,25 @@ modal_body = fluidRow(
   )
 )
 
+modal_parameter = fluidRow(
+  
+  column(
+    3,
+    sliderInput("test_ration", "Ratio of training to test data:", 
+                min=0, max=1, value=0.5,step=0.1)
+  ),
+  column(
+    3,
+    sliderInput("scope", "Rescope:", 
+                min=0, max=10, value=3,step=1)
+  ),
+  column(
+    3,
+    sliderInput("outlier", "Outlier:", 
+                min=0, max=1, value=0.5,step=0.1)
+  )
+)
 # exported
 task_modal = bsModal(
-  "taskselection", "Task selection", "taskBut", size = "large", modal_body
+  "taskselection", "Task selection", "taskBut", size = "large", modal_body, modal_parameter
 )
