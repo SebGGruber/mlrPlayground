@@ -66,8 +66,8 @@ ClusterLearningProcess = R6Class(
         x = ~unique(pred$x),
         y = ~unique(pred$y),
         z = ~matrix(
-          pred$predictions,
-          nrow = sqrt(length(pred$predictions)),
+          pred$z,
+          nrow = sqrt(length(pred$z)),
           byrow = TRUE
         ),
         type = "heatmap",
@@ -79,7 +79,7 @@ ClusterLearningProcess = R6Class(
           data = self$data$train.set,
           x = ~x,
           y = ~y,
-          color = ~class,
+          #color = ~class,
           colors = c("#2b8cbe", "#e34a33", "#2b8cbe", "#e34a33"),
           type = "scatter",
           mode = "markers"

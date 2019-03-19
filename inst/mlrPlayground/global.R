@@ -13,7 +13,8 @@ required_packages = c(
   "shinythemes",
   "class",
   "R6",
-  "assertthat"
+  "assertthat",
+  "kernlab"
 )
 
 for (package in required_packages)
