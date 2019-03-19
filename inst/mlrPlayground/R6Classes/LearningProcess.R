@@ -18,6 +18,8 @@ LearningProcess = R6Class(
     learners = reactiveValues("1" = NULL, "2" = NULL),
     data     = reactiveValues(train.set = NULL,  test.set = NULL),
     task     = reactiveValues(train = NULL), # reactiveVal seems to be buggy with R6
+    pred     = reactiveValues(grid = NULL, test.set = NULL),
+    measures = NULL,
 
     initialize = function() {
       return(NULL)
@@ -54,11 +56,22 @@ LearningProcess = R6Class(
     },
 
     calculatePred = function(i) {
-      return(NULL)
+
+      learner = self$learners[[i]]
+      model   = train(learner, self$task$train)
+
+      # calculate test.set predictions
+      # remove target column (last one)
+      test.set = predictLearner(
+        learner, model, self$data$test.set[-ncol(self$data$test.set)]
+      )
+      self$pred[[i]]$test.set = test.set
+
+      # return learner and trained model
+      return(list(learner = learner, model = model))
     },
 
     getPredPlot = function(i){
-      # call "calculatePred" in here to recieve predictions for the plot
       return(NULL)
     },
 

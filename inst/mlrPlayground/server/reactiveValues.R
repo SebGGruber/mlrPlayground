@@ -28,20 +28,55 @@ update_hyperparameters = function(learner, i){
 }
 
 
+values = reactiveValues( learner_choices = NULL, measure_choices = NULL) #data = NULL, task = NULL,data = NULL, process_1 = NULL, process_2 = NULL,
+
+output$measure_1 = renderUI({
+  # wait until everything in "process" is loaded - "measures" is not reactive,
+  # thus not usable as trigger
+  req(process$data$train.set)
+  selectInput("measure_1", "", choices = process$measures)
+})
+
+
 observe({
   # this creates a new R6 class whenever the tasktype is loaded/changed
   tasktype = req(input$tasktype)
   # assign on global scope
-  if (tasktype == "classif")
+  if (tasktype == "classif") {
+#    values$measure_choices = c(
+#      "acc", "tnr", "tpr", "f1", "mmce", "brier.scaled", "bac", "fn", "fp", "fnr", "qsr", "fpr", "npv",
+#      "brier", "auc", "multiclass.aunp", "multiclass.aunu","ber", "multiclass.brier", "ssr",
+#      "ppv", "wkappa", "tn", "tp", "multiclass.au1u", "gmean"
+#    )
     process <<- ClassifLearningProcess$new()
-  else if (tasktype == "regr")
+  } else if (tasktype == "regr") {
     process <<- RegrLearningProcess$new()
-  else if (tasktype == "cluster")
+#    values$measure_choices = c(
+#      "mae", "mape", "medse", "msle", "rae", "spearmanrho", "rmsle", "medae", "sse", "expvar",
+#      "kendalltau", "rmse", "mse", "rrse", "rsq", "sae", "arsq"
+#    )
+
+  } else if (tasktype == "cluster") {
     process <<- ClusterLearningProcess$new()
+#    values$measure_choices = c(
+#      "db", "dunn", "G1", "G2"
+#    )
+  }
+
+  # list of all remaining measures
+  #c(
+  #  "iauc.uno", "featperc", "multilabel.tpr",
+  #  "ibrier", "multilabel.hamloss", "mcc",
+  #  "mcp", "lsr",
+  #  "multilabel.subset01", "meancosts", "timeboth", "timetrain",
+  #  "timepredict", "multilabel.ppv", "logloss",
+  #  "cindex.uno", "multilabel.f1",
+  #  "multiclass.au1p", "multilabel.acc", "silhouette", "fdr",
+  #  "kappa", "cindex", "gpr"
+  #)
 
 })
 
-values = reactiveValues( learner_choices = NULL) #data = NULL, task = NULL,data = NULL, process_1 = NULL, process_2 = NULL,
 
 # observer modifying reactively values$data based on relevant inputs
 source("server/observe_for_data.R", local = TRUE)
