@@ -24,17 +24,17 @@ modal_parameter = fluidRow(
   column(
     3,
     sliderInput("test_ration", "Ratio of training to test data:", 
-                min=0, max=1, value=0.5,step=0.1)
+                min=0.1, max=1, value=0.5,step=0.1)
   ),
   column(
     3,
-    sliderInput("scope", "Rescope:", 
-                min=0, max=10, value=3,step=1)
+    sliderInput("noise", "Noise:", 
+                min=0.1, max=1, value=0.1,step=0.1)
   ),
   column(
     3,
-    sliderInput("outlier", "Outlier:", 
-                min=0, max=1, value=0.5,step=0.1)
+    sliderInput("rescope", "Rescope:", 
+                min=0.1, max=10, value=1,step=0.1)
   )
 )
 # exported
