@@ -13,11 +13,11 @@
 #' @export
 
 start = function(...) {
-  appDir = system.file("R", package = "mlrPlayground")
+  appDir = system.file("mlrPlayground", package = "mlrPlayground")
 
   if (appDir == "") {
     stop("Could not find example directory. Try re-installing `mlrPlayground`.", call. = FALSE)
   }
 
-  shiny::runApp(appDir)
+  shiny::runApp(appDir, ...)
 }
