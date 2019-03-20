@@ -9,34 +9,20 @@ Classif3dLearningProcess = R6Class(
       #' @return plotly plot object
       plotly::plot_ly(
         data = self$data$train.set,
-        name   = "Train",
         type = "scatter3d",
         x    = ~x,
         y    = ~y,
         z    = ~z,
         color = ~class,
-        symbol  = I('x'),
+        opacity = 0.5,
         colors = c("#2b8cbe", "#e34a33")
       )%>%
-      add_markers()%>%
-      layout(scene = list(
-        xaxis = list(title = 'xaxis'),
-        yaxis = list(title = 'yaxis'),
-        zaxis = list(title = 'zaxis'))
-      )%>%
-      plotly::add_trace(
-        data   = self$data$test.set,
-        name   = "Test",
-        x      = ~x,
-        y      = ~y,
-        z      = ~z,
-        color  = ~class,
-        colors = c("#2b8cbe", "#e34a33"),
-        symbol  = I('o'),
-        type   = "scatter",
-        mode   = "markers"
+        add_markers()%>%
+        layout(scene = list(
+          xaxis = list(title = 'xaxis'),
+          yaxis = list(title = 'yaxis'),
+          zaxis = list(title = 'zaxis'))
         )
-        
     },
 
     calculatePred = function(i) {

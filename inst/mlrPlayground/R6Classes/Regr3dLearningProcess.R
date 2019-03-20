@@ -11,12 +11,10 @@ Regr3dLearningProcess = R6Class(
         data = self$data$train.set,
         name   = "Train",
         type = "scatter3d",
-        symbol = I('x'),
         x    = ~x,
         y    = ~y,
         z    = ~z
       ) %>%
-      add_markers() %>%
       layout(scene = list(
         xaxis = list(title = 'xaxis'),
         yaxis = list(title = 'yaxis'),
@@ -27,8 +25,7 @@ Regr3dLearningProcess = R6Class(
         name   = "Test",
         x      = ~x,
         y      = ~y,
-        symbol = I('o'),
-        type   = "scatter",
+        type   = "scatter3d",
         mode   = "markers"
         )
     },

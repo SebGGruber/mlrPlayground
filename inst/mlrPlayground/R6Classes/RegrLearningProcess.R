@@ -32,7 +32,6 @@ RegrLearningProcess = R6Class(
         name   = "Train",
         x      = ~x,
         y      = ~y,
-        symbol = I('x'),
         type   = "scatter",
         mode   = "markers"
       )%>%
@@ -41,7 +40,6 @@ RegrLearningProcess = R6Class(
         name   = "Test",
         x      = ~x,
         y      = ~y,
-        symbol = I('o'),
         type   = "scatter",
         mode   = "markers"
         )
@@ -84,6 +82,7 @@ RegrLearningProcess = R6Class(
         x = ~x,
         y = ~y,
         symbol = I('x'),
+        color = I("#2b8cbe"),
         type = "scatter",
         mode = "markers"
       ) %>%
@@ -99,6 +98,7 @@ RegrLearningProcess = R6Class(
         plotly::add_trace(
           x = ~pred$x,
           y = ~pred$y,
+          color = I("#e34a33"),
           name = 'trace 1',
           mode = 'lines',
           showscale = FALSE

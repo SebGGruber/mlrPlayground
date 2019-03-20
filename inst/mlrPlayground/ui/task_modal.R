@@ -34,7 +34,7 @@ modal_parameter = fluidRow(
   column(
     3,
     sliderInput("datasize", "Data Size:", 
-                min=100, max=10000, value=400,step=100)
+                min=20, max=2000, value=400,step=20)
   )
 )
 # exported
