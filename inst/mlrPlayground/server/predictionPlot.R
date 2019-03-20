@@ -1,14 +1,30 @@
 observe({
   # if learner 1 is loaded, calculate predictions
   req(process$learners[["1"]])
-  process$calculatePred(1)
+  isolate(process$calculatePred(1))
 })
 
-output$measure_1 = renderText({
+
+observe({
+  # if learner 2 is loaded, calculate predictions
+  req(process$learners[["2"]])
+  isolate(process$calculatePred(2))
+})
+
+
+output$measure_1_value = renderText({
   # once predictions are loaded, calculate performance measure based on chosen measure
-  pred = req(process$pred[["1"]]$test.set)
-  measure = req(input$measure_1)
-  performance(pred, measures = measure)
+  pred    = req(process$pred[["1"]]$test.set)
+  measure = req(input$measure_sel)
+  performance(pred, measures = get(measure)) # use "get" cause string gives error
+})
+
+
+output$measure_2_value = renderText({
+  # once predictions are loaded, calculate performance measure based on chosen measure
+  pred = req(process$pred[["2"]]$test.set)
+  measure = req(input$measure_sel)
+  performance(pred, measures = get(measure)) # use "get" cause string gives error
 })
 
 
@@ -20,7 +36,7 @@ output$predictionPlot_1 = renderPlotly({
 
 
 output$predictionPlot_2 = renderPlotly({
-  # if learner 2 is loaded, calculate prediction plot
-#  req(process$learners[["2"]])
-#  process$getPredPlot(2)
+  # once predictions are loaded, get the prediction plot
+  req(process$pred[["2"]])
+  process$getPredPlot(2)
 })

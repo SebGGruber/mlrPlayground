@@ -5,9 +5,12 @@ ClusterLearningProcess = R6Class(
   public = list(
 
     initialize = function() {
-      self$measures = c(
+      self$task$measures = c(
         "db", "dunn", "G1", "G2"
       )
+      self$task$type = "cluster"
+      super$initialize()
+
     },
 
     setData = function(data, train.ratio) {

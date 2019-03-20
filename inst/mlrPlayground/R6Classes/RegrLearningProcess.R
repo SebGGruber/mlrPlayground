@@ -5,10 +5,13 @@ RegrLearningProcess = R6Class(
   public = list(
 
     initialize = function() {
-      self$measures = c(
+      self$task$measures = c(
         "mae", "mape", "medse", "msle", "rae", "spearmanrho", "rmsle", "medae", "sse", "expvar",
         "kendalltau", "rmse", "mse", "rrse", "rsq", "sae", "arsq"
       )
+      self$task$type = "regr"
+      super$initialize()
+
     },
 
     setData = function(data, train.ratio) {
