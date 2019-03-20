@@ -4,14 +4,14 @@ ClassifLearningProcess = R6Class(
 
   public = list(
 
-    initialize = function() {
+    initialize = function(valid.learners) {
       self$task$measures = c(
         "acc", "tnr", "tpr", "f1", "mmce", "brier.scaled", "bac", "fn", "fp", "fnr", "qsr", "fpr", "npv",
         "brier", "auc", "multiclass.aunp", "multiclass.aunu","ber", "multiclass.brier", "ssr",
         "ppv", "wkappa", "tn", "tp", "multiclass.au1u", "gmean"
       )
       self$task$type = "classif"
-      super$initialize()
+      super$initialize(valid.learners)
 
     },
 

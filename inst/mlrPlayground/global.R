@@ -14,7 +14,8 @@ required_packages = c(
   "class",
   "R6",
   "assertthat",
-  "kernlab"
+  "kernlab",
+  "R.utils"
 )
 
 for (package in required_packages)
@@ -34,11 +35,12 @@ source("R6Classes/ClusterLearningProcess.R",   local = TRUE)
 options(shiny.maxRequestSize = 9*1024^2)
 
 # READ AND PARSE CONFIG (TODO: put into function)
+config = list()
 text      = read.csv(file = "learner.config", quote = "", header = FALSE, sep = "\n")
 fst_index = which(text$V1 == "### Valid learners")
 snd_index = which(text$V1 == "### Hyperparameter definitions")
 # list of valid learners (factor format)
-valid_learners  = text$V1[(fst_index + 1) : (snd_index - 1)]
+config$valid.learners  = text$V1[(fst_index + 1) : (snd_index - 1)]
 hyperparameters = text$V1[(snd_index + 1) : nrow(text)]
 
 # dataframe of hyperparameter configurations
@@ -49,6 +51,6 @@ param_df = lapply(param_df, as.character)
 param_df[c("short.name", "param.name", "new.name")] = lapply(param_df[c("short.name", "param.name", "new.name")], trimws)
 # character to integer (don't skip as.character here!!!)
 param_df[c("new.min", "new.max", "new.default")] = lapply(param_df[c("new.min", "new.max", "new.default")], as.integer)
-
+config$param_df
 # init process variable, so req(process) doesn't crash during start
 process = NULL

@@ -4,12 +4,12 @@ ClusterLearningProcess = R6Class(
 
   public = list(
 
-    initialize = function() {
+    initialize = function(valid.learners) {
       self$task$measures = c(
         "db", "dunn", "G1", "G2"
       )
       self$task$type = "cluster"
-      super$initialize()
+      super$initialize(valid.learners)
 
     },
 
@@ -59,6 +59,7 @@ ClusterLearningProcess = R6Class(
       #' predictions for
       #' @return list(x = <<x-coordinates>>, y = <<predictions>>)
 
+      assert_that(i %in% 1:2)
       # Must use string to index into reactivevalues
       i = as.character(i)
 

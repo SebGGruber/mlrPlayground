@@ -4,13 +4,13 @@ RegrLearningProcess = R6Class(
 
   public = list(
 
-    initialize = function() {
+    initialize = function(valid.learners) {
       self$task$measures = c(
         "mae", "mape", "medse", "msle", "rae", "spearmanrho", "rmsle", "medae", "sse", "expvar",
         "kendalltau", "rmse", "mse", "rrse", "rsq", "sae", "arsq"
       )
       self$task$type = "regr"
-      super$initialize()
+      super$initialize(valid.learners)
 
     },
 
