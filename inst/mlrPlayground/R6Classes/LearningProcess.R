@@ -15,12 +15,26 @@ LearningProcess = R6Class(
   public = list(
     # currently only 2 learners are supported
     # element names are mandatory
-    learners = reactiveValues("1" = NULL, "2" = NULL),
+    # "choices" is the list of selectable learners in the UI
+    learners = reactiveValues("1" = NULL, "2" = NULL, choices = NULL),
     data     = reactiveValues(train.set = NULL,  test.set = NULL),
-    task     = reactiveValues(train = NULL), # reactiveVal seems to be buggy with R6
+    task     = reactiveValues(train = NULL, measures = NULL, type = NULL),
+    pred     = reactiveValues(grid = NULL, test.set = NULL),
 
     initialize = function() {
-      return(NULL)
+      shortnames = listLearners()$short.name[
+        listLearners()$type       ==   self$task$type
+        & listLearners()$short.name %in% valid_learners
+        ]
+      names = listLearners()$name[
+        listLearners()$type       ==   self$task$type
+        & listLearners()$short.name %in% valid_learners
+        ]
+
+      choices                = as.list(c("", shortnames))
+      names(choices)         = c("Choose", names)
+
+      self$learners$choices = choices
     },
 
     setData = function(data, train.ratio) {
@@ -38,7 +52,7 @@ LearningProcess = R6Class(
     },
 
     initLearner = function(short.name, i, type) {
-      #' @param short.name Character of learner short.name
+      #' @param short.name String of learner short.name
       #' @param i Index of the learner in the list of stored learners
       #' @param type Type of learner and task (classif, regr, cluster)
 
@@ -54,11 +68,24 @@ LearningProcess = R6Class(
     },
 
     calculatePred = function(i) {
-      return(NULL)
+      #' @description Method for calculating and setting process predictions i
+      #' once learner i and task are loaded
+      #' @param i Index of the learner/predictions in the list of learners/pred
+      #' - only 1 and 2 are currently supported
+      #' @return named list of shape list(<<learner i>>, <<trained model>>)
+
+      learner = self$learners[[i]]
+      model   = train(learner, self$task$train)
+
+      # calculate test.set predictions
+      test.set = predict(model, newdata = self$data$test.set)
+      self$pred[[i]]$test.set = test.set
+
+      # return learner and trained model
+      return(list(learner = learner, model = model))
     },
 
     getPredPlot = function(i){
-      # call "calculatePred" in here to recieve predictions for the plot
       return(NULL)
     },
 
@@ -70,3 +97,16 @@ LearningProcess = R6Class(
   private = list(
   )
 )
+
+# list of all remaining measures
+#c(
+#  "iauc.uno", "featperc", "multilabel.tpr",
+#  "ibrier", "multilabel.hamloss", "mcc",
+#  "mcp", "lsr",
+#  "multilabel.subset01", "meancosts", "timeboth", "timetrain",
+#  "timepredict", "multilabel.ppv", "logloss",
+#  "cindex.uno", "multilabel.f1",
+#  "multiclass.au1p", "multilabel.acc", "silhouette", "fdr",
+#  "kappa", "cindex", "gpr"
+#)
+

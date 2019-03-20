@@ -25,28 +25,12 @@ select_learner_ui = function(i, choices) {
 }
 
 
-observe({
-  tasktype   = req(input$tasktype)
-  shortnames = listLearners()$short.name[
-      listLearners()$type       ==   tasktype
-    & listLearners()$short.name %in% valid_learners
-  ]
-  names = listLearners()$name[
-      listLearners()$type       ==   tasktype
-    & listLearners()$short.name %in% valid_learners
-  ]
-
-  choices                = as.list(c("", shortnames))
-  names(choices)         = c("Choose", names)
-
-  values$learner_choices = choices
-})
-
-
 output$dynamicLearners = renderUI({
 
   req(learner_amount_enum())
-  choices = req(values$learner_choices)
+  choices = req(process$learners$choices)
+  # create learner selection based on the amount of learners and the given choices
+  # (defined by tasktype)
   lapply(learner_amount_enum(), function(i) select_learner_ui(i, choices))
 })
 

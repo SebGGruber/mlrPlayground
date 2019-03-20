@@ -1,13 +1,21 @@
 # only locally used
 prediction_tab = tabPanel(
   "Predictions",
-  helpText("Learner 1:"),
+  fluidRow(
+    column(3, helpText("Learner 1:")),
+    column(3, uiOutput("measure_1_value")),
+    column(3, uiOutput("measure_1_sel"))#, offset = 0, style='padding: 0px 0px;')
+  ),
   withSpinner(
     plotly::plotlyOutput("predictionPlot_1", width = "90%", height = "450px")
   ),
   conditionalPanel(
     "output.learner_amount > 1",
-    helpText("Learner 2:"),
+    fluidRow(
+      column(3, helpText("Learner 2:")),
+      column(3, uiOutput("measure_2_value")),
+      column(3, uiOutput("measure_2_sel"))
+    ),
     withSpinner(
       plotly::plotlyOutput("predictionPlot_2", width = "90%", height = "450px")
     )

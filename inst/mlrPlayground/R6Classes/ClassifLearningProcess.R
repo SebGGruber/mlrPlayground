@@ -4,6 +4,17 @@ ClassifLearningProcess = R6Class(
 
   public = list(
 
+    initialize = function() {
+      self$task$measures = c(
+        "acc", "tnr", "tpr", "f1", "mmce", "brier.scaled", "bac", "fn", "fp", "fnr", "qsr", "fpr", "npv",
+        "brier", "auc", "multiclass.aunp", "multiclass.aunu","ber", "multiclass.brier", "ssr",
+        "ppv", "wkappa", "tn", "tp", "multiclass.au1u", "gmean"
+      )
+      self$task$type = "classif"
+      super$initialize()
+
+    },
+
     setData = function(data, train.ratio) {
       super$setData(data, train.ratio)
       self$task$train = makeClassifTask(data = self$data$train.set, target = "class")
@@ -41,25 +52,30 @@ ClassifLearningProcess = R6Class(
     },
 
     calculatePred = function(i) {
-      #' @description Method for calculating equidistant predictions in a 2D box
+      #' @description Method for calculating predictions of a grid data set used for plotting
+      #'  and returning the trained model for further prediction calculations
       #' @param i Index of the learner in self$learners to calculate the
       #' predictions for
-      #' @return list(x1 = <<x1-coordinates>>, x2 = <<x2-coordinates>>,
-      #'  pred_matrix = <<matrix containing predictions>>)
+      #' @return list(learner, model)
+
 
       # Must use string to index into reactivevalues
       i = as.character(i)
 
-      learner = self$learners[[i]]
-      model   = train(learner, self$task$train)
-      pred    = expand.grid(x1 = -50:50 / 10, x2 = -50:50 / 10)
+      trained = super$calculatePred(i)
 
-      predictions      = predictLearner(learner, model, pred)
-      pred$class       = predictions
-      pred$predictions = as.numeric(factor(predictions))
+      # caluclate grid predictions
+      grid    = expand.grid(x1 = -50:50 / 10, x2 = -50:50 / 10)
 
-      return(pred)
+      predictions      = predictLearner(trained$learner, trained$model, grid)
+      grid$class       = predictions
+      grid$predictions = as.numeric(factor(predictions))
+
+      self$pred[[i]]$grid = grid
+
+      return(trained)
     },
+
 
     getPredPlot = function(i) {
       #' @description Method to recieve prediction surface of a trained learner
@@ -68,7 +84,10 @@ ClassifLearningProcess = R6Class(
       #' predictions plot for
       #' @return plotly plot object
 
-      pred = self$calculatePred(i)
+      # Must use string to index into reactivevalues
+      i = as.character(i)
+
+      pred = self$pred[[i]]$grid
 
       plotly::plot_ly(
         data    = self$data$train.set,

@@ -4,6 +4,15 @@ ClusterLearningProcess = R6Class(
 
   public = list(
 
+    initialize = function() {
+      self$task$measures = c(
+        "db", "dunn", "G1", "G2"
+      )
+      self$task$type = "cluster"
+      super$initialize()
+
+    },
+
     setData = function(data, train.ratio) {
       super$setData(data, train.ratio)
       self$task$train = makeClusterTask(data = self$data$train.set)
@@ -54,14 +63,14 @@ ClusterLearningProcess = R6Class(
       # Must use string to index into reactivevalues
       i = as.character(i)
 
-      learner = self$learners[[i]]
-      model   = train(learner, self$task$train)
-      pred    = expand.grid(x = -50:50 / 10, y = -50:50 / 10)
+      trained = super$calculatePred(i)
 
-      predictions = predictLearner(learner, model, pred)
-      pred$z      = as.numeric(factor(predictions))
+      grid    = expand.grid(x = -50:50 / 10, y = -50:50 / 10)
 
-      return(pred)
+      predictions = predictLearner(trained$learner, trained$model, grid)
+      grid$z      = as.numeric(factor(predictions))
+
+      self$pred[[i]]$grid = grid
     },
 
     getPredPlot = function(i) {
@@ -71,14 +80,17 @@ ClusterLearningProcess = R6Class(
       #' predictions plot for
       #' @return plotly plot object
 
-      pred = self$calculatePred(i)
+      # Must use string to index into reactivevalues
+      i = as.character(i)
+
+      pred = self$pred[[i]]$grid
 
       plotly::plot_ly(
         x = ~unique(pred$x),
         y = ~unique(pred$y),
         z = ~matrix(
-          pred$predictions,
-          nrow = sqrt(length(pred$predictions)),
+          pred$z,
+          nrow = sqrt(length(pred$z)),
           byrow = TRUE
         ),
         type = "heatmap",

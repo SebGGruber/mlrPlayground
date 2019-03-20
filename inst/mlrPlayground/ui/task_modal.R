@@ -5,7 +5,7 @@ modal_body = fluidRow(
     selectInput(
       "tasktype",
       label = "Select task type",
-      choices = list("Classification" = "classif", "Regression" = "regr", "Clustering" = "cluster")#, "Regression" = "regr", "Clustering" = "cluster", "Multilabel" = "multilabel", "Survival" = "surv")
+      choices = list("Classification" = "classif", "Regression" = "regr", "Clustering" = "cluster", "Regression 3D" = "regr3d", "Classification 3d" = "classif3d")
     ),
     withSpinner(
       uiOutput("taskSelection")
@@ -20,7 +20,7 @@ modal_body = fluidRow(
 )
 
 modal_parameter = fluidRow(
-  
+
   column(
     3,
     sliderInput("test_ration", "Ratio of training data:", 
@@ -28,7 +28,7 @@ modal_parameter = fluidRow(
   ),
   column(
     3,
-    sliderInput("noise", "Noise:", 
+    sliderInput("noise", "Noise:",
                 min=0.1, max=1, value=0.1,step=0.1)
   ),
   column(
