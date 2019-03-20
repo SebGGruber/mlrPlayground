@@ -123,7 +123,7 @@ ClassifLearningProcess = R6Class(
           hoverinfo = "x+y+text+skip",
           showscale = FALSE
         ) %>%
-        plotly::layout(xaxis = list(title = ""), yaxis = list(title = ""))
+        plotly::layout(xaxis = list(title = "x"), yaxis = list(title = "y"))
     }
   ),
 
