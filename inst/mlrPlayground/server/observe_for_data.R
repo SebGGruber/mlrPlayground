@@ -158,9 +158,9 @@ observe({
     } else if(task == "1.Wavy surface"){
 
       kern  = c((- amount / 20) : (amount / 20)) * pi / 10
-      x     = rep(kern,41) * rescope
-      y     = rep(kern,each=41) * rescope
-      z     = sin(x) + sin(y) + rnorm(length(y), 0, 1) / 3 * rescope
+      x     = (rep(kern,41) + rnom_noise) * rescope
+      y     = (rep(kern,each=41) + rnom_noise) * rescope
+      z     = (sin(x) + sin(y) + rnorm(length(y), 0, 1) * noise) * rescope
       class = ifelse(z>0, "Class 1","Class 2")
 
       data.frame(x,y,z,class)
@@ -195,7 +195,7 @@ observe({
 
       x     = as.vector(x + rnom_noise) * rescope
       y     = as.vector(y + rnom_noise) * rescope
-      z     = as.vector(z) * rescope
+      z     = as.vector(z + rnom_noise) * rescope
       class = as.vector(class)
 
       data.frame(x,y,z,class)
@@ -317,9 +317,9 @@ observe({
       x = sin(z * 5) * 3
       y = cos(z * 5) * 3
 
-      x = x * rescope
-      y = y * rescope
-      z = z * rescope
+      x = (x + rnom_noise) * rescope
+      y = (y + rnom_noise) * rescope
+      z = (z + rnom_noise) * rescope
 
       data.frame(x, y, z)
 
