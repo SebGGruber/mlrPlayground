@@ -9,6 +9,7 @@ Classif3dLearningProcess = R6Class(
       #' @return plotly plot object
       plotly::plot_ly(
         data = self$data$train.set,
+        name   = "Train",
         type = "scatter3d",
         x    = ~x,
         y    = ~y,
@@ -25,6 +26,7 @@ Classif3dLearningProcess = R6Class(
       )%>%
       plotly::add_trace(
         data   = self$data$test.set,
+        name   = "Test",
         x      = ~x,
         y      = ~y,
         z      = ~z,

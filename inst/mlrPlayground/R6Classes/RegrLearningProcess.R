@@ -19,6 +19,7 @@ RegrLearningProcess = R6Class(
       #' @return plotly plot object
       plotly::plot_ly(
         data   = self$data$train.set,
+        name   = "Train",
         x      = ~x,
         y      = ~y,
         symbol = I('x'),
@@ -27,6 +28,7 @@ RegrLearningProcess = R6Class(
       )%>%
       plotly::add_trace(
         data   = self$data$test.set,
+        name   = "Test",
         x      = ~x,
         y      = ~y,
         symbol = I('o'),
@@ -63,6 +65,7 @@ RegrLearningProcess = R6Class(
 #browser()
       plotly::plot_ly(
         data = self$data$train.set,
+        name   = "Train",
         x = ~x,
         y = ~y,
         symbol = I('x'),
@@ -71,6 +74,7 @@ RegrLearningProcess = R6Class(
       ) %>%
       plotly::add_trace(
         data   = self$data$test.set,
+        name   = "Test",
         x      = ~x,
         y      = ~y,
         symbol = I('o'),

@@ -19,6 +19,7 @@ ClusterLearningProcess = R6Class(
 
       plotly::plot_ly(
         data   = self$data$train.set,
+        name   = "Train",
         x      = ~x,
         y      = ~y,
         symbol = I('x'),
@@ -35,6 +36,7 @@ ClusterLearningProcess = R6Class(
       )%>%
       plotly::add_trace(
         data   = self$data$test.set,
+        name   = "Test",
         x      = ~x,
         y      = ~y,
         symbol = I('o'),
@@ -86,13 +88,24 @@ ClusterLearningProcess = R6Class(
       ) %>%
         plotly::add_trace(
           data = self$data$train.set,
+          name   = "Train",
           x = ~x,
           y = ~y,
+          symbol = I('x'),
           color = ~class,
           colors = c("#2b8cbe", "#e34a33", "#2b8cbe", "#e34a33"),
           type = "scatter",
           mode = "markers"
         ) %>%
+      plotly::add_trace(
+        data   = self$data$test.set,
+        name   = "Test",
+        x      = ~x,
+        y      = ~y,
+        symbol = I('o'),
+        type   = "scatter",
+        mode   = "markers"
+        )%>%
         plotly::layout(xaxis = list(title = ""), yaxis = list(title = ""))
     }
   ),

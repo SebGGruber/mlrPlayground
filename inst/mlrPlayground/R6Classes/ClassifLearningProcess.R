@@ -18,6 +18,7 @@ ClassifLearningProcess = R6Class(
       #' @return plotly plot object
       plotly::plot_ly(
         data   = self$data$train.set,
+        name   = "Train",
         x      = ~x1,
         y      = ~x2,
         color  = ~class,
@@ -28,6 +29,7 @@ ClassifLearningProcess = R6Class(
       )%>%
       plotly::add_trace(
         data   = self$data$test.set,
+        name   = "Test",
         x      = ~x1,
         y      = ~x2,
         color  = ~class,
@@ -70,6 +72,7 @@ ClassifLearningProcess = R6Class(
 
       plotly::plot_ly(
         data    = self$data$train.set,
+        name   = "Train",
         x       = ~x1,
         y       = ~x2,
         color   = ~class,
@@ -81,6 +84,7 @@ ClassifLearningProcess = R6Class(
       ) %>%
       plotly::add_trace(
         data   = self$data$test.set,
+        name   = "Test",
         x      = ~x1,
         y      = ~x2,
         color  = ~class,

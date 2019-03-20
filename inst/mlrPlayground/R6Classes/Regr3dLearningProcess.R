@@ -9,6 +9,7 @@ Regr3dLearningProcess = R6Class(
       #' @return plotly plot object
       plotly::plot_ly(
         data = self$data$train.set,
+        name   = "Train",
         type = "scatter3d",
         symbol = I('x'),
         x    = ~x,
@@ -23,6 +24,7 @@ Regr3dLearningProcess = R6Class(
       )%>%
       plotly::add_trace(
         data   = self$data$test.set,
+        name   = "Test",
         x      = ~x,
         y      = ~y,
         symbol = I('o'),
@@ -63,11 +65,11 @@ Regr3dLearningProcess = R6Class(
         x = ~pred$x,
         y = ~pred$y,
         type = "line",
-        symbol = I('x'),
         showscale = FALSE
       ) %>%
       plotly::add_trace(
         data   = self$data$test.set,
+        name   = "Test",
         x      = ~x,
         y      = ~y,
         symbol = I('o'),
@@ -76,10 +78,10 @@ Regr3dLearningProcess = R6Class(
         )%>%
         plotly::add_trace(
           data = self$data$train.set,
+          name   = "Train",
           x = ~x,
           y = ~y,
-          #        color = ~class,
-          #        colors = c("#2b8cbe", "#e34a33", "#2b8cbe", "#e34a33"),
+          symbol = I('x'),
           type = "scatter",
           mode = "markers"
         ) %>%
