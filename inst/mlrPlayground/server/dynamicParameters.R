@@ -1,6 +1,8 @@
 min_max_modals = function(parameter, i, learner, tasktype) {
 
   id = paste0(parameter$id, i, tasktype)
+  param_df = config$param_df
+
 
   if (!parameter$has.default | !parameter$tunable) {
     # don't know what to do without default (yet) :(
@@ -76,6 +78,8 @@ parameter_to_ui = function(parameter, i, learner, tasktype) {
   id = paste0(parameter$id, i, tasktype)
   input_width    = 4
   helpText_width = 5
+  param_df = config$param_df
+
 
   inp_id = paste0("parameter_", id)
   label  = {

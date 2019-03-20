@@ -21,14 +21,20 @@ LearningProcess = R6Class(
     task     = reactiveValues(train = NULL, measures = NULL, type = NULL),
     pred     = reactiveValues(grid = NULL, test.set = NULL),
 
-    initialize = function() {
-      shortnames = listLearners()$short.name[
-        listLearners()$type       ==   self$task$type
-        & listLearners()$short.name %in% valid_learners
+    initialize = function(valid.learners) {
+      #' @description Initialize new class instance and define valid learners
+      #' for this class
+      #' @param valid.learners character vector of valid learner shortnames
+      #' @return NULL
+
+      listLearners = listLearners(warn.missing.packages = FALSE)
+      shortnames = listLearners$short.name[
+        listLearners$type       ==   self$task$type
+        & listLearners$short.name %in% valid.learners
         ]
-      names = listLearners()$name[
-        listLearners()$type       ==   self$task$type
-        & listLearners()$short.name %in% valid_learners
+      names = listLearners$name[
+        listLearners$type       ==   self$task$type
+        & listLearners$short.name %in% valid.learners
         ]
 
       choices                = as.list(c("", shortnames))

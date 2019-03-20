@@ -35,20 +35,26 @@ observe({
   tasktype = req(input$tasktype)
   # assign on global scope
   if (tasktype == "classif") {
-    process <<- ClassifLearningProcess$new()
+    process <<- ClassifLearningProcess$new(config$valid.learners)
 
   } else if (tasktype == "regr") {
-    process <<- RegrLearningProcess$new()
+    process <<- RegrLearningProcess$new(config$valid.learners)
 
   } else if (tasktype == "cluster") {
-    process <<- ClusterLearningProcess$new()
+    process <<- ClusterLearningProcess$new(config$valid.learners)
 
   } else if (tasktype == "classif3d") {
-    process <<- Classif3dLearningProcess$new()
+    process <<- Classif3dLearningProcess$new(config$valid.learners)
 
   } else if (tasktype == "regr3d") {
-    process <<- Regr3dLearningProcess$new()
+    process <<- Regr3dLearningProcess$new(config$valid.learners)
   }
+
+  # remove this and everything is totally messed up :)
+  # reset selections once tasktype changes
+  updateSelectInput(session, "learner_1", selected = "")
+  updateSelectInput(session, "learner_2", selected = "")
+  updateSelectInput(session, "measure_sel", selected = "")
 
 })
 
@@ -58,7 +64,13 @@ source("server/observe_for_data.R", local = TRUE)
 
 # render UI for the measure selection
 output$measure_1_sel = renderUI({
+  # measures need to be initialized
   req(process$task$measures)
+  # only render when learner_1 is not NULL
+  req(input$learner_1)
+  # optional dependency: Only renders once prediction plots
+  # also render
+  req(process$learners[["1"]])
   selectInput("measure_sel", "", choices = process$task$measures)
 })
 
@@ -71,7 +83,6 @@ output$measure_2_sel = renderText({
 
 # create learner 1 based on selected learner
 observe({
-  req(process$task$type)
   learner = req(input$learner_1)
   process$initLearner(learner, 1)
 })
@@ -84,7 +95,6 @@ observe({
 
 # create learner 2 based on selected learner
 observe({
-  req(process$task$type)
   learner = req(input$learner_2)
   process$initLearner(learner, 2)
 })
