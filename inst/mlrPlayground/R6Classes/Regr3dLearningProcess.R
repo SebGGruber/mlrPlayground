@@ -10,6 +10,7 @@ Regr3dLearningProcess = R6Class(
       plotly::plot_ly(
         data = self$data$train.set,
         type = "scatter3d",
+        symbol = I('x'),
         x    = ~x,
         y    = ~y,
         z    = ~z
@@ -19,7 +20,15 @@ Regr3dLearningProcess = R6Class(
         xaxis = list(title = 'xaxis'),
         yaxis = list(title = 'yaxis'),
         zaxis = list(title = 'zaxis'))
-      )
+      )%>%
+      plotly::add_trace(
+        data   = self$data$test.set,
+        x      = ~x,
+        y      = ~y,
+        symbol = I('o'),
+        type   = "scatter",
+        mode   = "markers"
+        )
     },
 
     calculatePred = function(i) {
@@ -54,10 +63,17 @@ Regr3dLearningProcess = R6Class(
         x = ~pred$x,
         y = ~pred$y,
         type = "line",
-        #        colors = colorRamp(c("red", "blue")),
-        #        opacity = 0.2,
+        symbol = I('x'),
         showscale = FALSE
       ) %>%
+      plotly::add_trace(
+        data   = self$data$test.set,
+        x      = ~x,
+        y      = ~y,
+        symbol = I('o'),
+        type   = "scatter",
+        mode   = "markers"
+        )%>%
         plotly::add_trace(
           data = self$data$train.set,
           x = ~x,

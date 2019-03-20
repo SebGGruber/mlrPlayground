@@ -1,5 +1,5 @@
 # set the amount of test data sets
-parameter    = reactiveValues(test_ration = 0.1, noise = 0.1, rescope = 1)
+parameter    = reactiveValues(test_ration = 0.1, noise = 0.1, datasize = 400)
 
 
 observe({
@@ -7,31 +7,24 @@ observe({
   req(process$data)
   task = req(input$task)
 
-  # 1.Parameter: Test ration 
-  parameter$test_ration = req(input$test_ration)
-  test_ration           = req(parameter$test_ration)
-  amount                = round(400 * test_ration)
+  # 1.Parameter: Data size
+  parameter$datasize = req(input$datasize)
+  amount             = req(parameter$datasize)
+  
 
-  # 2.Parameter: Noise
+  # 2.Parameter: Test ration 
+  parameter$test_ration = req(input$test_ration)
+  train.ratio           = req(parameter$test_ration)
+
+  # 3.Parameter: Noise
   parameter$noise = req(input$noise)
   noise           = req(parameter$noise)
   rnom_noise      = rnorm(amount, 0, 1) * noise
   rexp_noise      = rexp(amount, 1) * noise
   runif_noise     = runif(amount, 0, 1) * noise
 
-  # 3.Parameter: Rescope
-  parameter$rescope = req(input$rescope)
-  rescope           = req(parameter$rescope)
-
-  train.ratio = 0.5
-
-
-
-  # TODO: add parameter selections for the amount, the distribution, noisy_ration, noise,
-  # TODO: (add any number of data sets, set x offset and y offset for each class)
-  # distribution = Null
-  # noisy_ration = 0.1
-  # size_noisy   = amount * noisy_ration
+  # 4.Parameter: Rescope
+  rescope         = 1
 
   seed = 123 # TODO
   set.seed(seed)

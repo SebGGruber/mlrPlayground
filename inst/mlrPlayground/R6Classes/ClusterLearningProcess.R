@@ -21,6 +21,7 @@ ClusterLearningProcess = R6Class(
         data   = self$data$train.set,
         x      = ~x,
         y      = ~y,
+        symbol = I('x'),
         marker = list(
           size  = 10,
           color = 'rgba(255, 182, 193, .9)',
@@ -31,7 +32,15 @@ ClusterLearningProcess = R6Class(
         ),
         type   = "scatter",
         mode   = "markers"
-      )
+      )%>%
+      plotly::add_trace(
+        data   = self$data$test.set,
+        x      = ~x,
+        y      = ~y,
+        symbol = I('o'),
+        type   = "scatter",
+        mode   = "markers"
+        )
     },
 
     calculatePred = function(i) {

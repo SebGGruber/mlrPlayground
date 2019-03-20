@@ -22,9 +22,20 @@ ClassifLearningProcess = R6Class(
         y      = ~x2,
         color  = ~class,
         colors = c("#2b8cbe", "#e34a33"),
+        symbol  = I('x'),
         type   = "scatter",
         mode   = "markers"
-      )
+      )%>%
+      plotly::add_trace(
+        data   = self$data$test.set,
+        x      = ~x1,
+        y      = ~x2,
+        color  = ~class,
+        colors = c("#2b8cbe", "#e34a33"),
+        symbol  = I('o'),
+        type   = "scatter",
+        mode   = "markers"
+        )
     },
 
     calculatePred = function(i) {
@@ -63,10 +74,21 @@ ClassifLearningProcess = R6Class(
         y       = ~x2,
         color   = ~class,
         colors  = c("#2b8cbe", "#e34a33", "#2b8cbe", "#e34a33"),
+        symbol  = I("x"),
         type    = "scatter",
         mode    = "markers"
 
       ) %>%
+      plotly::add_trace(
+        data   = self$data$test.set,
+        x      = ~x1,
+        y      = ~x2,
+        color  = ~class,
+        colors = c("#2b8cbe", "#e34a33"),
+        symbol  = I('o'),
+        type   = "scatter",
+        mode   = "markers"
+        )%>%
         plotly::add_trace(
           x         = ~unique(pred$x1),
           y         = ~unique(pred$x2),

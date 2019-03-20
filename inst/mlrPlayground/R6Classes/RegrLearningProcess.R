@@ -18,12 +18,21 @@ RegrLearningProcess = R6Class(
       #' @description Method transforming the data into an interactive plot
       #' @return plotly plot object
       plotly::plot_ly(
-        data = self$data$train.set,
-        x    = ~x,
-        y    = ~y,
-        type = "scatter",
-        mode = "markers"
-      )
+        data   = self$data$train.set,
+        x      = ~x,
+        y      = ~y,
+        symbol = I('x'),
+        type   = "scatter",
+        mode   = "markers"
+      )%>%
+      plotly::add_trace(
+        data   = self$data$test.set,
+        x      = ~x,
+        y      = ~y,
+        symbol = I('o'),
+        type   = "scatter",
+        mode   = "markers"
+        )
     },
 
     calculatePred = function(i) {
@@ -56,18 +65,23 @@ RegrLearningProcess = R6Class(
         data = self$data$train.set,
         x = ~x,
         y = ~y,
-        #        color = ~class,
-        #        colors = c("#2b8cbe", "#e34a33", "#2b8cbe", "#e34a33"),
+        symbol = I('x'),
         type = "scatter",
         mode = "markers"
       ) %>%
+      plotly::add_trace(
+        data   = self$data$test.set,
+        x      = ~x,
+        y      = ~y,
+        symbol = I('o'),
+        type   = "scatter",
+        mode   = "markers"
+        )%>%
         plotly::add_trace(
           x = ~pred$x,
           y = ~pred$y,
           name = 'trace 1',
           mode = 'lines',
-          #        colors = colorRamp(c("red", "blue")),
-          #        opacity = 0.2,
           showscale = FALSE
 
         ) %>%
