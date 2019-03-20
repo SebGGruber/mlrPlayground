@@ -13,12 +13,16 @@ output$taskSelection = renderUI({
       "5.Gaussian",
       "6.Across Spiral",
       "7.Opposite Arc",
-      "8.Cross Sector",
-      "9.Wavy surface (3D)",
-      "10.Sphere (3D)"
+      "8.Cross Sector"
     )
 
-  }else if (input$tasktype == "regr") {
+  } else if (input$tasktype == "classif3d") {
+    choices = list(
+      "1.Wavy surface",
+      "2.Sphere"
+    )
+
+  } else if (input$tasktype == "regr") {
     choices = list(#"Linear ascend (2D)",
     #Regression
       "1.Linear ascend",
@@ -29,8 +33,12 @@ output$taskSelection = renderUI({
       "6.Sigmoid",
       "7.Circle",
       "8.Spiral",
-      "9.Parabola To Right",
-      "10.Spiral ascend (3D)"
+      "9.Parabola To Right"
+    )
+
+  } else if (input$tasktype == "regr3d") {
+    choices = list(
+      "1.Spiral ascend"
     )
 
   } else if (input$tasktype == "cluster") {

@@ -4,6 +4,16 @@ RegrLearningProcess = R6Class(
 
   public = list(
 
+    initialize = function(valid.learners) {
+      self$task$measures = c(
+        "mae", "mape", "medse", "msle", "rae", "spearmanrho", "rmsle", "medae", "sse", "expvar",
+        "kendalltau", "rmse", "mse", "rrse", "rsq", "sae", "arsq"
+      )
+      self$task$type = "regr"
+      super$initialize(valid.learners)
+
+    },
+
     setData = function(data, train.ratio) {
       super$setData(data, train.ratio)
       #browser()
@@ -35,12 +45,14 @@ RegrLearningProcess = R6Class(
       # Must use string to index into reactivevalues
       i = as.character(i)
 
-      learner = self$learners[[i]]
-      model   = train(learner, self$task$train)
-      pred    = expand.grid(x = -50:50 / 10)
-      pred$y  = predictLearner(learner, model, pred)
+      trained = super$calculatePred(i)
 
-      return(pred)
+      grid    = expand.grid(x = -50:50 / 10)
+      grid$y  = predictLearner(trained$learner, trained$model, grid)
+
+      self$pred[[i]]$grid = grid
+
+      return(trained)
     },
 
     getPredPlot = function(i) {
@@ -50,8 +62,11 @@ RegrLearningProcess = R6Class(
       #' predictions plot for
       #' @return plotly plot object
 
-      pred = self$calculatePred(i)
-#browser()
+      # Must use string to index into reactivevalues
+      i = as.character(i)
+
+      pred = self$pred[[i]]$grid
+
       plotly::plot_ly(
         data = self$data$train.set,
         x = ~x,

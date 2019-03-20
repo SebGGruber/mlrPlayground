@@ -7,7 +7,7 @@ observe({
   req(process$data)
   task = req(input$task)
 
-  # 1.Parameter: Test ration 
+  # 1.Parameter: Test ration
   parameter$test_ration = req(input$test_ration)
   test_ration           = req(parameter$test_ration)
   amount                = round(400 * test_ration)
@@ -162,7 +162,7 @@ observe({
       data.frame(x1, x2, class)
 
       #9.add Wavy surface(3D) data sets
-    } else if(task == "9.Wavy surface (3D)"){
+    } else if(task == "1.Wavy surface"){
 
       kern  = c((- amount / 20) : (amount / 20)) * pi / 10
       x     = rep(kern,41) * rescope
@@ -173,7 +173,7 @@ observe({
       data.frame(x,y,z,class)
 
       #10.add Sphere (3D) data sets
-    } else if(task == "10.Sphere (3D)"){
+    } else if(task == "2.Sphere"){
 
       R        = 2
       alfa     = runif(amount / 4, 0, 50)* pi
@@ -211,7 +211,7 @@ observe({
       #1.add normal linear data sets
     } else if (task == "1.Linear ascend") {
 
-      x = rnorm(amount, 0, 1) 
+      x = rnorm(amount, 0, 1)
       y = 0.5 * x + (rnom_noise * 0.5)
 
       x = x * rescope
@@ -269,7 +269,7 @@ observe({
       sigmoid = function(x) {
         1 / (1 + exp(-x))
       }
-      
+
       x = runif(amount, -5, 5)
       y = (8 * sigmoid(3 * x)+ rnom_noise / 4) - 4
 
@@ -297,7 +297,7 @@ observe({
       r = c(1 : (amount)) / 200 * 5
       t = c(1: (amount))  / 200 * 2 * pi
       x = (r * sin(2 * t) + rexp_noise )
-      y = (r * cos(2 * t) + rexp_noise ) -1 
+      y = (r * cos(2 * t) + rexp_noise ) -1
 
       x = x * rescope
       y = y * rescope
@@ -318,7 +318,7 @@ observe({
       data.frame( x, y)
 
       #10. add Spiral ascend (3D) data sets
-    } else if(task == "10.Spiral ascend (3D)"){
+    } else if(task == "1.Spiral ascend"){
 
       z = (rexp(amount, 1)) %% 5
       x = sin(z * 5) * 3
@@ -337,7 +337,7 @@ observe({
       x1 = rnorm(amount, 0, 3)
       x2 = rexp(amount,1) + rexp_noise * 5
       x3 = runif(amount,-2,2) + rexp_noise * 5
-      y1 = rnorm(amount, 0, 2) 
+      y1 = rnorm(amount, 0, 2)
       y2 = rexp(amount,1) + rexp_noise * 5
       y3 = runif(amount,-2,2) + rexp_noise * 5
 
@@ -372,7 +372,7 @@ observe({
       p3        = sqrt(radius) * cos(2 * pi * angle)
       x         = c(p1, p2, p3 - 2) + rexp_noise
 
-      y_class1  = sin(p1) + runif(amount, -1, 1) / 4 
+      y_class1  = sin(p1) + runif(amount, -1, 1) / 4
       y_class2  = sin(p2+pi/2) + runif(amount, -1, 1) / 4
       y_class3  = sqrt(radius) * sin(2*pi*angle)
       y         = c(y_class1, y_class2, y_class3) + rexp_noise
@@ -431,7 +431,7 @@ observe({
       y3     = sqrt(radius) * sin(2 * pi * angle) - 2
 
       x4     = (rexp(amount, 1))%%5
-      y4     = c(sqrt(4 * x4),-sqrt(4 * x4)) + rnom_noise 
+      y4     = c(sqrt(4 * x4),-sqrt(4 * x4)) + rnom_noise
 
       x      = c(x1, x2, x3, -x4, -x4) + rexp_noise
       y      = c(y1, y2, y3, y4) + rexp_noise

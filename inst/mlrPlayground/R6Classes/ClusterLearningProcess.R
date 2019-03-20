@@ -4,6 +4,15 @@ ClusterLearningProcess = R6Class(
 
   public = list(
 
+    initialize = function(valid.learners) {
+      self$task$measures = c(
+        "db", "dunn", "G1", "G2"
+      )
+      self$task$type = "cluster"
+      super$initialize(valid.learners)
+
+    },
+
     setData = function(data, train.ratio) {
       super$setData(data, train.ratio)
       self$task$train = makeClusterTask(data = self$data$train.set)
@@ -40,17 +49,18 @@ ClusterLearningProcess = R6Class(
       #' predictions for
       #' @return list(x = <<x-coordinates>>, y = <<predictions>>)
 
+      assert_that(i %in% 1:2)
       # Must use string to index into reactivevalues
       i = as.character(i)
 
-      learner = self$learners[[i]]
-      model   = train(learner, self$task$train)
-      pred    = expand.grid(x = -50:50 / 10, y = -50:50 / 10)
+      trained = super$calculatePred(i)
 
-      predictions = predictLearner(learner, model, pred)
-      pred$z      = as.numeric(factor(predictions))
+      grid    = expand.grid(x = -50:50 / 10, y = -50:50 / 10)
 
-      return(pred)
+      predictions = predictLearner(trained$learner, trained$model, grid)
+      grid$z      = as.numeric(factor(predictions))
+
+      self$pred[[i]]$grid = grid
     },
 
     getPredPlot = function(i) {
@@ -60,14 +70,17 @@ ClusterLearningProcess = R6Class(
       #' predictions plot for
       #' @return plotly plot object
 
-      pred = self$calculatePred(i)
+      # Must use string to index into reactivevalues
+      i = as.character(i)
+
+      pred = self$pred[[i]]$grid
 
       plotly::plot_ly(
         x = ~unique(pred$x),
         y = ~unique(pred$y),
         z = ~matrix(
-          pred$predictions,
-          nrow = sqrt(length(pred$predictions)),
+          pred$z,
+          nrow = sqrt(length(pred$z)),
           byrow = TRUE
         ),
         type = "heatmap",
@@ -79,7 +92,7 @@ ClusterLearningProcess = R6Class(
           data = self$data$train.set,
           x = ~x,
           y = ~y,
-          color = ~class,
+          #color = ~class,
           colors = c("#2b8cbe", "#e34a33", "#2b8cbe", "#e34a33"),
           type = "scatter",
           mode = "markers"
