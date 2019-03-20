@@ -180,18 +180,16 @@ observe({
       z        = matrix(0, num_alfa, num_sita)
       class    = matrix(0, num_alfa, num_sita)
 
-      for(i in c(1 : num_alfa)){
-        for(j in c(1 : num_sita)){
-          x[i,j] = R * sin(alfa[i]) * cos(sita[j])
-          y[i,j] = R * sin(alfa[i]) * sin(sita[j])
-          z[i,j] = R * cos(alfa[i])
-          if(z[i,j] >= y[i,j]){
-            class[i,j] = "Class 1"
-          }else{
-            class[i,j] = "Class 2"
-          }
-        }
-      }
+      x = sapply(alfa,function(a)
+      sapply(sita,function(b) sin(a) * cos(b) * R))
+
+      y = sapply(alfa,function(a)
+      sapply(sita,function(b) sin(a) * sin(b) * R))
+
+      z = sapply(alfa,function(a)
+      sapply(sita,function(b) cos(a) * R))
+
+      class = ifelse(z>=y,"Class 1","Class 2")
 
       x     = as.vector(x + rnom_noise) * rescope
       y     = as.vector(y + rnom_noise) * rescope

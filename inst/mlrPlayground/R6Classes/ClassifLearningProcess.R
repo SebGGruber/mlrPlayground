@@ -99,7 +99,6 @@ ClassifLearningProcess = R6Class(
         symbol  = I("x"),
         type    = "scatter",
         mode    = "markers"
-
       ) %>%
       plotly::add_trace(
         data   = self$data$test.set,

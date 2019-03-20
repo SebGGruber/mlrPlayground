@@ -17,11 +17,17 @@ Classif3dLearningProcess = R6Class(
         opacity = 0.5,
         colors = c("#2b8cbe", "#e34a33")
       )%>%
-        add_markers()%>%
-        layout(scene = list(
-          xaxis = list(title = 'xaxis'),
-          yaxis = list(title = 'yaxis'),
-          zaxis = list(title = 'zaxis'))
+      plotly::add_trace(
+        data   = self$data$test.set,
+        name   = "Test",
+        type = "scatter3d",
+        x    = ~x,
+        y    = ~y,
+        z    = ~z,
+        color = ~class,
+        opacity = 0.5,
+        symbol = I("o"),
+        colors = c("#2b8cbe", "#e34a33")
         )
     },
 
@@ -50,10 +56,31 @@ Classif3dLearningProcess = R6Class(
       #' predictions plot for
       #' @return plotly plot object
 
-      pred = self$calculatePred(i)
+      # pred = self$calculatePred(i)
 
       # TODO
-      return(NULL)
+      plotly::plot_ly(
+        data = self$data$train.set,
+        type = "scatter3d",
+        x    = ~x,
+        y    = ~y,
+        z    = ~z,
+        color = ~class,
+        opacity = 0.5,
+        colors = c("#2b8cbe", "#e34a33")
+      )%>%
+      plotly::add_trace(
+        data   = self$data$test.set,
+        name   = "Test",
+        type = "scatter3d",
+        x    = ~x,
+        y    = ~y,
+        z    = ~z,
+        color = ~class,
+        opacity = 0.5,
+        symbol = I("o"),
+        colors = c("#2b8cbe", "#e34a33")
+        )
     }
   ),
 
