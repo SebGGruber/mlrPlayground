@@ -80,6 +80,9 @@ LearningProcess = R6Class(
       #' - only 1 and 2 are currently supported
       #' @return named list of shape list(<<learner i>>, <<trained model>>)
 
+      # Must use string to index into reactivevalues
+      i = as.character(i)
+
       learner = self$learners[[i]]
       model   = train(learner, self$task$train)
 
@@ -91,12 +94,48 @@ LearningProcess = R6Class(
       return(list(learner = learner, model = model))
     },
 
-    getPredPlot = function(i){
+    getPredPlot = function(i) {
       return(NULL)
     },
 
-    getDataPlot = function(){
+    getDataPlot = function() {
       return(NULL)
+    },
+
+    getValidHyperparam = function(i) {
+      #' @description Returns the names of valid (in terms of UI) hyperparameters
+      #' for learner with index i
+      #' @param i Index of the target learner
+      #' @return character vector
+
+      # Must use string to index into reactivevalues
+      i = as.character(i)
+      assert_that(i %in% c("1", "2"))
+
+      learner = self$learners[[i]]
+
+      valid_types = c("integer", "numeric", "discrete", "logical")
+      is_valid    = sapply(learner$par.set$pars, function(par) par$has.default & par$tunable & par$type %in% valid_types)
+      names       = names(learner$par.set$pars)[is_valid]
+      # nameception
+      names(names) = names
+      # ... never question art (seriously: remove this and everything breaks)
+      return(names)
+    },
+
+    updateHyperparam = function(par.vals, i) {
+      #' @description Method for updating a learner with the given hyperparemeter values
+      #' @param par.vals Named list with values of the hyperparameters to update
+      #' @param i Index of the target learner
+      #' @return NULL
+
+      # Must use string to index into reactivevalues
+      i = as.character(i)
+      assert_that(i %in% c("1", "2"))
+
+      # sanity parsing for values disguised as characters
+      par.vals = lapply(par.vals, function(val) if (is.character(val) & !is.na(as.integer(val))) as.integer(val) else val)
+      self$learners[[i]] = setHyperPars(self$learners[[i]], par.vals = par.vals)
     }
   ),
 

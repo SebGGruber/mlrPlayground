@@ -1,3 +1,4 @@
+# required further down
 modified_req = function(x){
   #' @description modified version of the req function
   #' doesn't throw error if x equals FALSE
@@ -8,25 +9,6 @@ modified_req = function(x){
     x
   else
     req(x)
-}
-
-
-# this function uses heavily input values and thus is defined here instead
-# of in the R6 classes
-update_hyperparameters = function(learner, i){
-  #' @description Function updating hyperparameters reactively of a learner given index i
-  #' @param i Index of the learner to update
-  #' @return mlr learner object
-
-  tasktype    = req(process$task$type)
-  valid_types = c("integer", "numeric", "discrete", "logical")
-  is_valid    = sapply(learner$par.set$pars, function(par) par$has.default & par$tunable & par$type %in% valid_types)
-  names       = names(learner$par.set$pars)[is_valid]
-  par.vals    = lapply(names,    function(par) modified_req(input[[paste0("parameter_", par, i, tasktype)]]))
-  par.vals    = lapply(par.vals, function(val) if (is.character(val) & !is.na(as.integer(val))) as.integer(val) else val)
-  names(par.vals) = names
-
-  setHyperPars(learner, par.vals = par.vals)
 }
 
 
@@ -89,8 +71,11 @@ observe({
 
 # update learner 1 based on selected parameters
 observe({
-  learner = req(process$learners[["1"]])
-  process$learners[["1"]] = update_hyperparameters(learner, 1)
+  # wait until learner is loaded, but don't react to it
+  isolate(req(process$learners[["1"]]))
+  names = process$getValidHyperparam(1)
+  par.vals = lapply(names, function(par) modified_req(input[[paste0("parameter_", par, 1, process$task$type)]]))
+  process$updateHyperparam(par.vals, 1)
 })
 
 # create learner 2 based on selected learner
@@ -101,6 +86,9 @@ observe({
 
 # update learner 2 based on selected parameters
 observe({
-  learner = req(process$learners[["2"]])
-  process$learners[["2"]] = update_hyperparameters(learner, 2)
+  # wait until learner is loaded, but don't react to it
+  isolate(req(process$learners[["2"]]))
+  names = process$getValidHyperparam(2)
+  par.vals = lapply(names, function(par) modified_req(input[[paste0("parameter_", par, 2, process$task$type)]]))
+  process$updateHyperparam(par.vals, 2)
 })
