@@ -29,13 +29,26 @@ ClassifLearningProcess = R6Class(
       #' @return plotly plot object
       plotly::plot_ly(
         data   = self$data$train.set,
+        name   = "Train",
         x      = ~x1,
         y      = ~x2,
         color  = ~class,
         colors = c("#2b8cbe", "#e34a33"),
+        symbol  = I('x'),
         type   = "scatter",
         mode   = "markers"
-      )
+      )%>%
+      plotly::add_trace(
+        data   = self$data$test.set,
+        name   = "Test",
+        x      = ~x1,
+        y      = ~x2,
+        color  = ~class,
+        colors = c("#2b8cbe", "#e34a33"),
+        symbol  = I('o'),
+        type   = "scatter",
+        mode   = "markers"
+        )
     },
 
     calculatePred = function(i) {
@@ -78,14 +91,26 @@ ClassifLearningProcess = R6Class(
 
       plotly::plot_ly(
         data    = self$data$train.set,
+        name   = "Train",
         x       = ~x1,
         y       = ~x2,
         color   = ~class,
         colors  = c("#2b8cbe", "#e34a33", "#2b8cbe", "#e34a33"),
+        symbol  = I("x"),
         type    = "scatter",
         mode    = "markers"
-
       ) %>%
+      plotly::add_trace(
+        data   = self$data$test.set,
+        name   = "Test",
+        x      = ~x1,
+        y      = ~x2,
+        color  = ~class,
+        colors = c("#2b8cbe", "#e34a33"),
+        symbol  = I('o'),
+        type   = "scatter",
+        mode   = "markers"
+        )%>%
         plotly::add_trace(
           x         = ~unique(pred$x1),
           y         = ~unique(pred$x2),
@@ -97,7 +122,7 @@ ClassifLearningProcess = R6Class(
           hoverinfo = "x+y+text+skip",
           showscale = FALSE
         ) %>%
-        plotly::layout(xaxis = list(title = ""), yaxis = list(title = ""))
+        plotly::layout(xaxis = list(title = "X"), yaxis = list(title = "Y"))
     }
   ),
 

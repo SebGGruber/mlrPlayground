@@ -1,5 +1,5 @@
 # set the amount of test data sets
-parameter    = reactiveValues(test_ration = 0.1, noise = 0.1, rescope = 1)
+parameter    = reactiveValues(test_ration = 0.1, noise = 0.1, datasize = 400)
 
 
 observe({
@@ -7,31 +7,24 @@ observe({
   req(process$data)
   task = req(input$task)
 
-  # 1.Parameter: Test ration
-  parameter$test_ration = req(input$test_ration)
-  test_ration           = req(parameter$test_ration)
-  amount                = round(400 * test_ration)
+  # 1.Parameter: Data size
+  parameter$datasize = req(input$datasize)
+  amount             = req(parameter$datasize)
+  
 
-  # 2.Parameter: Noise
+  # 2.Parameter: Test ration 
+  parameter$test_ration = req(input$test_ration)
+  train.ratio           = req(parameter$test_ration)
+
+  # 3.Parameter: Noise
   parameter$noise = req(input$noise)
   noise           = req(parameter$noise)
   rnom_noise      = rnorm(amount, 0, 1) * noise
   rexp_noise      = rexp(amount, 1) * noise
   runif_noise     = runif(amount, 0, 1) * noise
 
-  # 3.Parameter: Rescope
-  parameter$rescope = req(input$rescope)
-  rescope           = req(parameter$rescope)
-
-  train.ratio = 0.5
-
-
-
-  # TODO: add parameter selections for the amount, the distribution, noisy_ration, noise,
-  # TODO: (add any number of data sets, set x offset and y offset for each class)
-  # distribution = Null
-  # noisy_ration = 0.1
-  # size_noisy   = amount * noisy_ration
+  # 4.Parameter: Rescope
+  rescope         = 1
 
   seed = 123 # TODO
   set.seed(seed)
@@ -165,9 +158,9 @@ observe({
     } else if(task == "1.Wavy surface"){
 
       kern  = c((- amount / 20) : (amount / 20)) * pi / 10
-      x     = rep(kern,41) * rescope
-      y     = rep(kern,each=41) * rescope
-      z     = sin(x) + sin(y) + rnorm(length(y), 0, 1) / 3 * rescope
+      x     = (rep(kern,41) + rnom_noise) * rescope
+      y     = (rep(kern,each=41) + rnom_noise) * rescope
+      z     = (sin(x) + sin(y) + rnorm(length(y), 0, 1) * noise) * rescope
       class = ifelse(z>0, "Class 1","Class 2")
 
       data.frame(x,y,z,class)
@@ -187,22 +180,20 @@ observe({
       z        = matrix(0, num_alfa, num_sita)
       class    = matrix(0, num_alfa, num_sita)
 
-      for(i in c(1 : num_alfa)){
-        for(j in c(1 : num_sita)){
-          x[i,j] = R * sin(alfa[i]) * cos(sita[j])
-          y[i,j] = R * sin(alfa[i]) * sin(sita[j])
-          z[i,j] = R * cos(alfa[i])
-          if(z[i,j] >= y[i,j]){
-            class[i,j] = "Class 1"
-          }else{
-            class[i,j] = "Class 2"
-          }
-        }
-      }
+      x = sapply(alfa,function(a)
+      sapply(sita,function(b) sin(a) * cos(b) * R))
+
+      y = sapply(alfa,function(a)
+      sapply(sita,function(b) sin(a) * sin(b) * R))
+
+      z = sapply(alfa,function(a)
+      sapply(sita,function(b) cos(a) * R))
+
+      class = ifelse(z>=y,"Class 1","Class 2")
 
       x     = as.vector(x + rnom_noise) * rescope
       y     = as.vector(y + rnom_noise) * rescope
-      z     = as.vector(z) * rescope
+      z     = as.vector(z + rnom_noise) * rescope
       class = as.vector(class)
 
       data.frame(x,y,z,class)
@@ -324,9 +315,9 @@ observe({
       x = sin(z * 5) * 3
       y = cos(z * 5) * 3
 
-      x = x * rescope
-      y = y * rescope
-      z = z * rescope
+      x = (x + rnom_noise) * rescope
+      y = (y + rnom_noise) * rescope
+      z = (z + rnom_noise) * rescope
 
       data.frame(x, y, z)
 

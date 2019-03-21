@@ -30,17 +30,17 @@ ClusterLearningProcess = R6Class(
         data   = self$data$train.set,
         x      = ~x,
         y      = ~y,
-        marker = list(
-          size  = 10,
-          color = 'rgba(255, 182, 193, .9)',
-          line  = list(
-            color = 'rgba(152, 0, 0, .8)',
-            width = 1
-          )
-        ),
         type   = "scatter",
         mode   = "markers"
-      )
+      )%>%
+      plotly::add_trace(
+        data   = self$data$test.set,
+        name   = "Test",
+        x      = ~x,
+        y      = ~y,
+        type   = "scatter",
+        mode   = "markers"
+        )
     },
 
     calculatePred = function(i) {
@@ -75,8 +75,24 @@ ClusterLearningProcess = R6Class(
 
       pred = self$pred[[i]]$grid
 
-      plotly::plot_ly(
-        x = ~unique(pred$x),
+     plotly::plot_ly(
+        data   = self$data$train.set,
+        name   = "Train",
+        x      = ~x,
+        y      = ~y,
+        type   = "scatter",
+        mode   = "markers"
+      )%>%
+      plotly::add_trace(
+        data   = self$data$test.set,
+        name   = "Test",
+        x      = ~x,
+        y      = ~y,
+        type   = "scatter",
+        mode   = "markers"
+        ) %>%
+        plotly::add_trace(
+          x = ~unique(pred$x),
         y = ~unique(pred$y),
         z = ~matrix(
           pred$z,
@@ -87,15 +103,6 @@ ClusterLearningProcess = R6Class(
         colors = colorRamp(c("red", "blue")),
         opacity = 0.2,
         showscale = FALSE
-      ) %>%
-        plotly::add_trace(
-          data = self$data$train.set,
-          x = ~x,
-          y = ~y,
-          #color = ~class,
-          colors = c("#2b8cbe", "#e34a33", "#2b8cbe", "#e34a33"),
-          type = "scatter",
-          mode = "markers"
         ) %>%
         plotly::layout(xaxis = list(title = ""), yaxis = list(title = ""))
     }
