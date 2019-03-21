@@ -33,7 +33,7 @@ observe({
 
       ##add classification datasets
       #1.add Circle data sets
-    if (task == "1.Circle") {
+    if (task == "Circle") {
 
       angle         = runif(2 * amount, 0, 360)
       radius_class1 = rexp(amount, 1 / (5 *  noise))
@@ -46,36 +46,39 @@ observe({
       data.frame(x1,x2,class)
 
       #2.add two-circle data sets
-    } else if (task == "2.Two-Circle") {
+    } else if (task == "Two-Circle") {
 
-      angle         = runif(amount * 2, 0, 360)
-      radius_class1 = rnorm(amount, 6, 10 * noise)
-      radius_class2 = rnorm(amount, 16, 10 * noise)
-      radius_class  = c(radius_class1, radius_class2)
-      x1            = sqrt(abs(radius_class)) * cos(2*pi*angle) * rescope
-      x2            = sqrt(abs(radius_class)) * sin(2*pi*angle) * rescope
-      class         = c(rep("Class 1", amount), rep("Class 2", amount))
+      angle           = runif(amount * 2, 0, 360)
+      radius_class1   = rnorm(amount, 6, 10 * noise)
+      amount2_1       = round(amount / 4)
+      radius_class2_1 = rexp(amount2_1, 1 / (5 *  noise))
+      radius_class2_2 = rnorm(amount, 16, 10 * noise)
+      radius_class    = c(radius_class2_1,radius_class1, radius_class2_2)
+      x1              = sqrt(abs(radius_class)) * cos(2*pi*angle) * rescope
+      x2              = sqrt(abs(radius_class)) * sin(2*pi*angle) * rescope
+      class_1         = c(rep("Class 2",amount2_1),rep("Class 1", amount))
+      class           = c(class_1, rep("Class 2", amount))
 
       data.frame(x1,x2,class)
 
       #3.add two-circle-2 data sets
-    } else if (task == "3.Two-Circle-2") {
+    } else if (task == "Two-Circle-2") {
 
-      angle         = runif(amount * 2, 0, 360)
-      radius_class1 = rnorm(amount, 6, noise)
-      radius_class2 = rnorm(amount, 16, noise)
+      radius_class1 = rnorm(amount, 6, 10 * noise)
+      radius_class2 = rnorm(amount, 16, 10 * noise)
       radius_class  = c(radius_class1, radius_class2)
-      x1            = sqrt(abs(radius_class)) * cos(2*pi*angle)
-      x2            = sqrt(abs(radius_class)) * sin(2*pi*angle)
-
-      x1            = (x1 + rnom_noise) * rescope
-      x2            = (x2 + rnom_noise) * rescope
-      class         = ifelse(x2 > 0, "Class 1", "Class 2")
+      x1            = sqrt(abs(radius_class)) * cos(2*pi*angle) * rescope
+      x2            = sqrt(abs(radius_class)) * sin(2*pi*angle) * rescopengle)
+      x2_1          = x2[1 : amount]ngle)
+      x2_2          = x2[(amount + 1) : (amount * 2)]
+      class_1       = ifelse(x2_1 >= 0,"Class 1", "Class 2")
+      class_2       = ifelse(x2_2 <  0,"Class 1", "Class 2")
+      class         = c(class_1,class_2)
 
       data.frame(x1, x2, class)
 
       #4.add XOR data sets
-    } else if (task == "4.XOR") {
+    } else if (task == "XOR") {
 
       x1    = runif(amount * 2, -5, 5)
       x2    = runif(amount * 2, -5, 5)
@@ -88,7 +91,7 @@ observe({
       data.frame(x1, x2, class)
 
       #5.add Gaussian data sets
-    } else if(task == "5.Gaussian"){
+    } else if(task == "Gaussian"){
 
       x1    = c(rnorm(amount, 2, 1), rnorm(amount, -2, 1)) - 0.5
       x2    = c(rnorm(amount, 2, 1), rnorm(amount, -2, 1))
@@ -100,7 +103,7 @@ observe({
       data.frame(x1, x2, class)
 
       #6.add Across Spiral data sets
-    } else if(task == "6.Across Spiral"){
+    } else if(task == "Across Spiral"){
 
       r     = c(1 : amount) / amount * 5
       angle = 1.75 * c(1 : amount)  / amount * 2 * pi
@@ -114,7 +117,7 @@ observe({
       data.frame(x1, x2, class)
 
       #7. add Opposite Arc data sets
-    } else if(task == "7.Opposite Arc"){
+    } else if(task == "Opposite Arc"){
 
       range1 = c(0 : (amount - 1)) * pi / 200
       range2 = c(100 : (amount + 99)) * pi / 200
@@ -131,7 +134,7 @@ observe({
       data.frame(x1, x2, class)
 
       #8.add Cross Sector data sets
-    } else if (task == "8.Cross Sector") {
+    } else if (task == "Cross Sector") {
 
       part          = c(0 : 9)
       angle         = runif(amount * 5, 0, 36)
@@ -155,7 +158,7 @@ observe({
       data.frame(x1, x2, class)
 
       #9.add Wavy surface(3D) data sets
-    } else if(task == "1.Wavy surface"){
+    } else if(task == "Wavy surface"){
 
       kern  = c((- amount / 20) : (amount / 20)) * pi / 10
       x     = (rep(kern,41) + rnom_noise) * rescope
@@ -166,7 +169,7 @@ observe({
       data.frame(x,y,z,class)
 
       #10.add Sphere (3D) data sets
-    } else if(task == "2.Sphere"){
+    } else if(task == "Sphere"){
 
       R        = 2
       alfa     = runif(amount / 4, 0, 50)* pi
@@ -200,7 +203,7 @@ observe({
 
       ### add regression data sets
       #1.add normal linear data sets
-    } else if (task == "1.Linear ascend") {
+    } else if (task == "Linear ascend") {
 
       x = rnorm(amount, 0, 1)
       y = 0.5 * x + (rnom_noise * 0.5)
@@ -211,7 +214,7 @@ observe({
       data.frame(x, y)
 
       #2.dd Log function data sets
-    } else if(task == "2.Log linear"){
+    } else if(task == "Log linear"){
 
       x = abs(rnorm(amount, 0, 1.5))
       y = 4 * log10(x + abs(rnom_noise))
@@ -222,7 +225,7 @@ observe({
       data.frame(x, y)
 
       #3.add trigonometric function: Sine data sets
-    } else if(task == "3.Sine"){
+    } else if(task == "Sine"){
 
       x = c((-1 / 2 * amount) : ((1 / 2 * amount) - 1)) * pi/100
       y = sin(2 * x) + rexp_noise
@@ -233,7 +236,7 @@ observe({
       data.frame(x,y)
 
       #4.add Ascend Cosine data sets
-    } else if(task == "4.Ascend Cosine"){
+    } else if(task == "Ascend Cosine"){
 
       x = c((1 - amount / 2) : (amount / 2)) * pi/100
       y = 2 * (cos(2 * x) + c(1 : amount) / 75 + rexp_noise - 2.1)
@@ -244,7 +247,7 @@ observe({
       data.frame(x,y)
 
       #5.add Tangent data sets
-    } else if(task == "5.Tangent"){
+    } else if(task == "Tangent"){
 
       x = c((1-amount / 2) : (amount / 2 )) * pi/230
       y = tan(x) + (rnom_noise)
@@ -255,7 +258,7 @@ observe({
       data.frame(x, y)
 
       #6. add Sigmoid data sets
-    } else if(task == "6.Sigmoid"){
+    } else if(task == "Sigmoid"){
 
       sigmoid = function(x) {
         1 / (1 + exp(-x))
@@ -270,7 +273,7 @@ observe({
       data.frame(x,y)
 
       #7. add Circle data sets
-    } else if(task == "7.Circle"){
+    } else if(task == "Circle"){
 
       angle  = runif(amount * 2, 0, 360)
       radius = rnorm(amount * 2, 16, 3)
@@ -283,12 +286,10 @@ observe({
       data.frame(x,y)
 
       #8. add Spiral data sets
-    } else if(task == "8.Spiral"){
+    } else if(task == "Spiral"){
 
-      r = c(1 : (amount)) / 200 * 5
-      t = c(1: (amount))  / 200 * 2 * pi
-      x = (r * sin(2 * t) + rexp_noise )
-      y = (r * cos(2 * t) + rexp_noise ) -1
+      x = c((-1 / 2 * amount) : ((1 / 2 * amount) - 1)) * pi/100 
+      y = (sin(2 * x) + rnom_noise)*(1:amount)/100
 
       x = x * rescope
       y = y * rescope
@@ -296,7 +297,7 @@ observe({
       data.frame(x, y)
 
       #9. add Parabola To Right data sets
-    } else if(task == "9.Parabola To Right"){
+    } else if(task == "Parabola To Right"){
 
       x  = rexp(amount, 1)%%5
       y1 = sqrt( x) + rnom_noise /2
@@ -309,7 +310,7 @@ observe({
       data.frame( x, y)
 
       #10. add Spiral ascend (3D) data sets
-    } else if(task == "1.Spiral ascend"){
+    } else if(task == "Spiral ascend"){
 
       z = (rexp(amount, 1)) %% 5
       x = sin(z * 5) * 3
@@ -323,7 +324,7 @@ observe({
 
       ### add clustering data sets
       #1. add Clustering Dataset 1
-    } else if(task == "1.Clustering Dataset 1"){
+    } else if(task == "Clustering Dataset 1"){
 
       x1 = rnorm(amount, 0, 3)
       x2 = rexp(amount,1) + rexp_noise * 5
@@ -341,7 +342,7 @@ observe({
       data.frame(x, y)
 
       #2. add Clustering Dataset 2
-    } else if(task == "2.Clustering Dataset 2"){
+    } else if(task == "Clustering Dataset 2"){
 
       radius = c(101 : amount) / 60
       angle  = 1.75 * c(101 : amount)  / 100 * pi
@@ -354,7 +355,7 @@ observe({
       data.frame(x, y)
 
       #3. add Clustering Dataset 3
-    } else if(task == "3.Clustering Dataset 3"){
+    } else if(task == "Clustering Dataset 3"){
 
       angle     = runif(amount * 2, 0, 360)
       radius    = rexp(amount, 1)
@@ -374,7 +375,7 @@ observe({
       data.frame(x, y)
 
       #4. add Clustering Dataset 4
-    } else if(task == "4.Clustering Dataset 4"){
+    } else if(task == "Clustering Dataset 4"){
 
       angle    = runif(amount * 2, 0, 360)
       r_class1 = rnorm(amount, 8, 3)
@@ -391,7 +392,7 @@ observe({
       data.frame(x, y)
 
       #5. add Clustering Dataset 5
-    } else if(task == "5.Clustering Dataset 5"){
+    } else if(task == "Clustering Dataset 5"){
 
       x1 = rnorm(amount, 0, 5)
       x2 = rnorm(amount, 3, 5) + 4
@@ -408,7 +409,7 @@ observe({
       data.frame(x,y)
 
       #6. add Clustering Dataset 6
-    } else if(task == "6.Clustering Dataset 6"){
+    } else if(task == "Clustering Dataset 6"){
 
       x1     = runif(amount,-5,5)
       y1     = runif(amount,-5,5)
