@@ -23,7 +23,7 @@ modal_parameter = fluidRow(
 
   column(
     3,
-    sliderInput("test_ration", "Ratio of training to test data:",
+    sliderInput("test_ration", "Ratio of training data:", 
                 min=0.1, max=1, value=0.5,step=0.1)
   ),
   column(
@@ -33,8 +33,8 @@ modal_parameter = fluidRow(
   ),
   column(
     3,
-    sliderInput("rescope", "Rescope:",
-                min=0.1, max=10, value=1,step=0.1)
+    sliderInput("datasize", "Data Size:", 
+                min=20, max=2000, value=400,step=20)
   )
 )
 # exported
