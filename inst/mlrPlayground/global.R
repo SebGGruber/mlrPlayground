@@ -15,7 +15,8 @@ required_packages = c(
   "R6",
   "assertthat",
   "kernlab",
-  "R.utils"
+  "R.utils",
+  "shinytest"
 )
 
 for (package in required_packages)
