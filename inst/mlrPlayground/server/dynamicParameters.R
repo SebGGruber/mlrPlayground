@@ -111,6 +111,7 @@ parameter_to_ui = function(parameter, i, learner, tasktype) {
     max_id = paste0("max_", id)
     step   = if (parameter$type == "integer") 1 else NULL
 
+    # don't isolate here cause UI should change with min / max values
     min_bound =
       if (is.infinite(parameter$lower)) as.numeric(req(input[[min_id]])) else parameter$lower
 

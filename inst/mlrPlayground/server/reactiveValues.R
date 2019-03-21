@@ -1,16 +1,3 @@
-# required further down
-modified_req = function(x){
-  #' @description modified version of the req function
-  #' doesn't throw error if x equals FALSE
-  #' @param x anything to check for
-  # '!' doesn't work here because x can be anything
-  #' @return input
-  if (!is.null(x) && x == FALSE)
-    x
-  else
-    req(x)
-}
-
 
 observe({
   # this creates a new R6 class instance whenever the tasktype is loaded/changed
@@ -41,8 +28,20 @@ observe({
 })
 
 
-# observer modifying reactively values$data based on relevant inputs
-source("server/observe_for_data.R", local = TRUE)
+observe({
+  # check if "process" is already initialized as class instance (NOT REACTIVE)
+  req(process$data)
+  # Parameters for function call
+  task        = req(input$task)
+  amount      = req(input$datasize)
+  train.ratio = req(input$test_ration)
+  noise       = req(input$noise)
+
+  data = calculate_data(task, amount, noise, train.ratio)
+
+  process$setData(data, train.ratio)
+})
+
 
 # render UI for the measure selection
 output$measure_1_sel = renderUI({
@@ -66,16 +65,22 @@ output$measure_2_sel = renderText({
 # create learner 1 based on selected learner
 observe({
   learner = req(input$learner_1)
-  process$initLearner(learner, 1)
+  isolate(process$initLearner(learner, 1))
 })
 
 # update learner 1 based on selected parameters
 observe({
-  # wait until learner is loaded, but don't react to it
-  isolate(req(process$learners[["1"]]))
-  names = process$getValidHyperparam(1)
-  par.vals = lapply(names, function(par) modified_req(input[[paste0("parameter_", par, 1, process$task$type)]]))
-  process$updateHyperparam(par.vals, 1)
+  req(process$learners[["1"]])
+  # remove this if statement once issue is solved
+  if (input$tasktype != "cluster") {
+    names    = process$getValidHyperparam(1)
+    # check for and get input values
+    par.vals = lapply(names, function(par) {
+      id = paste0("parameter_", par, 1, process$task$type)
+      modified_req(input[[id]])
+    })
+    process$updateHyperparam(par.vals, 1)
+  }
 })
 
 # create learner 2 based on selected learner
@@ -86,9 +91,12 @@ observe({
 
 # update learner 2 based on selected parameters
 observe({
-  # wait until learner is loaded, but don't react to it
-  isolate(req(process$learners[["2"]]))
-  names = process$getValidHyperparam(2)
-  par.vals = lapply(names, function(par) modified_req(input[[paste0("parameter_", par, 2, process$task$type)]]))
+  req(process$learners[["2"]])
+  names    = process$getValidHyperparam(2)
+  # check for and get input values
+  par.vals = lapply(names, function(par) {
+    id = paste0("parameter_", par, 2, process$task$type)
+    modified_req(input[[id]])
+  })
   process$updateHyperparam(par.vals, 2)
 })

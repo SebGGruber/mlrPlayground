@@ -1,4 +1,6 @@
 observe({
+  # recalculate predictions once task changes
+  req(process$task$train)
   # check if input is set back to NULL
   req(input$learner_1)
   # if learner 1 is loaded, calculate predictions
@@ -8,6 +10,8 @@ observe({
 
 
 observe({
+  # recalculate predictions once task changes
+  req(process$task$train)
   # check if input is set back to NULL
   req(input$learner_2)
   # if learner 2 is loaded, calculate predictions

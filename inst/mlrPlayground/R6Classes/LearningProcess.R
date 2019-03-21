@@ -84,6 +84,7 @@ LearningProcess = R6Class(
       i = as.character(i)
 
       learner = self$learners[[i]]
+      #browser()
       model   = train(learner, self$task$train)
 
       # calculate test.set predictions
