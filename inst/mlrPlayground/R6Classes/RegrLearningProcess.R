@@ -5,22 +5,21 @@ RegrLearningProcess = R6Class(
   public = list(
 
     initialize = function(valid.learners) {
-      self$task$measures = c(
+      measures = c(
         "mae", "mape", "medse", "msle", "rae", "spearmanrho", "rmsle", "medae", "sse", "expvar",
         "kendalltau", "rmse", "mse", "rrse", "rsq", "sae", "arsq"
       )
-      self$task$type = "regr"
-      super$initialize(valid.learners)
+      super$initialize(valid.learners, tasktype = "regr", measures = measures)
 
     },
 
     setData = function(data, train.ratio) {
       super$setData(data, train.ratio)
-      #browser()
-      self$task$train = makeRegrTask(data = self$data$train.set, target = "y")
+      self$task$train = makeRegrTask(data = isolate(self$data$train.set), target = "y")
     },
 
-    initLearner = function(short.name, i) {
+    initLearner = function(short.name, i, prob) {
+      # prob is only used for classif
       super$initLearner(short.name, i, "regr")
     },
 
@@ -28,7 +27,7 @@ RegrLearningProcess = R6Class(
       #' @description Method transforming the data into an interactive plot
       #' @return plotly plot object
       plotly::plot_ly(
-        data   = self$data$train.set,
+        data   = isolate(self$data$train.set),
         name   = "Train",
         x      = ~x,
         y      = ~y,
@@ -36,7 +35,7 @@ RegrLearningProcess = R6Class(
         mode   = "markers"
       )%>%
       plotly::add_trace(
-        data   = self$data$test.set,
+        data   = isolate(self$data$test.set),
         name   = "Test",
         x      = ~x,
         y      = ~y,
@@ -74,10 +73,10 @@ RegrLearningProcess = R6Class(
       # Must use string to index into reactivevalues
       i = as.character(i)
 
-      pred = self$pred[[i]]$grid
+      pred = isolate(self$pred[[i]]$grid)
 
       plotly::plot_ly(
-        data = self$data$train.set,
+        data = isolate(self$data$train.set),
         name   = "Train",
         x = ~x,
         y = ~y,
@@ -87,7 +86,7 @@ RegrLearningProcess = R6Class(
         mode = "markers"
       ) %>%
       plotly::add_trace(
-        data   = self$data$test.set,
+        data   = isolate(self$data$test.set),
         name   = "Test",
         x      = ~x,
         y      = ~y,

@@ -1,26 +1,21 @@
-required_packages = c(
-  "shiny",
-  "e1071",
-  "ranger",
-  "xgboost",
-  "igraph",
-  "kknn",
-  "extraTrees",
-  "plotly",
-  "mlr",
-  "shinycssloaders",
-  "shinyBS",
-  "shinythemes",
-  "class",
-  "R6",
-  "assertthat",
-  "kernlab",
-  "R.utils",
-  "shinytest"
-)
+require(shiny)
+require(e1071)
+require(ranger)
+require(xgboost)
+require(igraph)
+require(kknn)
+require(plotly)
+require(mlr)
+require(shinycssloaders)
+require(shinyBS)
+require(shinythemes)
+require(class)
+require(R6)
+require(assertthat)
+require(kernlab)
+require(R.utils)
+require(shinytest)
 
-for (package in required_packages)
-  require(package, character.only = TRUE)
 
 # R6 classes definitions (one class per file, filename equals class name)
 source("R6Classes/LearningProcess.R",          local = TRUE)

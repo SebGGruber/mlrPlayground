@@ -5,8 +5,8 @@ account: sebastian-gruber
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 795406
-bundleId: 1945893
+bundleId: 1958845
 url: https://sebastian-gruber.shinyapps.io/mlrPlayground/
-when: 1552852289.13147
+when: 1553280394.08737
 asMultiple: FALSE
 asStatic: FALSE

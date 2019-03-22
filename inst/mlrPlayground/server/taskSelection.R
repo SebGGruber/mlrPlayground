@@ -1,7 +1,6 @@
 output$taskSelection = renderUI({
 
   req(input$tasktype)
-  #print(input$tasktype)
 
   if (input$tasktype == "" || input$tasktype == "classif") {
     choices = list(#"Circle", "XOR",

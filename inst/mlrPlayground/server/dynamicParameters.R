@@ -165,14 +165,38 @@ parameter_to_ui = function(parameter, i, learner, tasktype) {
 
 
 # TODO MAKE FUNCTION
+output$min_max_modals_1 = renderUI({
+
+  #lrn = paste0("learner_", 1)
+  # react to "input" or "tasktype" instead of "values" here, because we do only want
+  # an execution when the learner name changes - not its hyperparameters
+  #req(input[[lrn]])
+  tasktype = req(isolate(process$task$type))
+  learner  = req(process$learners[["1"]])
+  lapply(learner$par.set$pars, function(par) min_max_modals(par, 1, learner, tasktype))
+})
+
+output$min_max_modals_2 = renderUI({
+
+  #lrn = paste0("learner_", 2)
+  # react to "input" or "tasktype" instead of "values" here, because we do only want
+  # an execution when the learner name changes - not its hyperparameters
+  #req(input[[lrn]])
+  tasktype = req(isolate(process$task$type))
+  learner  = req(process$learners[["2"]])
+  lapply(learner$par.set$pars, function(par) min_max_modals(par, 2, learner, tasktype))
+})
+
+
+# TODO MAKE FUNCTION
 output$dynamicParameters_1 = renderUI({
 
-    lrn = paste0("learner_", 1)
-    # react to "input" or "tasktype" instead of "values" here, because we do only want
+    #lrn = paste0("learner_", 1)
+    # react to "input" instead of "process" here, because we do only want
     # an execution when the learner name changes - not its hyperparameters
-    req(input[[lrn]])
-    tasktype = req(input$tasktype)
-    learner  = req(isolate(process$learners[["1"]]))
+    #req(input[[lrn]])
+    tasktype = req(isolate(process$task$type))
+    learner  = req(process$learners[["1"]])
     # sort parameter list by parameter type
     par_list = learner$par.set$pars[order(sapply(learner$par.set$pars, function(par) par$type))]
     # for each parameter
@@ -200,11 +224,11 @@ output$dynamicParameters_1 = renderUI({
 output$dynamicParameters_2 = renderUI({
 
   lrn = paste0("learner_", 2)
-  # react to "input" or "tasktype" instead of "values" here, because we do only want
+  # react to "input" instead of "process" here, because we do only want
   # an execution when the learner name changes - not its hyperparameters
-  req(input[[lrn]])
-  tasktype = req(input$tasktype)
-  learner  = req(isolate(process$learners[["2"]]))
+  #req(input[[lrn]])
+  tasktype = req(isolate(process$task$type))
+  learner  = req(process$learners[["2"]])
   # sort parameter list by parameter type
   par_list = learner$par.set$pars[order(sapply(learner$par.set$pars, function(par) par$type))]
   # for each parameter
@@ -229,37 +253,13 @@ output$dynamicParameters_2 = renderUI({
 })
 
 
-# TODO MAKE FUNCTION
-output$min_max_modals_1 = renderUI({
-
-    lrn = paste0("learner_", 1)
-    # react to "input" or "tasktype" instead of "values" here, because we do only want
-    # an execution when the learner name changes - not its hyperparameters
-    req(input[[lrn]])
-    tasktype = req(input$tasktype)
-    learner  = req(isolate(process$learners[["1"]]))
-    lapply(learner$par.set$pars, function(par) min_max_modals(par, 1, learner, tasktype))
-})
-
-output$min_max_modals_2 = renderUI({
-
-  lrn = paste0("learner_", 2)
-  # react to "input" or "tasktype" instead of "values" here, because we do only want
-  # an execution when the learner name changes - not its hyperparameters
-  req(input[[lrn]])
-  tasktype = req(input$tasktype)
-  learner  = req(isolate(process$learners[["2"]]))
-  lapply(learner$par.set$pars, function(par) min_max_modals(par, 2, learner, tasktype))
-})
-
-
 # TODO MAKE FUNCTION FOR THIS
 observe({
   # react to "input" or "tasktype" instead of "values" here, because we do only want
   # an execution when the learner name changes - not its hyperparameters
-  req(input$learner_1)
-  tasktype = req(input$tasktype)
-  learner  = req(isolate(process$learners[["1"]]))
+  #req(input$learner_1)
+  tasktype = req(isolate(process$task$type))
+  learner  = req(process$learners[["1"]])
 
   lapply(learner$par.set$pars, function(par) {
     if (par$type %in% c("integer", "numeric")) {
@@ -276,9 +276,9 @@ observe({
 observe({
   # react to "input" or "tasktype" instead of "values" here, because we do only want
   # an execution when the learner name changes - not its hyperparameters
-  req(input$learner_2)
-  tasktype = req(input$tasktype)
-  learner  = req(isolate(process$learners[["2"]]))
+  #req(input$learner_2)
+  tasktype = req(isolate(process$task$type))
+  learner  = req(process$learners[["2"]])
 
   lapply(learner$par.set$pars, function(par) {
     if (par$type %in% c("integer", "numeric")) {
