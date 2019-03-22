@@ -150,7 +150,7 @@ LearningProcess = R6Class(
 #  "ibrier", "multilabel.hamloss", "mcc",
 #  "mcp", "lsr",
 #  "multilabel.subset01", "meancosts", "timeboth", "timetrain",
-#  "timepredict", "multilabel.ppv", "logloss",
+#  "timepredict", "multilabel.ppv",
 #  "cindex.uno", "multilabel.f1",
 #  "multiclass.au1p", "multilabel.acc", "silhouette", "fdr",
 #  "kappa", "cindex", "gpr"

@@ -25,6 +25,7 @@ output$measure_1_value = renderText({
   # once predictions are loaded, calculate performance measure based on chosen measure
   pred    = req(process$pred[["1"]]$test.set)
   measure = req(input$measure_sel)
+  #browser()
   performance(pred, measures = get(measure)) # use "get" cause string gives error
 })
 
