@@ -15,6 +15,7 @@ require(assertthat)
 require(kernlab)
 require(R.utils)
 require(shinytest)
+require(extraTrees)
 
 
 # R6 classes definitions (one class per file, filename equals class name)
