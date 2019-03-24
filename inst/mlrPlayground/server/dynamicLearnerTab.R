@@ -33,6 +33,3 @@ output$dynamicLearners = renderUI({
   # (defined by tasktype)
   lapply(learner_amount_enum(), function(i) select_learner_ui(i, choices))
 })
-
-# force loading even when hidden
-outputOptions(output, "dynamicLearners", suspendWhenHidden = FALSE)

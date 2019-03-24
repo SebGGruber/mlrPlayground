@@ -49,8 +49,23 @@ LearningProcess = R6Class(
         updated_learners_2 = NULL
       ) {
       #' @description Initialize new class instance and define valid learners
-      #' for this class
+      #' for this class; all arguments define values in the class instance
       #' @param valid.learners character vector of valid learner shortnames
+      #' @param learner_1 mlr learner object
+      #' @param learner_2 mlr learner object
+      #' @param params_1 list of params for learner 1
+      #' @param params_2 list of params for learner 2
+      #' @param train_set dataframe of train data
+      #' @param test_set dataframe of test data
+      #' @param task mlr task object stored in the instance
+      #' @param measures character vector of valid measures
+      #' @param tasktype tasktype of the used class ("classif", "regr", "cluster")
+      #' @param pred_1_grid grid predictions of learner 1
+      #' @param pred_1_test test set predictions of learner 1
+      #' @param pred_2_grid grid predicitions for learner 2
+      #' @param pred_2_test test set predictions for learner 2
+      #' @param updated_learners_1 Updated mlr learner 1
+      #' @param updated_learners_2 Updated mlr learner 2
       #' @return NULL
       #'
 

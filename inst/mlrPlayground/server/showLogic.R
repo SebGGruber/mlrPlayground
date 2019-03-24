@@ -1,4 +1,4 @@
-# only works for two learners atm
+# only works for two learners
 # make the list length reactive for arbitrary amount of learners
 show = reactiveValues(learners = TRUE, param1 = FALSE, param2 = FALSE)
 
@@ -28,8 +28,3 @@ observe({
 output$showLearners = reactive(show$learners)
 output$showParam1   = reactive(show$param1)
 output$showParam2   = reactive(show$param2)
-
-# force loading even when hidden
-outputOptions(output, "showLearners", suspendWhenHidden = FALSE)
-outputOptions(output, "showParam1",   suspendWhenHidden = FALSE)
-outputOptions(output, "showParam2",   suspendWhenHidden = FALSE)

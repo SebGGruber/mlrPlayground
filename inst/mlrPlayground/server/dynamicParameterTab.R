@@ -1,4 +1,12 @@
 min_max_modals = function(parameter, i, learner, tasktype) {
+  #' @description Function for transforming a parameter into a modal
+  #' This is the window that pops up when the "Min/Max" button in the
+  #' parameter UI is pressed
+  #' @param parameter mlr parameter object
+  #' @param i index of the learner
+  #' @param learner learner mlr object
+  #' @param tasktype character name of the tasktype
+  #' @return UI element or NULL if parameter is invalid for plotting
 
   id = paste0(parameter$id, i, tasktype)
   param_df = config$param_df
@@ -69,11 +77,18 @@ min_max_modals = function(parameter, i, learner, tasktype) {
     )))
 
   } else {
+    # return NULL in all other cases
     NULL
   }
 }
 
 parameter_to_ui = function(parameter, i, learner, tasktype) {
+  #' @description function for transforming a mlr parameter into an UI element
+  #' @param parameter mlr parameter object
+  #' @param i index of the learner
+  #' @param learner learner mlr object
+  #' @param tasktype character name of the tasktype
+  #' @return UI element or NULL if parameter is invalid for plotting
 
   id = paste0(parameter$id, i, tasktype)
   input_width    = 4
@@ -82,8 +97,8 @@ parameter_to_ui = function(parameter, i, learner, tasktype) {
 
 
   inp_id = paste0("parameter_", id)
+  # get the label, but consider the config file
   label  = {
-    #lrn = paste0("learner_", i)
     if (
       parameter$id %in% param_df$param.name[
         param_df$short.name == learner$short.name & param_df$new.name != "NA"
@@ -94,6 +109,7 @@ parameter_to_ui = function(parameter, i, learner, tasktype) {
       parameter$id
   }
 
+  # helpText column
   helpText_col = column(
     helpText_width,
     # align the helptext to the right side of the column
@@ -101,9 +117,11 @@ parameter_to_ui = function(parameter, i, learner, tasktype) {
   )
 
   if (!parameter$has.default | !parameter$tunable) {
-    # don't know what to do without default (yet) :(
+    # missing default values are difficult :(
+    # also skip not tunable parameters
     NULL
 
+  # NUMERIC PARAMETERS
   } else if (parameter$type %in% c("integer", "numeric")) {
 
     btn_id = paste0("btn_", id)
@@ -132,6 +150,7 @@ parameter_to_ui = function(parameter, i, learner, tasktype) {
       actionButton(btn_id, "Min/Max")
     )
 
+    # DISCRETE PARAMETERS
   } else if (parameter$type == "discrete") {
 
     default =
@@ -145,6 +164,7 @@ parameter_to_ui = function(parameter, i, learner, tasktype) {
       )
     )
 
+    # LOGICAL PARAMETERS
   } else if (parameter$type == "logical") {
 
     default =
@@ -159,74 +179,76 @@ parameter_to_ui = function(parameter, i, learner, tasktype) {
     )
 
   } else {
+    # return NULL if parameter has a different type
     NULL
   }
 }
 
 
-# TODO MAKE FUNCTION
+# pop up modals for hyperparameters of learner 1
 output$min_max_modals_1 = renderUI({
 
-  #lrn = paste0("learner_", 1)
-  # react to "input" or "tasktype" instead of "values" here, because we do only want
-  # an execution when the learner name changes - not its hyperparameters
-  #req(input[[lrn]])
+  # react to "process$learners" or "tasktype" instead of "process$updated_learners
+  # here, because we do only want
+  # an execution when the learner changes - not its hyperparameters
   tasktype = req(isolate(process$task$type))
   learner  = req(process$learners[["1"]])
+  # calculate the min/max modals for every hyperparameter (non numerics return NULL)
   lapply(learner$par.set$pars, function(par) min_max_modals(par, 1, learner, tasktype))
 })
 
+
+# pop up modals for hyperparameters of learner 2
 output$min_max_modals_2 = renderUI({
 
-  #lrn = paste0("learner_", 2)
-  # react to "input" or "tasktype" instead of "values" here, because we do only want
-  # an execution when the learner name changes - not its hyperparameters
-  #req(input[[lrn]])
+  # react to "process$learners" or "tasktype" instead of "process$updated_learners
+  # here, because we do only want
+  # an execution when the learner changes - not its hyperparameters
   tasktype = req(isolate(process$task$type))
   learner  = req(process$learners[["2"]])
+  # calculate the min/max modals for every hyperparameter (non numerics return NULL)
   lapply(learner$par.set$pars, function(par) min_max_modals(par, 2, learner, tasktype))
 })
 
 
-# TODO MAKE FUNCTION
+# render parameter selections for learner 1 in the UI
 output$dynamicParameters_1 = renderUI({
 
-    #lrn = paste0("learner_", 1)
-    # react to "input" instead of "process" here, because we do only want
-    # an execution when the learner name changes - not its hyperparameters
-    #req(input[[lrn]])
-    tasktype = req(isolate(process$task$type))
-    learner  = req(process$learners[["1"]])
-    # sort parameter list by parameter type
-    par_list = learner$par.set$pars[order(sapply(learner$par.set$pars, function(par) par$type))]
-    # for each parameter
-    ui_list  = lapply(par_list, function(par) parameter_to_ui(par, 1, learner, tasktype))
-    # if there are more than 4 parameters, split the parameters into 2 columns
-    ui_split = {
-      if (length(ui_list) > 4)
-        split(ui_list, cut(seq_along(ui_list), 2, labels = FALSE))
-      else
-        list(ui_list, NULL)
-    }
-    # compute (hidden) parameter panel
-    conditionalPanel(
-      paste0("output.showParam", 1, " == true"),
-      fluidRow(
-        # split into two columns
-        column(6, ui_split[[1]]),
-        column(6, ui_split[[2]])
-      ),
-      style = "overflow-y:scroll; overflow-x:hidden; max-height: 800px; min-height: 800px"
-    )
+  # react to "process$learners" or "tasktype" instead of "process$updated_learners
+  # here, because we do only want
+  # an execution when the learner changes - not its hyperparameters
+  tasktype = req(isolate(process$task$type))
+  learner  = req(process$learners[["1"]])
+  # sort parameter list by parameter type
+  par_list = learner$par.set$pars[order(sapply(learner$par.set$pars, function(par) par$type))]
+  # for each parameter
+  ui_list  = lapply(par_list, function(par) parameter_to_ui(par, 1, learner, tasktype))
+  # if there are more than 4 parameters, split the parameters into 2 columns
+  ui_split = {
+    if (length(ui_list) > 4)
+      split(ui_list, cut(seq_along(ui_list), 2, labels = FALSE))
+    else
+      list(ui_list, NULL)
+  }
+  # compute (hidden) parameter panel
+  conditionalPanel(
+    paste0("output.showParam", 1, " == true"),
+    fluidRow(
+      # split into two columns
+      column(6, ui_split[[1]]),
+      column(6, ui_split[[2]])
+    ),
+    style = "overflow-y:scroll; overflow-x:hidden; max-height: 800px; min-height: 800px"
+  )
 })
 
 
+# render parameter selections for learner 2 in the UI
 output$dynamicParameters_2 = renderUI({
 
-  lrn = paste0("learner_", 2)
-  # react to "input" instead of "process" here, because we do only want
-  # an execution when the learner name changes - not its hyperparameters
-  #req(input[[lrn]])
+  # react to "process$learners" or "tasktype" instead of "process$updated_learners
+  # here, because we do only want
+  # an execution when the learner changes - not its hyperparameters
   tasktype = req(isolate(process$task$type))
   learner  = req(process$learners[["2"]])
   # sort parameter list by parameter type
@@ -253,11 +275,11 @@ output$dynamicParameters_2 = renderUI({
 })
 
 
-# TODO MAKE FUNCTION FOR THIS
+# this observer is necessary for the min/max button + modal functionality
 observe({
-  # react to "input" or "tasktype" instead of "values" here, because we do only want
-  # an execution when the learner name changes - not its hyperparameters
-  #req(input$learner_1)
+  # react to "process$learners" or "tasktype" instead of "process$updated_learners
+  # here, because we do only want
+  # an execution when the learner changes - not its hyperparameters
   tasktype = req(isolate(process$task$type))
   learner  = req(process$learners[["1"]])
 
@@ -273,10 +295,12 @@ observe({
   })
 })
 
+
+# this observer is necessary for the min/max button + modal functionality
 observe({
-  # react to "input" or "tasktype" instead of "values" here, because we do only want
-  # an execution when the learner name changes - not its hyperparameters
-  #req(input$learner_2)
+  # react to "process$learners" or "tasktype" instead of "process$updated_learners
+  # here, because we do only want
+  # an execution when the learner changes - not its hyperparameters
   tasktype = req(isolate(process$task$type))
   learner  = req(process$learners[["2"]])
 
@@ -291,9 +315,3 @@ observe({
     }
   })
 })
-
-# force loading even when hidden
-outputOptions(output, "min_max_modals_1",    suspendWhenHidden = FALSE)
-outputOptions(output, "min_max_modals_2",    suspendWhenHidden = FALSE)
-outputOptions(output, "dynamicParameters_1", suspendWhenHidden = FALSE)
-outputOptions(output, "dynamicParameters_2", suspendWhenHidden = FALSE)

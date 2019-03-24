@@ -22,6 +22,3 @@ output$learner_amount = reactive({
   else
     max(learner_amount_enum())
 })
-
-# force loading even when hidden
-outputOptions(output, "learner_amount", suspendWhenHidden = FALSE)

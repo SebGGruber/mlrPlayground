@@ -56,5 +56,14 @@ output$taskSelection = renderUI({
   radioButtons("task", label = "Select task", choices = choices)
 })
 
-# force loading even when hidden
-outputOptions(output, "taskSelection",   suspendWhenHidden = FALSE)
+
+# plotly object in the UI showing the selected dataset
+output$datasetPlot = renderPlotly({
+  # check for process instance train set and then call getPlot method
+  req(process$data$train.set)
+  process$getDataPlot()
+
+})
+
+# small info text in the UI
+output$taskinfo = renderText(paste("Currently selected:", input$tasktype, "-", input$task))

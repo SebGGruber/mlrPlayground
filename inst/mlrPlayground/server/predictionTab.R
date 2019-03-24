@@ -1,21 +1,3 @@
-observe({
-  # whenever learner 1 or test set is updated, calculate predictions
-  req(process$data$test.set)
-  learner = req(process$updated_learners[["1"]])
-  process$calculatePred(1)
-  print("Preds 1 successfully calculated")
-})
-
-
-observe({
-  # whenever learner 2 or test set is updated, calculate predictions
-  req(process$data$test.set)
-  learner = req(process$updated_learners[["2"]])
-  process$calculatePred(2)
-  print("Preds 2 successfully calculated")
-})
-
-
 output$predictionPlot_1 = renderPlotly({
   # once predictions are loaded, get the predictions plot
   req(process$pred[["1"]]$grid)

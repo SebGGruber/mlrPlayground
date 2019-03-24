@@ -1,4 +1,4 @@
-
+# PROCESS INSTANCE CREATION - HERE IS WHERE THE FUN STARTS
 observe({
   # this creates a new R6 class instance whenever the tasktype is loaded/changed
   tasktype = req(input$tasktype)
@@ -41,45 +41,6 @@ observe({
   data = calculate_data(task, amount, noise, train.ratio)
 
   process$setData(data, train.ratio)
-})
-
-
-# render UI for the measure selection
-output$measure_multi_lc = renderUI({
-  # measures need to be initialized
-  req(process$task$measures)
-  # only render when learner_1 is not NULL
-  req(input$learner_1)
-  # optional dependency: Only renders once plots
-  # also render
-  req(process$learners[["1"]])
-  selectInput("measure_multi_lc", "", multiple = TRUE, choices = process$task$measures)
-})
-
-
-# render UI for the measure selection
-output$measure_1_roc = renderUI({
-  # measures need to be initialized
-  req(process$task$measures)
-  # only render when learner_1 is not NULL
-  req(input$learner_1)
-  # optional dependency: Only renders once plots
-  # also render
-  req(process$learners[["1"]])
-  selectInput("measure_1_roc", "", choices = process$task$measures, selected = "fpr")
-})
-
-
-# render UI for the measure selection
-output$measure_2_roc = renderUI({
-  # measures need to be initialized
-  req(process$task$measures)
-  # only render when learner_1 is not NULL
-  req(input$learner_1)
-  # optional dependency: Only renders once plots
-  # also render
-  req(process$learners[["1"]])
-  selectInput("measure_2_roc", "", choices = process$task$measures, selected = "tpr")
 })
 
 
@@ -126,11 +87,19 @@ observe({
 
 })
 
-# this is required to reference the tasktype in the UI
-# and thus hide the ROC stuff based on the tasktype
-output$tasktype = reactive({
-  req(input$tasktype)
+observe({
+  # whenever learner 1 or test set is updated, calculate predictions
+  req(process$data$test.set)
+  learner = req(process$updated_learners[["1"]])
+  process$calculatePred(1)
+  print("Preds 1 successfully calculated")
 })
 
-# force loading even when hidden
-outputOptions(output, "tasktype",   suspendWhenHidden = FALSE)
+
+observe({
+  # whenever learner 2 or test set is updated, calculate predictions
+  req(process$data$test.set)
+  learner = req(process$updated_learners[["2"]])
+  process$calculatePred(2)
+  print("Preds 2 successfully calculated")
+})
