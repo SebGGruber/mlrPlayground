@@ -9,17 +9,21 @@ select_learner_ui = function(i, choices) {
   fluidRow(
     column(
       3,
+      helpText(paste("Learner", i))
+    ),
+    column(
+      5,
       selectInput( #selectizeInput(
         inputId   = paste0("learner_", i),
-        label     = paste("Learner", i),
+        label     = "",
         choices   = choices,
         selected  = isolate(process$learners[[i]]$short.name),
         selectize = TRUE
       )
     ),
     column(
-      9,
-      actionButton(paste0("parameter", i), paste("Set learner", i, "parameters"))
+      4,
+      actionButton(paste0("parameter", i), "Change parameters")
     )
   )
 }

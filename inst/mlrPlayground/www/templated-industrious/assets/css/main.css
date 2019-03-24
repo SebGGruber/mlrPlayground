@@ -256,7 +256,7 @@ select:hover {
 /* Inner */
 .inner {
   margin: 0 auto;
-  width: 75rem;
+  width: 95rem;
   max-width: calc(100% - 6rem); }
   @media screen and (max-width: 480px) {
     .inner {
@@ -419,13 +419,13 @@ label {
   font-weight: 600;
   margin: 0 0 1rem 0; }
 
-input[type="text"],
+/*input[type="text"],
 input[type="password"],
 input[type="email"],
 input[type="tel"],
 input[type="search"],
 input[type="url"] {
-  height: 3.25rem; }
+  height: 3.25rem; } */
 
 select {
   background-size: 1.25rem;
@@ -696,21 +696,21 @@ table.alt tbody tr td {
     -ms-flex-grow: 0;
     flex-grow: 0; }
   .highlights > * {
-    width: 33.3333333333%; }
+    width: 50.0%; }
   .highlights > * {
     padding: 1.5rem;
-    width: calc(33.3333333333% + 1rem); }
-  .highlights > :nth-child(-n + 3) {
+    width: calc(50.0% + -0.5rem); }
+  .highlights > :nth-child(-n + 2) {
     padding-top: 0; }
-  .highlights > :nth-last-child(-n + 3) {
+  .highlights > :nth-last-child(-n + 2) {
     padding-bottom: 0; }
-  .highlights > :nth-child(3n + 1) {
+  .highlights > :nth-child(2n + 1) {
     padding-left: 0; }
-  .highlights > :nth-child(3n) {
+  .highlights > :nth-child(2n) {
     padding-right: 0; }
-  .highlights > :nth-child(3n + 1),
-  .highlights > :nth-child(3n) {
-    width: calc(33.3333333333% + -0.5rem); }
+  .highlights > :nth-child(2n + 1),
+  .highlights > :nth-child(2n) {
+    width: calc(50.0% + -0.5rem); }
   .highlights .content {
     border-radius: 4px;
     height: 100%;
@@ -725,17 +725,17 @@ table.alt tbody tr td {
       width: 50%; }
     .highlights > * {
       padding: 1rem;
-      width: calc(33.3333333333% + 0.6666666667rem); }
-    .highlights > :nth-child(-n + 3) {
+      width: calc(50.0% + 0.6666666667rem); }
+    .highlights > :nth-child(-n + 2) {
       padding-top: 1rem; }
-    .highlights > :nth-last-child(-n + 3) {
+    .highlights > :nth-last-child(-n + 2) {
       padding-bottom: 1rem; }
-    .highlights > :nth-child(3n + 1) {
+    .highlights > :nth-child(2n + 1) {
       padding-left: 1rem; }
-    .highlights > :nth-child(3n) {
+    .highlights > :nth-child(2n) {
       padding-right: 1rem; }
-    .highlights > :nth-child(3n + 1),
-    .highlights > :nth-child(3n) {
+    .highlights > :nth-child(2n + 1),
+    .highlights > :nth-child(2n) {
       padding: 1rem;
       width: calc(50% + 1rem); }
     .highlights > * {
@@ -759,17 +759,17 @@ table.alt tbody tr td {
       width: 100%; }
     .highlights > * {
       padding: 1rem;
-      width: calc(33.3333333333% + 0.6666666667rem); }
-    .highlights > :nth-child(-n + 3) {
+      width: calc(50.0% + 0.6666666667rem); }
+    .highlights > :nth-child(-n + 2) {
       padding-top: 1rem; }
-    .highlights > :nth-last-child(-n + 3) {
+    .highlights > :nth-last-child(-n + 2) {
       padding-bottom: 1rem; }
-    .highlights > :nth-child(3n + 1) {
+    .highlights > :nth-child(2n + 1) {
       padding-left: 1rem; }
-    .highlights > :nth-child(3n) {
+    .highlights > :nth-child(2n) {
       padding-right: 1rem; }
-    .highlights > :nth-child(3n + 1),
-    .highlights > :nth-child(3n) {
+    .highlights > :nth-child(2n + 1),
+    .highlights > :nth-child(2n) {
       padding: 1rem;
       width: calc(100% + 2rem); }
     .highlights > * {
@@ -832,21 +832,21 @@ table.alt tbody tr td {
     -ms-flex-grow: 0;
     flex-grow: 0; }
   .testimonials > * {
-    width: 33.3333333333%; }
+    width: 50.0%; }
   .testimonials > * {
     padding: 1.5rem;
-    width: calc(33.3333333333% + 1rem); }
-  .testimonials > :nth-child(-n + 3) {
+    width: calc(50.0% + 1rem); }
+  .testimonials > :nth-child(-n + 2) {
     padding-top: 0; }
-  .testimonials > :nth-last-child(-n + 3) {
+  .testimonials > :nth-last-child(-n + 2) {
     padding-bottom: 0; }
-  .testimonials > :nth-child(3n + 1) {
+  .testimonials > :nth-child(2n + 1) {
     padding-left: 0; }
-  .testimonials > :nth-child(3n) {
+  .testimonials > :nth-child(2n) {
     padding-right: 0; }
-  .testimonials > :nth-child(3n + 1),
-  .testimonials > :nth-child(3n) {
-    width: calc(33.3333333333% + -0.5rem); }
+  .testimonials > :nth-child(2n + 1),
+  .testimonials > :nth-child(2n) {
+    width: calc(50.0% + -0.5rem); }
   .testimonials .content {
     border-radius: 4px;
     height: 100%;
@@ -879,17 +879,17 @@ table.alt tbody tr td {
       width: 50%; }
     .testimonials > * {
       padding: 1rem;
-      width: calc(33.3333333333% + 0.6666666667rem); }
-    .testimonials > :nth-child(-n + 3) {
+      width: calc(50.0% + 0.6666666667rem); }
+    .testimonials > :nth-child(-n + 2) {
       padding-top: 1rem; }
-    .testimonials > :nth-last-child(-n + 3) {
+    .testimonials > :nth-last-child(-n + 2) {
       padding-bottom: 1rem; }
-    .testimonials > :nth-child(3n + 1) {
+    .testimonials > :nth-child(2n + 1) {
       padding-left: 1rem; }
-    .testimonials > :nth-child(3n) {
+    .testimonials > :nth-child(2n) {
       padding-right: 1rem; }
-    .testimonials > :nth-child(3n + 1),
-    .testimonials > :nth-child(3n) {
+    .testimonials > :nth-child(2n + 1),
+    .testimonials > :nth-child(2n) {
       padding: 1rem;
       width: calc(50% + 1rem); }
     .testimonials > * {
@@ -913,17 +913,17 @@ table.alt tbody tr td {
       width: 100%; }
     .testimonials > * {
       padding: 1rem;
-      width: calc(33.3333333333% + 0.6666666667rem); }
-    .testimonials > :nth-child(-n + 3) {
+      width: calc(50.0% + 0.6666666667rem); }
+    .testimonials > :nth-child(-n + 2) {
       padding-top: 1rem; }
-    .testimonials > :nth-last-child(-n + 3) {
+    .testimonials > :nth-last-child(-n + 2) {
       padding-bottom: 1rem; }
-    .testimonials > :nth-child(3n + 1) {
+    .testimonials > :nth-child(2n + 1) {
       padding-left: 1rem; }
-    .testimonials > :nth-child(3n) {
+    .testimonials > :nth-child(2n) {
       padding-right: 1rem; }
-    .testimonials > :nth-child(3n + 1),
-    .testimonials > :nth-child(3n) {
+    .testimonials > :nth-child(2n + 1),
+    .testimonials > :nth-child(2n) {
       padding: 1rem;
       width: calc(100% + 2rem); }
     .testimonials > * {
@@ -1044,6 +1044,11 @@ ul.actions {
           ul.actions:not(.fixed) li .button.icon:before {
             margin-left: -0.5rem; } }
 
+/* item */
+.item {
+    margin-right: 15px;
+}
+
 /* Grid */
 .row {
   display: flex;
@@ -1069,9 +1074,9 @@ ul.actions {
 .row > .off-3 {
   margin-left: 25%; }
 .row > .col-4 {
-  width: 33.3333333333%; }
+  width: 50.0%; }
 .row > .off-4 {
-  margin-left: 33.3333333333%; }
+  margin-left: 50.0%; }
 .row > .col-5 {
   width: 41.6666666667%; }
 .row > .off-5 {
@@ -1184,9 +1189,9 @@ ul.actions {
   .row > .off-3-xlarge {
     margin-left: 25%; }
   .row > .col-4-xlarge {
-    width: 33.3333333333%; }
+    width: 50.0%; }
   .row > .off-4-xlarge {
-    margin-left: 33.3333333333%; }
+    margin-left: 50.0%; }
   .row > .col-5-xlarge {
     width: 41.6666666667%; }
   .row > .off-5-xlarge {
@@ -1248,7 +1253,8 @@ ul.actions {
         padding-top: 1.5rem; }
   .row {
     margin-top: 0;
-    margin-left: -3rem; }
+    margin-left: -4rem;
+    margin-right: auto; }
     .row > * {
       padding: 0 0 0 3rem; }
     .row.gtr-uniform {
@@ -1298,9 +1304,9 @@ ul.actions {
   .row > .off-3-large {
     margin-left: 25%; }
   .row > .col-4-large {
-    width: 33.3333333333%; }
+    width: 50.0%; }
   .row > .off-4-large {
-    margin-left: 33.3333333333%; }
+    margin-left: 50.0%; }
   .row > .col-5-large {
     width: 41.6666666667%; }
   .row > .off-5-large {
@@ -1412,9 +1418,9 @@ ul.actions {
   .row > .off-3-medium {
     margin-left: 25%; }
   .row > .col-4-medium {
-    width: 33.3333333333%; }
+    width: 50.0%; }
   .row > .off-4-medium {
-    margin-left: 33.3333333333%; }
+    margin-left: 50.0%; }
   .row > .col-5-medium {
     width: 41.6666666667%; }
   .row > .off-5-medium {
@@ -1526,9 +1532,9 @@ ul.actions {
   .row > .off-3-small {
     margin-left: 25%; }
   .row > .col-4-small {
-    width: 33.3333333333%; }
+    width: 50.0%; }
   .row > .off-4-small {
-    margin-left: 33.3333333333%; }
+    margin-left: 50.0%; }
   .row > .col-5-small {
     width: 41.6666666667%; }
   .row > .off-5-small {
@@ -1640,9 +1646,9 @@ ul.actions {
   .row > .off-3-xsmall {
     margin-left: 25%; }
   .row > .col-4-xsmall {
-    width: 33.3333333333%; }
+    width: 50.0%; }
   .row > .off-4-xsmall {
-    margin-left: 33.3333333333%; }
+    margin-left: 50.0%; }
   .row > .col-5-xsmall {
     width: 41.6666666667%; }
   .row > .off-5-xsmall {
@@ -1729,6 +1735,15 @@ ul.actions {
       margin-top: -2.5rem; }
       .row.gtr-200.gtr-uniform > * {
         padding-top: 2.5rem; } }
+
+
+/* form-group */
+.form-group {
+    margin-bottom: 15px;
+    margin-top: -15px;
+}
+
+
 /* Icon */
 .icon {
   text-decoration: none;

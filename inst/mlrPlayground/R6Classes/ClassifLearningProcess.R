@@ -6,10 +6,10 @@ ClassifLearningProcess = R6Class(
 
     initialize = function(valid.learners) {
       measures = c(
-        "acc", "tnr", "tpr", "f1", "mmce", "brier.scaled", "bac", "fn", "fp", "fnr", "qsr", "fpr", "npv",
-        "brier", "auc", "multiclass.aunp", "multiclass.aunu","ber", "multiclass.brier", "ssr",
-        "ppv", "wkappa", "tn", "tp", "multiclass.au1u", "gmean", "logloss"
-      )
+        "acc", "tnr", "tpr", "f1", "mmce", "bac", "fn", "fp", "fnr", "qsr", "fpr", "npv",
+        "brier", "auc", "ber", "ssr",
+        "ppv", "wkappa", "tn", "tp", "gmean", "logloss"
+      )  #"brier.scaled", "multiclass.brier", "multiclass.aunu","multiclass.au1u", "multiclass.aunp",
       super$initialize(valid.learners, tasktype = "classif", measures = measures)
 
     },

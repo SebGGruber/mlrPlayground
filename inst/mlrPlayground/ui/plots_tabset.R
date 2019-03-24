@@ -1,6 +1,7 @@
 # only locally used
 prediction_tab = tabPanel(
   "Predictions",
+  br(),
   fluidRow(
     column(3, helpText("Learner 1:")),
     column(2, uiOutput("measure_1_value")),
@@ -26,6 +27,7 @@ prediction_tab = tabPanel(
 # only locally used
 learning_curve_tab = tabPanel(
   "Learning Curve",
+  br(),
   fluidRow(
     column(3, helpText("Measures:")),
     column(3, uiOutput("measure_multi_lc"))
@@ -40,6 +42,7 @@ roc_tab = tabPanel(
   "ROC",
   conditionalPanel(
     "output.tasktype == 'classif'",
+    br(),
     fluidRow(
       column(3, helpText("Measures:")),
       column(3, uiOutput("measure_1_roc")),
