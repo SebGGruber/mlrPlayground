@@ -76,35 +76,36 @@ ClusterLearningProcess = R6Class(
       pred = self$pred[[i]]$grid
 
      plotly::plot_ly(
-        data   = self$data$train.set,
+        data    = self$data$train.set,
         name   = "Train",
-        x      = ~x,
-        y      = ~y,
-        type   = "scatter",
-        mode   = "markers"
-      )%>%
+        x       = ~x,
+        y       = ~y,
+        colors  = c("#2b8cbe", "#e34a33", "#2b8cbe", "#e34a33"),
+        symbol  = I("x"),
+        type    = "scatter",
+        mode    = "markers"
+      ) %>%
       plotly::add_trace(
         data   = self$data$test.set,
         name   = "Test",
         x      = ~x,
         y      = ~y,
+        colors = c("#2b8cbe", "#e34a33"),
+        symbol  = I('o'),
         type   = "scatter",
         mode   = "markers"
-        ) %>%
+        )%>%
         plotly::add_trace(
-          x = ~unique(pred$x),
-        y = ~unique(pred$y),
-        z = ~matrix(
-          pred$z,
-          nrow = sqrt(length(pred$z)),
-          byrow = TRUE
-        ),
-        type = "heatmap",
-        colors = colorRamp(c("red", "blue")),
-        opacity = 0.2,
-        showscale = FALSE
+          x         = ~unique(pred$x),
+          y         = ~unique(pred$y),
+          z         = ~matrix(pred$z, nrow = sqrt(length(pred$z)), byrow = TRUE),
+          type      = "heatmap",
+          colors    = colorRamp(c("blue","red")),
+          opacity   = 0.2,
+          hoverinfo = "x+y+skip",
+          showscale = FALSE
         ) %>%
-        plotly::layout(xaxis = list(title = ""), yaxis = list(title = ""))
+        plotly::layout(xaxis = list(title = "X"), yaxis = list(title = "Y"))
     }
   ),
 

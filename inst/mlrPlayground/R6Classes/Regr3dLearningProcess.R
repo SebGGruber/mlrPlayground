@@ -13,7 +13,8 @@ Regr3dLearningProcess = R6Class(
         type = "scatter3d",
         x    = ~x,
         y    = ~y,
-        z    = ~z
+        z    = ~z,
+        size = 10
       ) %>%
       layout(scene = list(
         xaxis = list(title = 'xaxis'),
@@ -25,6 +26,7 @@ Regr3dLearningProcess = R6Class(
         name   = "Test",
         x      = ~x,
         y      = ~y,
+        z      = ~z,
         type   = "scatter3d",
         mode   = "markers"
         )
