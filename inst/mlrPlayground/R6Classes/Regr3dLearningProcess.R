@@ -9,11 +9,12 @@ Regr3dLearningProcess = R6Class(
       #' @return plotly plot object
       plotly::plot_ly(
         data = self$data$train.set,
-        name   = "Train",
+        name = "Train",
         type = "scatter3d",
         x    = ~x,
         y    = ~y,
-        z    = ~z
+        z    = ~z,
+        size = 10
       ) %>%
       layout(scene = list(
         xaxis = list(title = 'xaxis'),
@@ -25,6 +26,7 @@ Regr3dLearningProcess = R6Class(
         name   = "Test",
         x      = ~x,
         y      = ~y,
+        z      = ~z,
         type   = "scatter3d",
         mode   = "markers"
         )
@@ -39,9 +41,9 @@ Regr3dLearningProcess = R6Class(
       # Must use string to index into reactivevalues
       i = as.character(i)
 
-      learner = self$learners[[i]]
-      model   = train(learner, self$task$train)
-      pred    = expand.grid(x = -50:50 / 10)
+      learner     = self$learners[[i]]
+      model       = train(learner, self$task$train)
+      pred        = expand.grid(x = -50:50 / 10)
 
       predictions = predictLearner(learner, model, pred)
       pred$y      = as.numeric(factor(predictions))
@@ -59,28 +61,28 @@ Regr3dLearningProcess = R6Class(
       pred = self$calculatePred(i)
 
       plotly::plot_ly(
-        x = ~pred$x,
-        y = ~pred$y,
-        type = "line",
+        x         = ~pred$x,
+        y         = ~pred$y,
+        type      = "line",
         showscale = FALSE
       ) %>%
       plotly::add_trace(
-        data   = self$data$test.set,
-        name   = "Test",
-        x      = ~x,
-        y      = ~y,
-        symbol = I('o'),
-        type   = "scatter",
-        mode   = "markers"
+        data      = self$data$test.set,
+        name      = "Test",
+        x         = ~x,
+        y         = ~y,
+        symbol    = I('o'),
+        type      = "scatter",
+        mode      = "markers"
         )%>%
         plotly::add_trace(
-          data = self$data$train.set,
-          name   = "Train",
-          x = ~x,
-          y = ~y,
-          symbol = I('x'),
-          type = "scatter",
-          mode = "markers"
+          data    = self$data$train.set,
+          name    = "Train",
+          x       = ~x,
+          y       = ~y,
+          symbol  = I('x'),
+          type    = "scatter",
+          mode    = "markers"
         ) %>%
         plotly::layout(xaxis = list(title = ""), yaxis = list(title = ""))
     }

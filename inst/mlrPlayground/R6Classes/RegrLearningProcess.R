@@ -1,6 +1,6 @@
 RegrLearningProcess = R6Class(
   classname = "RegrLearningProcess",
-  inherit = LearningProcess,
+  inherit   = LearningProcess,
 
   public = list(
 
@@ -77,14 +77,14 @@ RegrLearningProcess = R6Class(
       pred = self$pred[[i]]$grid
 
       plotly::plot_ly(
-        data = self$data$train.set,
+        data   = self$data$train.set,
         name   = "Train",
-        x = ~x,
-        y = ~y,
+        x      = ~x,
+        y      = ~y,
         symbol = I('x'),
-        color = I("#2b8cbe"),
-        type = "scatter",
-        mode = "markers"
+        color  = I("#2b8cbe"),
+        type   = "scatter",
+        mode   = "markers"
       ) %>%
       plotly::add_trace(
         data   = self$data$test.set,
@@ -96,11 +96,11 @@ RegrLearningProcess = R6Class(
         mode   = "markers"
         )%>%
         plotly::add_trace(
-          x = ~pred$x,
-          y = ~pred$y,
+          x     = ~pred$x,
+          y     = ~pred$y,
           color = I("#e34a33"),
-          name = 'trace 1',
-          mode = 'lines',
+          name  = 'trace 1',
+          mode  = 'lines',
           showscale = FALSE
 
         ) %>%
