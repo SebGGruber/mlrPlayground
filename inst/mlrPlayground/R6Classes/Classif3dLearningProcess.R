@@ -8,26 +8,26 @@ Classif3dLearningProcess = R6Class(
       #' @description Method transforming the data into an interactive plot
       #' @return plotly plot object
       plotly::plot_ly(
-        data = self$data$train.set,
-        type = "scatter3d",
-        x    = ~x,
-        y    = ~y,
-        z    = ~z,
-        color = ~class,
+        data    = self$data$train.set,
+        type    = "scatter3d",
+        x       = ~x,
+        y       = ~y,
+        z       = ~z,
+        color   = ~class,
         opacity = 0.5,
-        colors = c("#2b8cbe", "#e34a33")
+        colors  = c("#2b8cbe", "#e34a33")
       )%>%
       plotly::add_trace(
-        data   = self$data$test.set,
-        name   = "Test",
-        type = "scatter3d",
-        x    = ~x,
-        y    = ~y,
-        z    = ~z,
-        color = ~class,
+        data    = self$data$test.set,
+        name    = "Test",
+        type    = "scatter3d",
+        x       = ~x,
+        y       = ~y,
+        z       = ~z,
+        color   = ~class,
         opacity = 0.5,
-        symbol = I("o"),
-        colors = c("#2b8cbe", "#e34a33")
+        symbol  = I("o"),
+        colors  = c("#2b8cbe", "#e34a33")
         )
     },
 
@@ -60,26 +60,26 @@ Classif3dLearningProcess = R6Class(
 
       # TODO
       plotly::plot_ly(
-        data = self$data$train.set,
-        type = "scatter3d",
-        x    = ~x,
-        y    = ~y,
-        z    = ~z,
-        color = ~class,
+        data    = self$data$train.set,
+        type    = "scatter3d",
+        x       = ~x,
+        y       = ~y,
+        z       = ~z,
+        color   = ~class,
         opacity = 0.5,
-        colors = c("#2b8cbe", "#e34a33")
+        colors  = c("#2b8cbe", "#e34a33")
       )%>%
       plotly::add_trace(
-        data   = self$data$test.set,
-        name   = "Test",
-        type = "scatter3d",
-        x    = ~x,
-        y    = ~y,
-        z    = ~z,
-        color = ~class,
+        data    = self$data$test.set,
+        name    = "Test",
+        type    = "scatter3d",
+        x       = ~x,
+        y       = ~y,
+        z       = ~z,
+        color   = ~class,
         opacity = 0.5,
-        symbol = I("o"),
-        colors = c("#2b8cbe", "#e34a33")
+        symbol  = I("o"),
+        colors  = c("#2b8cbe", "#e34a33")
         )
     }
   ),

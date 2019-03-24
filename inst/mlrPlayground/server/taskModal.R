@@ -6,8 +6,8 @@ output$taskSelection = renderUI({
     choices = list(#"Circle", "XOR",
     #Classification
       "1.Circle",
-      "2.Two-Circle",
-      "3.Two-Circle-2",
+      "2.Two Circle",
+      "3.Two Circle + Point",
       "4.XOR",
       "5.Gaussian",
       "6.Across Spiral",
@@ -26,13 +26,14 @@ output$taskSelection = renderUI({
     #Regression
       "1.Linear ascend",
       "2.Log linear",
-      "3.Sine",
+      "3.Polyline",
       "4.Ascend Cosine",
       "5.Tangent",
       "6.Sigmoid",
-      "7.Circle",
-      "8.Spiral",
-      "9.Parabola To Right"
+      "7.Three Line",
+      "8.Amplification Sine",
+      "9.Parabola To Right",
+      "10.Precipice"
     )
 
   } else if (input$tasktype == "regr3d") {
@@ -43,12 +44,12 @@ output$taskSelection = renderUI({
   } else if (input$tasktype == "cluster") {
     choices = list(
     #Cluster
-      "1.Clustering Dataset 1",
-      "2.Clustering Dataset 2",
-      "3.Clustering Dataset 3",
-      "4.Clustering Dataset 4",
-      "5.Clustering Dataset 5",
-      "6.Clustering Dataset 6"
+      "1.Normal Points + Uniform Square",
+      "2.Two Spiral",
+      "3.Points + Sine",
+      "4.Three Circle",
+      "5.Three Slant",
+      "6.Parabola + Two Points"
     )
 
   }

@@ -33,7 +33,7 @@ ClassifLearningProcess = R6Class(
         y      = ~x2,
         color  = ~class,
         colors = c("#2b8cbe", "#e34a33"),
-        symbol  = I('x'),
+        symbol = I('x'),
         type   = "scatter",
         mode   = "markers"
       )%>%
@@ -44,7 +44,7 @@ ClassifLearningProcess = R6Class(
         y      = ~x2,
         color  = ~class,
         colors = c("#2b8cbe", "#e34a33"),
-        symbol  = I('o'),
+        symbol = I('o'),
         type   = "scatter",
         mode   = "markers"
         )
@@ -97,7 +97,7 @@ ClassifLearningProcess = R6Class(
       #' @return plotly plot object
 
       # Must use string to index into reactivevalues
-      i = as.character(i)
+      i         = as.character(i)
 
       pred = isolate(self$pred[[i]]$grid)
 
@@ -112,28 +112,28 @@ ClassifLearningProcess = R6Class(
         type    = "scatter",
         mode    = "markers"
       ) %>%
-        plotly::add_trace(
-          data   = isolate(self$data$test.set),
-          name   = "Test",
-          x      = ~x1,
-          y      = ~x2,
-          color  = ~class,
-          colors = c("#2b8cbe", "#e34a33"),
-          symbol  = I('o'),
-          type   = "scatter",
-          mode   = "markers"
-        )%>%
-        plotly::add_trace(
-          x         = ~unique(pred$x1),
-          y         = ~unique(pred$x2),
-          z         = ~matrix(pred$predictions, nrow = sqrt(nrow(pred)), byrow = TRUE),
-          type      = "heatmap",
-          text      = ~matrix(pred$class, nrow = sqrt(nrow(pred)), byrow = TRUE),
-          colors    = colorRamp(c("blue","red")),
-          opacity   = 0.2,
-          hoverinfo = "x+y+text+skip",
-          showscale = FALSE
-        ) %>%
+      plotly::add_trace(
+        data   = isolate(self$data$test.set),
+        name    = "Test",
+        x       = ~x1,
+        y       = ~x2,
+        color   = ~class,
+        colors  = c("#2b8cbe", "#e34a33"),
+        symbol  = I('o'),
+        type    = "scatter",
+        mode    = "markers"
+      )%>%
+      plotly::add_trace(
+        x         = ~unique(pred$x1),
+        y         = ~unique(pred$x2),
+        z         = ~matrix(pred$predictions, nrow = sqrt(nrow(pred)), byrow = TRUE),
+        type      = "heatmap",
+        text      = ~matrix(pred$class, nrow = sqrt(nrow(pred)), byrow = TRUE),
+        colors    = colorRamp(c("blue","red")),
+        opacity   = 0.2,
+        hoverinfo = "x+y+text+skip",
+        showscale = FALSE
+      ) %>%
         plotly::layout(xaxis = list(title = ""), yaxis = list(title = ""))
     }
   ),
