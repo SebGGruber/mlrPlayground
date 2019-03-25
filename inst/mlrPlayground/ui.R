@@ -22,7 +22,7 @@ source("ui/plots_tabset.R",    local = TRUE) # importing: plots_tabset
 
 shinyUI(
   tagList(
-    useShinyjs(),
+    #useShinyjs(),
     div(
       id = "app-content",
       tags$head(

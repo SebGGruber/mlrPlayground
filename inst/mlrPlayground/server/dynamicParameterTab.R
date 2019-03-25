@@ -1,14 +1,13 @@
-min_max_modals = function(parameter, i, learner, tasktype) {
+min_max_modals = function(parameter, i, learner) {
   #' @description Function for transforming a parameter into a modal
   #' This is the window that pops up when the "Min/Max" button in the
   #' parameter UI is pressed
   #' @param parameter mlr parameter object
   #' @param i index of the learner
   #' @param learner learner mlr object
-  #' @param tasktype character name of the tasktype
   #' @return UI element or NULL if parameter is invalid for plotting
 
-  id = paste0(parameter$id, i, tasktype)
+  id = paste0(parameter$id, i, learner$id)
   param_df = config$param_df
 
 
@@ -82,15 +81,14 @@ min_max_modals = function(parameter, i, learner, tasktype) {
   }
 }
 
-parameter_to_ui = function(parameter, i, learner, tasktype) {
+parameter_to_ui = function(parameter, i, learner) {
   #' @description function for transforming a mlr parameter into an UI element
   #' @param parameter mlr parameter object
   #' @param i index of the learner
   #' @param learner learner mlr object
-  #' @param tasktype character name of the tasktype
   #' @return UI element or NULL if parameter is invalid for plotting
 
-  id = paste0(parameter$id, i, tasktype)
+  id = paste0(parameter$id, i, learner$id)
   input_width    = 4
   helpText_width = 5
   param_df = config$param_df
@@ -191,10 +189,10 @@ output$min_max_modals_1 = renderUI({
   # react to "process$learners" or "tasktype" instead of "process$updated_learners
   # here, because we do only want
   # an execution when the learner changes - not its hyperparameters
-  tasktype = req(isolate(process$task$type))
+  #tasktype = req(isolate(process$task$type))
   learner  = req(process$learners[["1"]])
   # calculate the min/max modals for every hyperparameter (non numerics return NULL)
-  lapply(learner$par.set$pars, function(par) min_max_modals(par, 1, learner, tasktype))
+  lapply(learner$par.set$pars, function(par) min_max_modals(par, 1, learner))
 })
 
 
@@ -204,10 +202,10 @@ output$min_max_modals_2 = renderUI({
   # react to "process$learners" or "tasktype" instead of "process$updated_learners
   # here, because we do only want
   # an execution when the learner changes - not its hyperparameters
-  tasktype = req(isolate(process$task$type))
+  #tasktype = req(isolate(process$task$type))
   learner  = req(process$learners[["2"]])
   # calculate the min/max modals for every hyperparameter (non numerics return NULL)
-  lapply(learner$par.set$pars, function(par) min_max_modals(par, 2, learner, tasktype))
+  lapply(learner$par.set$pars, function(par) min_max_modals(par, 2, learner))
 })
 
 
@@ -217,12 +215,12 @@ output$dynamicParameters_1 = renderUI({
   # react to "process$learners" or "tasktype" instead of "process$updated_learners
   # here, because we do only want
   # an execution when the learner changes - not its hyperparameters
-  tasktype = req(isolate(process$task$type))
+  #tasktype = req(isolate(process$task$type))
   learner  = req(process$learners[["1"]])
   # sort parameter list by parameter type
   par_list = learner$par.set$pars[order(sapply(learner$par.set$pars, function(par) par$type))]
   # for each parameter
-  ui_list  = lapply(par_list, function(par) parameter_to_ui(par, 1, learner, tasktype))
+  ui_list  = lapply(par_list, function(par) parameter_to_ui(par, 1, learner))
   # if there are more than 4 parameters, split the parameters into 2 columns
   ui_split = {
     if (length(ui_list) > 4)
@@ -249,12 +247,12 @@ output$dynamicParameters_2 = renderUI({
   # react to "process$learners" or "tasktype" instead of "process$updated_learners
   # here, because we do only want
   # an execution when the learner changes - not its hyperparameters
-  tasktype = req(isolate(process$task$type))
+  #tasktype = req(isolate(process$task$type))
   learner  = req(process$learners[["2"]])
   # sort parameter list by parameter type
   par_list = learner$par.set$pars[order(sapply(learner$par.set$pars, function(par) par$type))]
   # for each parameter
-  ui_list  = lapply(par_list, function(par) parameter_to_ui(par, 2, learner, tasktype))
+  ui_list  = lapply(par_list, function(par) parameter_to_ui(par, 2, learner))
   # if there are more than 4 parameters, split the parameters into 2 columns
   ui_split = {
     if (length(ui_list) > 4)
@@ -280,14 +278,14 @@ observe({
   # react to "process$learners" or "tasktype" instead of "process$updated_learners
   # here, because we do only want
   # an execution when the learner changes - not its hyperparameters
-  tasktype = req(isolate(process$task$type))
+  #tasktype = req(isolate(process$task$type))
   learner  = req(process$learners[["1"]])
 
   lapply(learner$par.set$pars, function(par) {
     if (par$type %in% c("integer", "numeric")) {
 
-      btn_id = paste0("btn_", par$id, 1, tasktype)
-      mod_id = paste0("mod_", par$id, 1, tasktype)
+      btn_id = paste0("btn_", par$id, 1, learner$id)
+      mod_id = paste0("mod_", par$id, 1, learner$id)
       observeEvent(req(input[[btn_id]]), {
         toggleModal(session, mod_id, "open")
       })
@@ -301,14 +299,14 @@ observe({
   # react to "process$learners" or "tasktype" instead of "process$updated_learners
   # here, because we do only want
   # an execution when the learner changes - not its hyperparameters
-  tasktype = req(isolate(process$task$type))
+  #tasktype = req(isolate(process$task$type))
   learner  = req(process$learners[["2"]])
 
   lapply(learner$par.set$pars, function(par) {
     if (par$type %in% c("integer", "numeric")) {
 
-      btn_id = paste0("btn_", par$id, 2, tasktype)
-      mod_id = paste0("mod_", par$id, 2, tasktype)
+      btn_id = paste0("btn_", par$id, 2, learner$id)
+      mod_id = paste0("mod_", par$id, 2, learner$id)
       observeEvent(req(input[[btn_id]]), {
         toggleModal(session, mod_id, "open")
       })

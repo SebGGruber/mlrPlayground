@@ -56,9 +56,10 @@ observe({
 observe({
 
   names    = req(process$params[["1"]])
+  lrn_id   = isolate(process$learners[["1"]]$id)
   # check for and get input values if parameters exist
   par.vals = lapply(names, function(par) {
-    id = paste0("parameter_", par, 1, isolate(process$task$type))
+    id = paste0("parameter_", par, 1, lrn_id)
     modified_req(input[[id]])
   })
   process$updateHyperparam(par.vals, 1)
@@ -77,9 +78,10 @@ observe({
 observe({
 
   names    = req(process$params[["2"]])
+  lrn_id   = isolate(process$learners[["2"]]$id)
   # check for and get input values if parameters exist
   par.vals = lapply(names, function(par) {
-    id = paste0("parameter_", par, 2, isolate(process$task$type))
+    id = paste0("parameter_", par, 2, lrn_id)
     modified_req(input[[id]])
   })
 
