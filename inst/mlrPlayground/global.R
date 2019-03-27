@@ -8,7 +8,7 @@ require(plotly)
 require(mlr)
 require(shinycssloaders)
 require(shinyBS)
-require(shinythemes)
+require(shinyjs)
 require(class)
 require(R6)
 require(assertthat)
@@ -40,3 +40,13 @@ options(shiny.maxRequestSize = 9*1024^2)
 config = read.config("learner.config")
 # init process variable, so req(process) doesn't crash during start
 process = NULL
+
+### COLORS FOR PLOTS
+# class 1 (red-ish)
+color_1 = "#CE1B28"
+# class 2 (blue-ish)
+color_2 = "#428bca"
+# pred class 1
+color_11 = "#d74852"
+# pred class 2
+color_21 = "#67a2d4"

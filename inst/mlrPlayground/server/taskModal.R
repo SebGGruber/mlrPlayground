@@ -5,56 +5,56 @@ output$taskSelection = renderUI({
   if (input$tasktype == "" || input$tasktype == "classif") {
     choices = list(#"Circle", "XOR",
     #Classification
-      "1.Circle",
-      "2.Two Circle",
-      "3.Two Circle + Point",
-      "4.XOR",
-      "5.Gaussian",
-      "6.Across Spiral",
-      "7.Opposite Arc",
-      "8.Cross Sector"
+      "Circle",
+      "Two Circle",
+      "Two Circle + Point",
+      "XOR",
+      "Gaussian",
+      "Across Spiral",
+      "Opposite Arc",
+      "Cross Sector"
     )
 
   } else if (input$tasktype == "classif3d") {
     choices = list(
-      "1.Wavy surface",
-      "2.Sphere"
+      "Wavy surface",
+      "Sphere"
     )
 
   } else if (input$tasktype == "regr") {
     choices = list(#"Linear ascend (2D)",
     #Regression
-      "1.Linear ascend",
-      "2.Log linear",
-      "3.Polyline",
-      "4.Ascend Cosine",
-      "5.Tangent",
-      "6.Sigmoid",
-      "7.Three Line",
-      "8.Amplification Sine",
-      "9.Parabola To Right",
-      "10.Precipice"
+      "Linear ascend",
+      "Log linear",
+      "Polyline",
+      "Ascend Cosine",
+      "Tangent",
+      "Sigmoid",
+      "Three Line",
+      "Amplification Sine",
+      "Parabola To Right",
+      "Precipice"
     )
 
   } else if (input$tasktype == "regr3d") {
     choices = list(
-      "1.Spiral ascend"
+      "Spiral ascend"
     )
 
   } else if (input$tasktype == "cluster") {
     choices = list(
     #Cluster
-      "1.Normal Points + Uniform Square",
-      "2.Two Spiral",
-      "3.Points + Sine",
-      "4.Three Circle",
-      "5.Three Slant",
-      "6.Parabola + Two Points"
+      "Normal Points + Uniform Square",
+      "Two Spiral",
+      "Points + Sine",
+      "Three Circle",
+      "Three Slant",
+      "Parabola + Two Points"
     )
 
   }
 
-  radioButtons("task", label = "Select task", choices = choices)
+  custom_radioButtons("task", label = "Select task", choices = choices)
 })
 
 

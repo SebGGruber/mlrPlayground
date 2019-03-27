@@ -47,7 +47,11 @@ observe({
 # create learner 1 based on selected learner
 observe({
   learner = req(input$learner_1)
-  prob    = modified_req(input$prob)
+  # only react to prob when classif
+  if (isolate(process$task$type) == "classif")
+    prob = modified_req(input$prob)
+  else
+    prob = NULL
   process$initLearner(learner, 1, prob)
 })
 
@@ -69,7 +73,11 @@ observe({
 # create learner 2 based on selected learner
 observe({
   learner = req(input$learner_2)
-  prob    = modified_req(input$prob)
+  # only react to prob when classif
+  if (isolate(process$task$type) == "classif")
+    prob = modified_req(input$prob)
+  else
+    prob = NULL
   process$initLearner(learner, 2, prob)
 })
 

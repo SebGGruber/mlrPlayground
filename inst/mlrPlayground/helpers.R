@@ -24,9 +24,11 @@ read.config = function(file) {
   param_df = lapply(param_df, as.character)
   # whitespace trimming
   param_df[c("short.name", "param.name", "new.name")] = lapply(param_df[c("short.name", "param.name", "new.name")], trimws)
-  # character to integer (don't skip as.character here!!!)
-  param_df[c("new.min", "new.max", "new.default")] = lapply(param_df[c("new.min", "new.max", "new.default")], as.integer)
-
+  # surpress warnings when transforming "NA" to NA
+  suppressWarnings({
+    # character to integer (don't skip as.character here!!!)
+    param_df[c("new.min", "new.max", "new.default")] = lapply(param_df[c("new.min", "new.max", "new.default")], as.integer)
+  })
   # return
   list(valid.learners = valid.learners, param_df = param_df)
 
@@ -44,4 +46,53 @@ modified_req = function(x){
     x
   else
     req(x)
+}
+
+
+# function providing an alternative to shiny's radioButtons
+custom_radioButtons = function(id, label, choices){
+  # shiny's radioButtons doesn't work in our UI, so we have to do our own
+  div(
+    id = id,
+    class="form-group shiny-input-radiogroup shiny-input-container",
+    shiny:::controlLabel(id, label),
+    #tags$h3(label),
+    div(
+      class = "radio",
+      lapply(1:length(choices), function(i){
+        # check the first choice
+        if (i < 2)
+          inp = tags$input(type = "radio", name = id, value = choices[[i]], checked = "checked")
+        else
+          inp = tags$input(type = "radio", name = id, value = choices[[i]])
+
+        div(
+          tags$label(
+            class = "container",
+            helpText(style = "margin-left: 30px;", choices[[i]]),
+            inp,
+            tags$span(class = "checkmark", style = "border-radius: 50%;")
+          )
+        )
+      })
+    )
+  )
+}
+
+
+# function providing an alternative to shiny's checkboxInput
+custom_checkboxInput = function(id, label, value = FALSE){
+  # shiny's checkboxInput doesn't work in our UI, so we have to do our own
+  value = restoreInput(id = id, default = value)
+  inp   = tags$input(id = id, type = "checkbox")
+  # make checkbox "checked" when value is TRUE
+  if (!is.null(value) && value)
+    inp$attribs$checked = "checked"
+
+  tags$label(
+    class = "container",
+    helpText(label),
+    inp,
+    tags$span(class = "checkmark")
+  )
 }

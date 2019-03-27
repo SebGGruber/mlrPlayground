@@ -27,21 +27,26 @@ RegrLearningProcess = R6Class(
       #' @description Method transforming the data into an interactive plot
       #' @return plotly plot object
       plotly::plot_ly(
-        data   = isolate(self$data$train.set),
-        name   = "Train",
-        x      = ~x,
-        y      = ~y,
-        type   = "scatter",
-        mode   = "markers"
+        data    = isolate(self$data$train.set),
+        name    = "Train",
+        x       = ~x,
+        y       = ~y,
+        type    = "scatter",
+        mode    = "markers",
+        color  = I(color_2),
+        symbol  = I('x')
       )%>%
       plotly::add_trace(
-        data   = isolate(self$data$test.set),
-        name   = "Test",
-        x      = ~x,
-        y      = ~y,
-        type   = "scatter",
-        mode   = "markers"
-        )
+        data    = isolate(self$data$test.set),
+        name    = "Test",
+        x       = ~x,
+        y       = ~y,
+        type    = "scatter",
+        mode    = "markers",
+        color  = I(color_2),
+        symbol  = I('o')
+      ) %>%
+      config(displayModeBar = FALSE, displaylogo = FALSE)
     },
 
     calculatePred = function(i) {
@@ -55,7 +60,11 @@ RegrLearningProcess = R6Class(
 
       trained = super$calculatePred(i)
 
-      grid    = expand.grid(x = -50:50 / 10)
+      x_min = min(c(self$data$test.set$x, self$data$train.set$x)) * 1.1
+      x_max = max(c(self$data$test.set$x, self$data$train.set$x)) * 1.1
+      grid    = expand.grid(
+        x = seq(x_min, x_max, length.out = 100)
+      )
       grid$y  = predictLearner(trained$learner, trained$model, grid)
 
       self$pred[[i]]$grid = grid
@@ -74,14 +83,17 @@ RegrLearningProcess = R6Class(
       i = as.character(i)
 
       pred = isolate(self$pred[[i]]$grid)
+      # ignore warnings for now
+      storeWarn = getOption("warn")
+      options(warn = -1)
 
-      plotly::plot_ly(
+      plot = plotly::plot_ly(
         data = isolate(self$data$train.set),
         name   = "Train",
         x      = ~x,
         y      = ~y,
         symbol = I('x'),
-        color  = I("#2b8cbe"),
+        color  = I(color_2),
         type   = "scatter",
         mode   = "markers"
       ) %>%
@@ -91,19 +103,32 @@ RegrLearningProcess = R6Class(
         x      = ~x,
         y      = ~y,
         symbol = I('o'),
+        color  = I(color_2),
         type   = "scatter",
         mode   = "markers"
-        )%>%
+      )%>%
         plotly::add_trace(
           x     = ~pred$x,
           y     = ~pred$y,
-          color = I("#e34a33"),
-          name  = 'trace 1',
+          color = I(color_1),
+          name  = 'Prediction',
+          symbol = NULL,
           mode  = 'lines',
-          showscale = FALSE
+          showscale = FALSE,
+          line = list(width = 4)
+      ) %>%
+        plotly::layout(
+          xaxis = list(title = ""),
+          yaxis = list(title = "")
+      ) %>%
+        config(displayModeBar = FALSE, displaylogo = FALSE)
 
-        ) %>%
-        plotly::layout(xaxis = list(title = ""), yaxis = list(title = ""))
+      #restore warnings
+      shinyjs::delay(expr = ({
+        options(warn = storeWarn)
+      }), ms = 100)
+
+      plot
     }
   ),
 

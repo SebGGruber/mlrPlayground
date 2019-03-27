@@ -8,7 +8,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
 
   ##add classification datasets
   #1.add Circle data sets
-  if (task == "1.Circle") {
+  if (task == "Circle") {
 
     angle         = runif(2 * amount, 0, 360)
     radius_class1 = rexp(amount, 1 / (5 *  noise))
@@ -21,7 +21,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x1,x2,class)
 
     #2.add two-circle data sets
-  } else if (task == "2.Two Circle") {
+  } else if (task == "Two Circle") {
 
     angle           = runif(amount * 2, 0, 360)
     radius_class1 = rnorm(amount, 6, 10 * noise)
@@ -38,7 +38,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x1,x2,class)
 
     #3.add two-circle-2 data sets
-  } else if (task == "3.Two Circle + Point") {
+  } else if (task == "Two Circle + Point") {
 
     angle           = runif(amount * 2, 0, 360)
     radius_class1   = rnorm(amount, 6, 10 * noise)
@@ -54,8 +54,9 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x1, x2, class)
 
     #4.add XOR data sets
-  } else if (task == "4.XOR") {
+  } else if (task == "XOR") {
 
+    rescope = 0.8
     x1    = runif(amount * 2, -5, 5)
     x2    = runif(amount * 2, -5, 5)
     xor   = (x1 < 0 | x2 < 0) & !(x1 < 0 & x2 < 0)
@@ -67,8 +68,9 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x1, x2, class)
 
     #5.add Gaussian data sets
-  } else if(task == "5.Gaussian"){
+  } else if(task == "Gaussian"){
 
+    rescope = 0.8
     x1    = c(rnorm(amount, 2, 1), rnorm(amount, -2, 1)) - 0.5
     x2    = c(rnorm(amount, 2, 1), rnorm(amount, -2, 1))
     class = c(rep("Class 1", amount), rep("Class 2", amount))
@@ -79,8 +81,9 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x1, x2, class)
 
     #6.add Across Spiral data sets
-  } else if(task == "6.Across Spiral"){
+  } else if(task == "Across Spiral"){
 
+    rescope = 1.5
     r     = c(1 : amount) / amount * 5
     angle = 1.75 * c(1 : amount)  / amount * 2 * pi
     x1    = c(sin(angle), sin(angle + pi)) * r
@@ -93,24 +96,27 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x1, x2, class)
 
     #7. add Opposite Arc data sets
-  } else if(task == "7.Opposite Arc"){
+  } else if(task == "Opposite Arc"){
 
+    rescope = 1.5
     range1 = runif(amount,0,1) * pi
     range2 = runif(amount,0.5,1.5) * pi
     x1     = c(range1, range2)
 
     arc1   = sin(range1)
-    arc2   = cos(range2)
+    arc2   = cos(range2) + 0.5
     x2     = c(arc1, arc2) * 2
     class  = c(rep("Class 1", amount), rep("Class 2", amount))
 
-    x1     = (x1 - runif_noise * 1.5) * rescope
+    x1     = (x1 - runif_noise * 1.5) * rescope - 2
     x2     = (x2 - runif_noise * 1.5) * rescope
 
     data.frame(x1, x2, class)
 
     #8.add Cross Sector data sets
-  } else if (task == "8.Cross Sector") {
+  } else if (task == "Cross Sector") {
+
+    rescope = 0.8
 
     part          = c(0 : 9)
     angle         = runif(amount * 5, 0, 36)
@@ -134,7 +140,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x1, x2, class)
 
     #9.add Wavy surface(3D) data sets
-  } else if(task == "1.Wavy surface"){
+  } else if(task == "Wavy surface"){
 
     kern  = runif(amount,-20,20) * pi /5
     x     = (rep(kern,41) + runif_noise) * rescope /2
@@ -146,7 +152,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x,y,z,class)
 
     #10.add Sphere (3D) data sets
-  } else if(task == "2.Sphere"){
+  } else if(task == "Sphere"){
 
     R        = 2
     alfa     = runif(amount / 4, 0, 50)* pi
@@ -181,7 +187,9 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
 
     ### add regression data sets
     #1.add normal linear data sets
-  } else if (task == "1.Linear ascend") {
+  } else if (task == "Linear ascend") {
+
+    rescope = 1.5
 
     x = rnorm(amount, 0, 1)
     y = 0.5 * x + (rnom_noise * 0.5)
@@ -192,18 +200,19 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x, y)
 
     #2.dd Log function data sets
-  } else if(task == "2.Log linear"){
+  } else if(task == "Log linear"){
 
+    rescope = 2
     x = abs(rnorm(amount, 0, 1.5))
     y = 4 * log10(x + abs(rnom_noise))
 
-    x = x * rescope
+    x = x * rescope - 4
     y = y * rescope
 
     data.frame(x, y)
 
     #3.add Polyline data sets
-  } else if(task == "3.Polyline"){
+  } else if(task == "Polyline"){
 
     x_amount = round(amount/16)
     x1       = runif(x_amount,-4,-3.5)
@@ -232,8 +241,9 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x,y)
 
     #4.add Ascend Cosine data sets
-  } else if(task == "4.Ascend Cosine"){
+  } else if(task == "Ascend Cosine"){
 
+    rescope = 0.8
     x = c((1 - amount / 2) : (amount / 2)) * pi/100
     y = 2 * (cos(2 * x) + c(1 : amount) / 75 + rexp_noise - 2.1)
 
@@ -243,7 +253,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x,y)
 
     #5.add Tangent data sets
-  } else if(task == "5.Tangent"){
+  } else if(task == "Tangent"){
 
     x = runif(amount,-4.2,4.2)
     y = tan(x * pi / 10)
@@ -254,7 +264,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x, y)
 
     #6. add Sigmoid data sets
-  } else if(task == "6.Sigmoid"){
+  } else if(task == "Sigmoid"){
 
     sigmoid = function(x) {
       1 / (1 + exp(-x))
@@ -269,7 +279,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x,y)
 
     #7. add Three Line data sets
-  } else if(task == "7.Three Line"){
+  } else if(task == "Three Line"){
 
     x_amount = round(amount/3)
     x1 = runif(x_amount,-5,-1)
@@ -287,20 +297,21 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x,y)
 
     #8. add Amplification Sine data sets
-  } else if(task == "8.Amplification Sine"){
+  } else if(task == "Amplification Sine"){
 
+    rescope = 2
     x1 = c((1-1 / 2 * amount) : 0) * pi/150
     x2 = c(0 : ((1 / 2 * amount) - 1)) * pi/150
     x  = c(x1,x2)
     y  = (sin(6 * x) + rnom_noise)*((-amount/2):(amount/2-1))/40
 
-    x  = x * rescope
+    x  = x * rescope - 4
     y  = y * rescope
 
     data.frame(x, y)
 
     #9. add Parabola To Right data sets
-  } else if(task == "9.Parabola To Right"){
+  } else if(task == "Parabola To Right"){
 
     x  = rexp(amount, 1)%%5
     y1 = sqrt( x) + rnom_noise /2
@@ -313,7 +324,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame( x, y)
 
     #10. add Precipice data sets
-  } else if(task == "10.Precipice"){
+  } else if(task == "Precipice"){
 
     x_amount = round(amount/7)
     x1       = c(runif(x_amount,-5,-3),runif(x_amount,-2,-1))
@@ -331,7 +342,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame( x, y)
 
     #11. add Spiral ascend (3D) data sets
-  } else if(task == "1.Spiral ascend"){
+  } else if(task == "Spiral ascend"){
 
     angle        = sort(runif(amount, 0, 6 * pi))
     radius_class = sort(runif(amount, 3, 20))
@@ -348,7 +359,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
 
     ### add clustering data sets
     #1. add Clustering Dataset 1
-  } else if(task == "1.Normal Points + Uniform Square"){
+  } else if(task == "Normal Points + Uniform Square"){
 
     x1 = rnorm(amount, 0, 10 *noise)
     x2 = rnorm(amount, 0, 10 *noise)
@@ -366,7 +377,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x, y)
 
     #2. add Clustering Dataset 2
-  } else if(task == "2.Two Spiral"){
+  } else if(task == "Two Spiral"){
 
     radius = sort(runif(amount, 101,200))
     angle  = 1.75 * sort(runif(amount, 101,200))/100 * pi
@@ -380,7 +391,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x, y)
 
     #3. add Clustering Dataset 3
-  } else if(task == "3.Points + Sine"){
+  } else if(task == "Points + Sine"){
 
     angle     = runif(amount * 2, 0, 360)
     radius    = rexp(amount, 1)
@@ -400,7 +411,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x, y)
 
     #4. add Clustering Dataset 4
-  } else if(task == "4.Three Circle"){
+  } else if(task == "Three Circle"){
 
     angle    = runif(amount * 2, 0, 360)
     r_class1 = rnorm(amount, 8, 3)
@@ -416,7 +427,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x, y)
 
     #5. add Clustering Dataset 5
-  } else if(task == "5.Three Slant"){
+  } else if(task == "Three Slant"){
 
     x1 = rnorm(amount, 0, 5)
     x2 = rnorm(amount, 3, 5) + 4
@@ -433,7 +444,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     data.frame(x,y)
 
     #6. add Clustering Dataset 6
-  } else if(task == "6.Parabola + Two Points"){
+  } else if(task == "Parabola + Two Points"){
 
     x1     = runif(amount,-5,5)
     y1     = runif(amount,-5,5)

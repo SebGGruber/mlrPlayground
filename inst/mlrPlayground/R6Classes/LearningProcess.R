@@ -130,7 +130,7 @@ LearningProcess = R6Class(
       assert_that(i %in% c("1", "2"))
       assert_that(type %in% c("classif", "regr", "cluster"))
 
-      listLearners = listLearners()
+      listLearners = listLearners(warn.missing.packages = FALSE)
 
       learner = makeLearner({
         selected = listLearners$short.name == short.name & listLearners$type == type

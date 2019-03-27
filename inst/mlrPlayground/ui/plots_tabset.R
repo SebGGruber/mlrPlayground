@@ -1,23 +1,20 @@
 # only locally used
 prediction_tab = tabPanel(
   "Predictions",
+  uiOutput("prob_sel"),
+  column(3, helpText("Learner 1:")),
+  column(1, uiOutput("measure_1_value")),
+  column(3, uiOutput("measure_1_sel")),
   br(),
-  fluidRow(
-    column(3, helpText("Learner 1:")),
-    column(2, uiOutput("measure_1_value")),
-    column(3, uiOutput("measure_1_sel")),
-    column(3, uiOutput("prob_sel"))
-  ),
   withSpinner(
     plotly::plotlyOutput("predictionPlot_1", width = "90%", height = "450px")
   ),
   conditionalPanel(
     "output.learner_amount > 1",
-    fluidRow(
-      column(3, helpText("Learner 2:")),
-      column(2, uiOutput("measure_2_value")),
-      column(3, uiOutput("measure_2_sel"))
-    ),
+    column(3, helpText("Learner 2:")),
+    column(1, uiOutput("measure_2_value")),
+    column(3, uiOutput("measure_2_sel")),
+    br(),
     withSpinner(
       plotly::plotlyOutput("predictionPlot_2", width = "90%", height = "450px")
     )
@@ -29,7 +26,7 @@ learning_curve_tab = tabPanel(
   "Learning Curve",
   br(),
   fluidRow(
-    column(3, helpText("Measures:")),
+    column(3, helpText("Select measures:")),
     column(3, uiOutput("measure_multi_lc"))
   ),
   withSpinner(

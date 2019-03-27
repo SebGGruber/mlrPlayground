@@ -6,25 +6,40 @@ select_learner_ui = function(i, choices) {
 
   # can't do reactive value selections by indexing
   i = as.character(i)
-  fluidRow(
-    column(
-      3,
-      helpText(paste("Learner", i))
-    ),
-    column(
-      5,
-      selectInput( #selectizeInput(
-        inputId   = paste0("learner_", i),
-        label     = "",
-        choices   = choices,
-        selected  = isolate(process$learners[[i]]$short.name),
-        selectize = TRUE
+
+  div(
+    fluidRow(
+      column(
+        3,
+        helpText(paste("Learner", i))
+      ),
+      column(
+        6,
+        div(
+          selectInput( #selectizeInput(
+            inputId   = paste0("learner_", i),
+            label     = "",
+            choices   = choices,
+            selected  = isolate(process$learners[[i]]$short.name),
+            selectize = TRUE,
+            # box should fill its given space
+            width = "inherit"
+          )
+        )
+      ),
+      column(
+        3,
+        div(
+          conditionalPanel(
+            paste0("output.showBtnParam", i, " == true"),
+            actionButton(paste0("parameter", i), "Parameters", icon = icon("cog"))
+          ),
+          style = "min-width: 160px;"
+        )
       )
     ),
-    column(
-      4,
-      actionButton(paste0("parameter", i), "Change parameters")
-    )
+    br(),
+    br()
   )
 }
 

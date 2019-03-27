@@ -1,23 +1,7 @@
 source("ui/learner_panel.R",   local = TRUE) # importing: learner_panel
-source("ui/parameter_panel.R", local = TRUE) # importing: parameter_panel
+#source("ui/parameter_panel.R", local = TRUE) # importing: parameter_panel
 source("ui/task_modal.R",      local = TRUE) # importing: task_modal
 source("ui/plots_tabset.R",    local = TRUE) # importing: plots_tabset
-
-
-#shinyUI(
-#  basicPage(
-#    column(
-#      6,
-#      learner_panel,
-#      parameter_panel,
-#      task_modal
-#    ),
-#    column(
-#      6,
-#      plots_tabset
-#    )
-#  )
-#)
 
 
 shinyUI(
@@ -100,7 +84,9 @@ shinyUI(
                 ),
                 "as backend."
               )
-            )
+            ),
+#            tags$button(type = "button", onclick = "smoothScroll(document.getElementById('main'))", "Click Me"),
+            tags$a(class = "more", onclick = "smoothScroll(document.getElementById('main'))", "Learn More")
           ),
           tags$video(
             autoplay = NA,
@@ -121,43 +107,50 @@ shinyUI(
             tags$div(
               class = "highlights",
               tags$section(
+                id = "main",
                 tags$div(
                   class = "content",
-                  conditionalPanel(
-                    "output.showLearners == true",
-                    tags$a(
-                      class = "icon fa-qrcode",
-                      style = "font-size: 6.0em !important; height:150px !important; width:150px !important;"
-                    ),
-                    tags$br(),
-                    actionButton("taskBut", "Change task"),
-                    #textOutput("taskinfo"), # ugly
-                    hr(),
-                    tags$a(
-                      class = "icon fa-graduation-cap",
-                      style = "font-size: 6.0em !important; height:150px !important; width:150px !important;"
-                    ),
-                    withSpinner(
-                      uiOutput("dynamicLearners")
+                  fluidRow(
+                    conditionalPanel(
+                      "output.showLearners == true",
+                      tags$a(
+                        class = "icon fa-qrcode",
+                        style = "font-size: 6.0em !important; height:150px !important; width:150px !important;"
+                      ),
+                      tags$br(),
+                      actionButton("taskBut", "Change task", icon = icon("sync")),
+                      #textOutput("taskinfo"), # ugly
+                      hr(),
+                      tags$a(
+                        class = "icon fa-graduation-cap",
+                        style = "font-size: 6.0em !important; height:150px !important; width:150px !important;"
+                      ),
+                      withSpinner(
+                        uiOutput("dynamicLearners")
+                      ),
+                      conditionalPanel(
+                        "output.learner_amount < 2",
+                        actionButton("addLearner", "add Learner", icon = icon("plus"))
+                      ),
+                      style = "margin-left: auto; margin-right: auto"
                     ),
                     conditionalPanel(
-                      "output.learner_amount < 2",
-                      actionButton("addLearner", "add Learner")
+                      "output.showLearners == false",
+                      br(),
+                      actionButton("parameterDone", " Back", icon = icon("arrow-left")),
+                      hr(),
+                      # separated for independent reactivity
+                      withSpinner(
+                        uiOutput("dynamicParameters_1")
+                      ),
+                      withSpinner(
+                        uiOutput("dynamicParameters_2")
+                      ),
+                      hr(),
+                      # separated for independent reactivity
+                      uiOutput("min_max_modals_1"),
+                      uiOutput("min_max_modals_2")
                     )
-                  ),
-                  conditionalPanel(
-                    "output.showLearners == false",
-                    actionButton("parameterDone", "Back"),
-                    # separated for independent reactivity
-                    withSpinner(
-                      uiOutput("dynamicParameters_1")
-                    ),
-                    withSpinner(
-                      uiOutput("dynamicParameters_2")
-                    ),
-                    # separated for independent reactivity
-                    uiOutput("min_max_modals_1"),
-                    uiOutput("min_max_modals_2")
                   )
                 )
               ),
@@ -177,6 +170,7 @@ shinyUI(
         tags$script(src = "templated-industrious/assets/js/browser.min.js"),
         tags$script(src = "templated-industrious/assets/js/breakpoints.min.js"),
         tags$script(src = "templated-industrious/assets/js/util.js"),
+        tags$script(src = "templated-industrious/assets/js/scrolly.min.js"),
         tags$script(src = "templated-industrious/assets/js/main.js")
       )
     ),

@@ -253,6 +253,21 @@ select:hover {
 
 }
 
+
+
+/* bsModal */
+.modal-content {
+  position: fixed !important;
+}
+
+.modal-dialog {
+    margin: 60px auto !important;
+}
+
+.modal-backdrop {
+  position: relative !important;
+}
+
 /* Inner */
 .inner {
   margin: 0 auto;
@@ -261,6 +276,82 @@ select:hover {
   @media screen and (max-width: 480px) {
     .inner {
       max-width: calc(100% - 3rem); } }
+
+/* selectize */
+.selectize-control {
+    margin-bottom: 10px;
+    margin-top: 17px !important;
+}
+
+/* Customize the label (the container) */
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-left: 30px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 16px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 5px;
+  left: 15px;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #ce1b28;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 10px;
+  top: 6px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
 
 /* Button */
 input[type="submit"],
@@ -281,7 +372,7 @@ button,
   cursor: pointer;
   display: inline-block;
   font-weight: 600;
-  height: 3.25rem;
+  height: 2.25rem;
   line-height: 3.25rem;
   padding: 0 1.75rem;
   text-align: center;
@@ -1049,9 +1140,11 @@ ul.actions {
     margin-right: 15px;
 }
 
+
+
 /* Grid */
 .row {
-  display: flex;
+  /*display: flex;*/
   flex-wrap: wrap;
   box-sizing: border-box; }
   .row > * {
@@ -1138,11 +1231,11 @@ ul.actions {
       padding-top: 1.5rem; }
 .row {
   margin-top: 0;
-  margin-left: -3rem; }
-  .row > * {
+  /*margin-left: -3rem; */}
+/*  .row > * {
     padding: 0 0 0 3rem; }
   .row.gtr-uniform {
-    margin-top: -3rem; }
+    margin-top: -3rem; }*/
     .row.gtr-uniform > * {
       padding-top: 3rem; }
 .row.gtr-150 {
@@ -1253,14 +1346,14 @@ ul.actions {
         padding-top: 1.5rem; }
   .row {
     margin-top: 0;
-    margin-left: -4rem;
-    margin-right: auto; }
-    .row > * {
+    /*margin-left: -4rem;
+    margin-right: auto; */}
+    /*.row > * {
       padding: 0 0 0 3rem; }
     .row.gtr-uniform {
       margin-top: -3rem; }
       .row.gtr-uniform > * {
-        padding-top: 3rem; }
+        padding-top: 3rem; }*/
   .row.gtr-150 {
     margin-top: 0;
     margin-left: -4.5rem; }
@@ -2083,6 +2176,30 @@ ul.icons {
     opacity: 0; }
   body.is-preload #banner:before {
     opacity: 1; }
+
+    		#banner .more {
+			background-image: url("../../images/arrow.svg");
+			background-position: center 1.35em;
+			background-repeat: no-repeat;
+			background-size: auto;
+			border: 1px solid #fff;
+			border-radius: 100%;
+			color: rgba(255, 255, 255, 0.75);
+			display: block;
+			height: 4em;
+			text-indent: 4em;
+			overflow: hidden;
+			white-space: nowrap;
+			width: 4em;
+			z-index: 2;
+			margin: 0 auto 2em auto;
+		}
+
+			#banner .more:hover {
+				background-color: rgba(255, 255, 255, 0.05);
+				border: 1px solid #fff;
+				color: #FFF;
+			}
 
 /* CTA */
 #cta {

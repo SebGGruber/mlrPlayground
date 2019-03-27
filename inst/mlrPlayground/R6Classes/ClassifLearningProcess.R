@@ -26,28 +26,31 @@ ClassifLearningProcess = R6Class(
     getDataPlot = function() {
       #' @description Method transforming the data into an interactive plot
       #' @return plotly plot object
-      plotly::plot_ly(
-        data   = isolate(self$data$train.set),
-        name   = "Train",
-        x      = ~x1,
-        y      = ~x2,
-        color  = ~class,
-        colors = c("#2b8cbe", "#e34a33"),
-        symbol = I('x'),
-        type   = "scatter",
-        mode   = "markers"
-      )%>%
-      plotly::add_trace(
-        data   = isolate(self$data$test.set),
-        name   = "Test",
-        x      = ~x1,
-        y      = ~x2,
-        color  = ~class,
-        colors = c("#2b8cbe", "#e34a33"),
-        symbol = I('o'),
-        type   = "scatter",
-        mode   = "markers"
-        )
+
+        plotly::plot_ly(
+          data   = isolate(self$data$train.set),
+          name   = "Train",
+          x      = ~x1,
+          y      = ~x2,
+          color  = ~class,
+          colors = c(color_2, color_1),
+          symbol = I('x'),
+          type   = "scatter",
+          mode   = "markers"
+        )%>%
+        plotly::add_trace(
+          data   = isolate(self$data$test.set),
+          name   = "Test",
+          x      = ~x1,
+          y      = ~x2,
+          color  = ~class,
+          colors = c(color_2, color_1),
+          symbol = I('o'),
+          type   = "scatter",
+          mode   = "markers"
+        ) %>%
+        config(displayModeBar = FALSE, displaylogo = FALSE)
+
     },
 
     calculatePred = function(i) {
@@ -63,8 +66,15 @@ ClassifLearningProcess = R6Class(
 
       trained = super$calculatePred(i)
 
+      x1_min = min(c(self$data$test.set$x1, self$data$train.set$x1)) * 1.1
+      x2_min = min(c(self$data$test.set$x2, self$data$train.set$x2)) * 1.1
+      x1_max = max(c(self$data$test.set$x1, self$data$train.set$x1)) * 1.1
+      x2_max = max(c(self$data$test.set$x2, self$data$train.set$x2)) * 1.1
       # caluclate grid predictions
-      grid    = expand.grid(x1 = -50:50 / 10, x2 = -50:50 / 10)
+      grid    = expand.grid(
+        x1 = seq(x1_min, x1_max, length.out = 100),
+        x2 = seq(x2_min, x2_max, length.out = 100)
+      )
 
       predictions = predictLearner(trained$learner, trained$model, grid)
 
@@ -100,41 +110,62 @@ ClassifLearningProcess = R6Class(
       i         = as.character(i)
 
       pred = isolate(self$pred[[i]]$grid)
+      # ignore warnings for now
+      storeWarn = getOption("warn")
+      options(warn = -1)
 
-      plotly::plot_ly(
+      plot = plotly::plot_ly(
         data    = isolate(self$data$train.set),
         name    = "Train",
         x       = ~x1,
         y       = ~x2,
         color   = ~class,
-        colors  = c("#2b8cbe", "#e34a33", "#2b8cbe", "#e34a33"),
+        colors  = c(color_2, color_1, color_2, color_1),
         symbol  = I("x"),
         type    = "scatter",
         mode    = "markers"
       ) %>%
-      plotly::add_trace(
-        data   = isolate(self$data$test.set),
-        name    = "Test",
-        x       = ~x1,
-        y       = ~x2,
-        color   = ~class,
-        colors  = c("#2b8cbe", "#e34a33"),
-        symbol  = I('o'),
-        type    = "scatter",
-        mode    = "markers"
-      )%>%
-      plotly::add_trace(
-        x         = ~unique(pred$x1),
-        y         = ~unique(pred$x2),
-        z         = ~matrix(pred$predictions, nrow = sqrt(nrow(pred)), byrow = TRUE),
-        type      = "heatmap",
-        text      = ~matrix(pred$class, nrow = sqrt(nrow(pred)), byrow = TRUE),
-        colors    = colorRamp(c("blue","red")),
-        opacity   = 0.2,
-        hoverinfo = "x+y+text+skip",
-        showscale = FALSE
-      ) %>%
-        plotly::layout(xaxis = list(title = ""), yaxis = list(title = ""))
+        plotly::add_trace(
+          data   = isolate(self$data$test.set),
+          name    = "Test",
+          x       = ~x1,
+          y       = ~x2,
+          color   = ~class,
+          colors  = c(color_2, color_1),
+          symbol  = I('o'),
+          type    = "scatter",
+          mode    = "markers"
+        )%>%
+        plotly::add_trace(
+          x         = ~unique(pred$x1),
+          y         = ~unique(pred$x2),
+          z         = ~matrix(pred$predictions, nrow = sqrt(nrow(pred)), byrow = TRUE),
+          type      = "heatmap",
+          text      = ~matrix(pred$class, nrow = sqrt(nrow(pred)), byrow = TRUE),
+          colors    = colorRamp(c(color_21, color_11)),
+          opacity   = 0.2,
+          hoverinfo = "x+y+text+skip",
+          showscale = FALSE
+        ) %>%
+        plotly::layout(
+          xaxis = list(title = ""),
+          yaxis = list(title = ""),
+          margin = list(
+            l = 0,
+            r = 0,
+            b = 0,
+            t = 0,
+            pad = 0
+          )
+        ) %>%
+        config(displayModeBar = FALSE, displaylogo = FALSE)
+
+      #restore warnings
+      shinyjs::delay(expr = ({
+        options(warn = storeWarn)
+      }), ms = 100)
+
+      plot
     }
   ),
 
