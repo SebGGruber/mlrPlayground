@@ -3,12 +3,6 @@ require(shinyjs)
 require(shinythemes)
 require(shinyBS)
 
-ui_files = list.files(path = "./ui", pattern = "*.R")
-ui_files = paste0("ui/", ui_files)
-
-for (i in seq_along(ui_files)) {
-#  source(ui_files[i], local = TRUE)
-}
 
 shinyUI(
   tagList(

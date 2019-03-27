@@ -5,20 +5,20 @@ ClusterLearningProcess = R6Class(
   public = list(
 
     initialize = function(valid.learners) {
-      self$task$measures = c(
+      measures = c(
         "db", "dunn", "G1", "G2"
       )
-      self$task$type = "cluster"
-      super$initialize(valid.learners)
+      super$initialize(valid.learners, tasktype = "cluster", measures = measures)
 
     },
 
     setData = function(data, train.ratio) {
       super$setData(data, train.ratio)
-      self$task$train = makeClusterTask(data = self$data$train.set)
+      self$task$train = makeClusterTask(data = isolate(self$data$train.set))
     },
 
-    initLearner = function(short.name, i) {
+    initLearner = function(short.name, i, prob) {
+      # prob is only used for classif
       super$initLearner(short.name, i, "cluster")
     },
 
@@ -27,14 +27,14 @@ ClusterLearningProcess = R6Class(
       #' @return plotly plot object
 
       plotly::plot_ly(
-        data   = self$data$train.set,
+        data   = isolate(self$data$train.set),
         x      = ~x,
         y      = ~y,
         type   = "scatter",
         mode   = "markers"
       )%>%
       plotly::add_trace(
-        data   = self$data$test.set,
+        data   = isolate(self$data$test.set),
         name   = "Test",
         x      = ~x,
         y      = ~y,
@@ -73,10 +73,10 @@ ClusterLearningProcess = R6Class(
       # Must use string to index into reactivevalues
       i = as.character(i)
 
-      pred = self$pred[[i]]$grid
+      pred = isolate(self$pred[[i]]$grid)
 
      plotly::plot_ly(
-        data    = self$data$train.set,
+        data   = isolate(self$data$train.set),
         name    = "Train",
         x       = ~x,
         y       = ~y,
@@ -86,7 +86,7 @@ ClusterLearningProcess = R6Class(
         mode    = "markers"
       ) %>%
       plotly::add_trace(
-        data    = self$data$test.set,
+        data   = isolate(self$data$test.set),
         name    = "Test",
         x       = ~x,
         y       = ~y,
