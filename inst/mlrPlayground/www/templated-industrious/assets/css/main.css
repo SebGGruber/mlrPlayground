@@ -257,7 +257,7 @@ select:hover {
 
 /* bsModal */
 .modal-content {
-  position: fixed !important;
+/*  position: fixed !important;*/
 }
 
 .modal-dialog {

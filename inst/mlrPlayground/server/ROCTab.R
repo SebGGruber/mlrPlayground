@@ -8,26 +8,34 @@ output$tasktype = reactive({
 # render UI for the measure selection
 output$measure_1_roc = renderUI({
   # measures need to be initialized
-  req(process$task$measures)
+  choices = req(process$task$measures)
+  # only keep binary measures
+  choices = choices[
+    sapply(choices, function(x) !("classif.multi" %in% getMeasureProperties(get(x))))
+  ]
   # only render when learner_1 is not NULL
   req(input$learner_1)
   # optional dependency: Only renders once plots
   # also render
   req(process$learners[["1"]])
-  selectInput("measure_1_roc", "", choices = process$task$measures, selected = "fpr")
+  selectInput("measure_1_roc", "", choices = choices, selected = "fpr")
 })
 
 
 # render UI for the measure selection
 output$measure_2_roc = renderUI({
   # measures need to be initialized
-  req(process$task$measures)
+  choices = req(process$task$measures)
+  # only keep binary measures
+  choices = choices[
+    sapply(choices, function(x) !("classif.multi" %in% getMeasureProperties(get(x))))
+  ]
   # only render when learner_1 is not NULL
   req(input$learner_1)
   # optional dependency: Only renders once plots
   # also render
   req(process$learners[["1"]])
-  selectInput("measure_2_roc", "", choices = process$task$measures, selected = "tpr")
+  selectInput("measure_2_roc", "", choices = choices, selected = "tpr")
 })
 
 

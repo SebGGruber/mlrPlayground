@@ -14,7 +14,6 @@ require(R6)
 require(assertthat)
 require(kernlab)
 require(R.utils)
-require(shinytest)
 require(extraTrees)
 
 
@@ -40,6 +39,9 @@ options(shiny.maxRequestSize = 9*1024^2)
 config = read.config("learner.config")
 # init process variable, so req(process) doesn't crash during start
 process = NULL
+
+# configure mlr behaviour to be as quiet as possible as long as nothing breaks
+configureMlr(on.learner.warning = "quiet", show.info = FALSE, show.learner.output = FALSE)
 
 ### COLORS FOR PLOTS
 # class 1 (red-ish)

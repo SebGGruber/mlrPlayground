@@ -3,7 +3,6 @@ observe({
   # this creates a new R6 class instance whenever the tasktype is loaded/changed
   tasktype = req(input$tasktype)
 
-  # remove this and everything is totally messed up :)
   # reset selections once tasktype changes
   updateSelectInput(session, "learner_1", selected = "")
   updateSelectInput(session, "learner_2", selected = "")
@@ -58,14 +57,18 @@ observe({
 
 # update learner 1 based on selected parameters
 observe({
-
-  names    = req(process$params[["1"]])
+  # get parameter names to check input
+  names    = names(req(process$params[["1"]]))
+  # nameception - looks dumb, but is required to keep names after lapply
+  names(names) = names
   lrn_id   = isolate(process$learners[["1"]]$id)
   # check for and get input values if parameters exist
   par.vals = lapply(names, function(par) {
-    id = paste0("parameter_", par, 1, lrn_id)
+    # remove "." or tooltips wont work
+    id = gsub("\\.", "", paste0("parameter_", par, 1, lrn_id))
     modified_req(input[[id]])
   })
+
   process$updateHyperparam(par.vals, 1)
 })
 
@@ -84,12 +87,15 @@ observe({
 
 # update learner 2 based on selected parameters
 observe({
-
-  names    = req(process$params[["2"]])
+  # get parameter names to check input
+  names    = names(req(process$params[["2"]]))
+  # nameception - looks dumb, but is required to keep names after lapply
+  names(names) = names
   lrn_id   = isolate(process$learners[["2"]]$id)
   # check for and get input values if parameters exist
   par.vals = lapply(names, function(par) {
-    id = paste0("parameter_", par, 2, lrn_id)
+    # remove "." or tooltips wont work
+    id = gsub("\\.", "", paste0("parameter_", par, 2, lrn_id))
     modified_req(input[[id]])
   })
 

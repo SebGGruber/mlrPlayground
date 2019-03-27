@@ -9,6 +9,7 @@ prediction_tab = tabPanel(
   withSpinner(
     plotly::plotlyOutput("predictionPlot_1", width = "90%", height = "450px")
   ),
+  bsTooltip("predictionPlot_1", "Drag box to zoom. Double click to reset.", placement = "right"),
   conditionalPanel(
     "output.learner_amount > 1",
     column(3, helpText("Learner 2:")),
@@ -17,7 +18,8 @@ prediction_tab = tabPanel(
     br(),
     withSpinner(
       plotly::plotlyOutput("predictionPlot_2", width = "90%", height = "450px")
-    )
+    ),
+    bsTooltip("predictionPlot_2", "Drag box to zoom. Double click to reset.", placement = "right")
   )
 )
 
