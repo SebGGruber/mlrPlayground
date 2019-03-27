@@ -1,14 +1,26 @@
 Package: mlrPlayground
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
-Authors@R: 
-    person(given = "First",
-           family = "Last",
+Title: Package containing the mlrPlayground app
+Version: 0.1.0.0000
+Authors@R: c(
+    person(given = "Sebastian",
+           family = "Gruber",
            role = c("aut", "cre"),
-           email = "first.last@example.com")
-Description: What the package does (one paragraph).
-License: What license it uses
+           email = "gruber_sebastian@t-online.de"),
+    person(given = "Yuhao",
+           family = "Wang",
+           role = c("aut"),
+           email = "wangyuhaodeutsch@gmail.com")
+    )
+Description: Package containing the mlrPlayground app for interactive machine learning tasks.
+License: BSD_2_clause
 Encoding: UTF-8
 LazyData: true
+Depends:
+    R (>= 3.4.0)
+Imports:
+    shiny,
+    R6,
+    plotly
 Suggests: 
     testthat
+RoxygenNote: 6.0.1
