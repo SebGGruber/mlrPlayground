@@ -1,6 +1,6 @@
 Package: mlrPlayground
 Title: Package containing the mlrPlayground app
-Version: 0.1.0.0000
+Version: 0.2.0.0000
 Authors@R: c(
     person(given = "Sebastian",
            family = "Gruber",
@@ -38,4 +38,4 @@ Imports:
     extraTrees
 Suggests: 
     testthat
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
