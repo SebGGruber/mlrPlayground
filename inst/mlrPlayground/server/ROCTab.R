@@ -50,13 +50,13 @@ output$ROCPlot = renderPlot({
   measures  = list(get(measure_1), get(measure_2))#list(fpr, tpr)
 
   # this is mandatory for ROC plots
-  learner_1 = setPredictType(req(process$learners[["1"]]), "prob")
+  learner_1 = setPredictType(req(process$updated_learners[["1"]]), "prob")
 
   learners = list(learner_1)
 
   # this is also mandatory if learner 2 exists
   if (!is.null(process$learners[["2"]]))
-    learners[[2]] = setPredictType(req(process$learners[["2"]]), "prob")
+    learners[[2]] = setPredictType(req(process$updated_learners[["2"]]), "prob")
 
   # make resampling description
   rdesc = makeResampleDesc(method = "Holdout", split = split)
