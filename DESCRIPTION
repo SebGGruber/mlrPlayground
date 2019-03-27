@@ -19,8 +19,23 @@ Depends:
     R (>= 3.4.0)
 Imports:
     shiny,
+    e1071,
+    ranger,
+    xgboost,
+    igraph,
+    kknn,
+    plotly,
+    mlr,
+    shinycssloaders,
+    shinyBS,
+    shinyjs,
+    class,
     R6,
-    plotly
+    assertthat,
+    kernlab,
+    R.utils,
+    shinytest,
+    extraTrees
 Suggests: 
     testthat
 RoxygenNote: 6.0.1
