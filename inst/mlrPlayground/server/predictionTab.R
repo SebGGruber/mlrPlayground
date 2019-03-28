@@ -36,7 +36,11 @@ output$measure_1_value = renderUI({
   # once predictions are loaded, calculate performance measure based on chosen measure
   pred    = req(process$pred[["1"]]$test.set)
   measure = req(input$measure_sel)
-  perf = performance(pred, measures = get(measure)) # use "get" cause string gives error
+  task = req(process$task$train)
+  if (isolate(process$task$type) == "cluster")
+    perf = performance(pred, measures = dunn,task)
+  else
+    perf = performance(pred, measures = get(measure)) # use "get" cause string gives error
   helpText(sprintf("%1.3f", perf), style = "font: 16px arial, sans-serif !important; margin-top: 11px;")
 })
 

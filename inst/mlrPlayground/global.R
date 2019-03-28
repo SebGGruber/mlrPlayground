@@ -16,6 +16,13 @@ require(kernlab)
 require(R.utils)
 require(shinytest)
 require(extraTrees)
+require(RWeka)
+require(mvtnorm)
+require(fpc)
+
+## package RWeka including XMeans,but XMeans still needs to be installed with below instruction
+# WPM("refresh-cache") # Build Weka package metadata cache
+WPM("install-package", "XMeans")
 
 
 # R6 classes definitions (one class per file, filename equals class name)
