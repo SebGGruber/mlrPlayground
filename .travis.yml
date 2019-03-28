@@ -5,6 +5,8 @@ sudo: false
 cache: packages
 
 before_install:
+  - sudo apt remove libcurl4-openssl-dev
+  - sudo apt install -y libcurl4-openssl-dev
   - sudo apt install r-base
   - sudo Rscript -e "install.packages(\"devtools\")"
   - sudo Rscript -e "devtools::install_github(\"rstudio/shinytest\")"
