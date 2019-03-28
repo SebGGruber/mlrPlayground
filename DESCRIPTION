@@ -22,6 +22,22 @@ Imports:
     R6,
     plotly
 Suggests:
+    shinytest,
+    shiny,
+    e1071,
+    ranger,
+    xgboost,
+    igraph,
+    kknn,
+    plotly,
+    mlr,
+    shinycssloaders,
+    shinyBS,
+    shinyjs,
+    class,
+    R6,
+    assertthat,
+    kernlab,
+    extraTrees,
     testthat
-    shinytest
 RoxygenNote: 6.1.1
