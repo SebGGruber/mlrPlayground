@@ -19,21 +19,19 @@ Depends:
     R (>= 3.4.0)
 Imports:
     shiny,
+    shinycssloaders,
+    shinyBS,
+    shinyjs,
     R6,
+    mlr,
     plotly
 Suggests:
     shinytest,
-    shiny,
     e1071,
     ranger,
     xgboost,
     igraph,
     kknn,
-    plotly,
-    mlr,
-    shinycssloaders,
-    shinyBS,
-    shinyjs,
     class,
     R6,
     assertthat,
