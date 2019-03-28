@@ -33,7 +33,6 @@ Suggests:
     igraph,
     kknn,
     class,
-    R6,
     assertthat,
     kernlab,
     extraTrees,
