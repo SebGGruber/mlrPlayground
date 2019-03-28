@@ -19,6 +19,8 @@ require(extraTrees)
 require(RWeka)
 require(mvtnorm)
 require(fpc)
+require(clusterSim)
+require(clValid)
 
 ## package RWeka including XMeans,but XMeans still needs to be installed with below instruction
 WPM("refresh-cache") # Build Weka package metadata cache
