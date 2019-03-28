@@ -18,12 +18,12 @@ output$learningCurve = renderPlot({
   split    = req(input$test_ration)
   measures = lapply(req(input$measure_multi_lc), get)
 
-  learners = list(req(process$learners[["1"]]))
+  learners = list(req(process$updated_learners[["1"]]))
 
   # if learner 2 exists, add it to the list of learners to
   # calculate
   if (!is.null(process$learners[["2"]]))
-    learners[[2]] = process$learners[["2"]]
+    learners[[2]] = req(process$updated_learners[["2"]])
 
   # make resampling description
   resampling = makeResampleDesc(method = "Holdout", split = split)
@@ -36,6 +36,6 @@ output$learningCurve = renderPlot({
     measures = measures,
     resampling = resampling
   )
-  plotLearningCurve(lc)
+  plotLearningCurve(lc) + theme_minimal()
 
 })

@@ -14,39 +14,52 @@ output$predictionPlot_2 = renderPlotly({
 })
 
 
-# render UI for the measure selection
-output$measure_1_sel = renderUI({
-  # measures need to be initialized
-  req(process$task$measures)
-  # only render when learner_1 is not NULL
-  req(input$learner_1)
-  # optional dependency: Only renders once prediction plots
-  # also render
-  req(process$learners[["1"]])
-  selectInput("measure_sel", "", choices = process$task$measures)
-})
-
-# render helptext
-output$measure_2_sel = renderUI({
-  req(process$task$measures)
-  helpText(input$measure_sel)
-})
-
-output$measure_1_value = renderUI({
-  # once predictions are loaded, calculate performance measure based on chosen measure
+output$table_measures_1 = renderUI({
   pred    = req(process$pred[["1"]]$test.set)
-  measure = req(input$measure_sel)
-  perf = performance(pred, measures = get(measure)) # use "get" cause string gives error
-  helpText(sprintf("%1.3f", perf), style = "font: 16px arial, sans-serif !important; margin-top: 11px;")
+  measures = lapply(req(process$task$measures), get)
+
+  perf = performance(pred, measures = measures)
+  len = length(perf)
+  i1 = 1                  : ceiling(len/3)
+  i2 = ceiling(len/3+1)   : ceiling(len*2/3)
+  i3 = ceiling(len*2/3+1) : len
+
+  splitLayout(
+    renderTable({
+      data.frame(Measure = names(perf)[i1], Value = perf[i1])
+    }),
+    renderTable({
+      data.frame(Measure = names(perf)[i2], Value = perf[i2])
+    }),
+    renderTable({
+      data.frame(Measure = names(perf)[i3], Value = perf[i3])
+    })
+  )
+
 })
 
 
-output$measure_2_value = renderUI({
-  # once predictions are loaded, calculate performance measure based on chosen measure
-  pred = req(process$pred[["2"]]$test.set)
-  measure = req(input$measure_sel)
-  perf = performance(pred, measures = get(measure)) # use "get" cause string gives error
-  helpText(sprintf("%1.3f", perf), style = "font: 16px arial, sans-serif !important; margin-top: 11px;")
+output$table_measures_2 = renderUI({
+  pred    = req(process$pred[["2"]]$test.set)
+  measures = lapply(req(process$task$measures), get)
+  perf = performance(pred, measures = measures)
+  len = length(perf)
+  i1 = 1                  : ceiling(len/3)
+  i2 = ceiling(len/3+1)   : ceiling(len*2/3)
+  i3 = ceiling(len*2/3+1) : len
+
+  splitLayout(
+    renderTable({
+      data.frame(Measure = names(perf)[i1], Value = perf[i1])
+    }),
+    renderTable({
+      data.frame(Measure = names(perf)[i2], Value = perf[i2])
+    }),
+    renderTable({
+      data.frame(Measure = names(perf)[i3], Value = perf[i3])
+    })
+  )
+
 })
 
 
