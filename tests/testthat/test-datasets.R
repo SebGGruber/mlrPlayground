@@ -3,7 +3,7 @@ context("datasets")
 test_that("test datasets", {
 
   # start app
-  app = shinytest::ShinyDriver$new('inst/mlrPlayground', loadTimeout = 15000)
+  app = shinytest::ShinyDriver$new('../../mlrPlayground', loadTimeout = 15000)
 
   # test all the datasets and check if dataset plots exist
 
