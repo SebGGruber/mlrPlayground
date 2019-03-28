@@ -1,6 +1,6 @@
 Package: mlrPlayground
 Title: Package containing the mlrPlayground app
-Version: 0.1.0.0000
+Version: 0.2.0.0000
 Authors@R: c(
     person(given = "Sebastian",
            family = "Gruber",
@@ -12,15 +12,29 @@ Authors@R: c(
            email = "wangyuhaodeutsch@gmail.com")
     )
 Description: Package containing the mlrPlayground app for interactive machine learning tasks.
-License: BSD_2_clause
+License: BSD_2_clause + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends:
     R (>= 3.4.0)
 Imports:
     shiny,
+    shinycssloaders,
+    shinyBS,
+    shinyjs,
     R6,
+    mlr,
     plotly
-Suggests: 
+Suggests:
+    shinytest,
+    e1071,
+    ranger,
+    xgboost,
+    igraph,
+    kknn,
+    class,
+    assertthat,
+    kernlab,
+    extraTrees,
     testthat
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1

@@ -5,22 +5,21 @@ RegrLearningProcess = R6Class(
   public = list(
 
     initialize = function(valid.learners) {
-      self$task$measures = c(
-        "mae", "mape", "medse", "msle", "rae", "spearmanrho", "rmsle", "medae", "sse", "expvar",
-        "kendalltau", "rmse", "mse", "rrse", "rsq", "sae", "arsq"
+      measures = c(
+        "mae", "mape", "medse", "rae", "spearmanrho", "medae", "sse", "expvar",
+        "kendalltau", "rmse", "mse", "rrse", "rsq", "sae", "arsq"#, "rmsle", "msle"#, not working
       )
-      self$task$type = "regr"
-      super$initialize(valid.learners)
+      super$initialize(valid.learners, tasktype = "regr", measures = measures)
 
     },
 
     setData = function(data, train.ratio) {
       super$setData(data, train.ratio)
-      #browser()
-      self$task$train = makeRegrTask(data = self$data$train.set, target = "y")
+      self$task$train = makeRegrTask(data = isolate(self$data$train.set), target = "y")
     },
 
-    initLearner = function(short.name, i) {
+    initLearner = function(short.name, i, prob) {
+      # prob is only used for classif
       super$initLearner(short.name, i, "regr")
     },
 
@@ -28,21 +27,26 @@ RegrLearningProcess = R6Class(
       #' @description Method transforming the data into an interactive plot
       #' @return plotly plot object
       plotly::plot_ly(
-        data   = self$data$train.set,
-        name   = "Train",
-        x      = ~x,
-        y      = ~y,
-        type   = "scatter",
-        mode   = "markers"
+        data    = isolate(self$data$train.set),
+        name    = "Train",
+        x       = ~x,
+        y       = ~y,
+        type    = "scatter",
+        mode    = "markers",
+        color  = I(color_2),
+        symbol  = I('x')
       )%>%
       plotly::add_trace(
-        data   = self$data$test.set,
-        name   = "Test",
-        x      = ~x,
-        y      = ~y,
-        type   = "scatter",
-        mode   = "markers"
-        )
+        data    = isolate(self$data$test.set),
+        name    = "Test",
+        x       = ~x,
+        y       = ~y,
+        type    = "scatter",
+        mode    = "markers",
+        color  = I(color_2),
+        symbol  = I('o')
+      ) %>%
+      config(displayModeBar = FALSE, displaylogo = FALSE)
     },
 
     calculatePred = function(i) {
@@ -56,7 +60,11 @@ RegrLearningProcess = R6Class(
 
       trained = super$calculatePred(i)
 
-      grid    = expand.grid(x = -50:50 / 10)
+      x_min = min(c(self$data$test.set$x, self$data$train.set$x)) * 1.1
+      x_max = max(c(self$data$test.set$x, self$data$train.set$x)) * 1.1
+      grid    = expand.grid(
+        x = seq(x_min, x_max, length.out = 100)
+      )
       grid$y  = predictLearner(trained$learner, trained$model, grid)
 
       self$pred[[i]]$grid = grid
@@ -74,37 +82,60 @@ RegrLearningProcess = R6Class(
       # Must use string to index into reactivevalues
       i = as.character(i)
 
-      pred = self$pred[[i]]$grid
+      pred = isolate(self$pred[[i]]$grid)
+      # ignore warnings for now
+      storeWarn = getOption("warn")
+      options(warn = -1)
 
-      plotly::plot_ly(
-        data   = self$data$train.set,
+      plot = plotly::plot_ly(
+        data = isolate(self$data$train.set),
         name   = "Train",
         x      = ~x,
         y      = ~y,
         symbol = I('x'),
-        color  = I("#2b8cbe"),
+        color  = I(color_2),
         type   = "scatter",
         mode   = "markers"
       ) %>%
       plotly::add_trace(
-        data   = self$data$test.set,
+        data   = isolate(self$data$test.set),
         name   = "Test",
         x      = ~x,
         y      = ~y,
         symbol = I('o'),
+        color  = I(color_2),
         type   = "scatter",
         mode   = "markers"
-        )%>%
+      )%>%
         plotly::add_trace(
           x     = ~pred$x,
           y     = ~pred$y,
-          color = I("#e34a33"),
-          name  = 'trace 1',
+          color = I(color_1),
+          name  = 'Prediction',
+          symbol = NULL,
           mode  = 'lines',
-          showscale = FALSE
+          showscale = FALSE,
+          line = list(width = 4)
+      ) %>%
+        plotly::layout(
+          xaxis = list(title = ""),
+          yaxis = list(title = ""),
+          margin = list(
+            l = 0,
+            r = 0,
+            b = 0,
+            t = 0,
+            pad = 0
+          )
+      ) %>%
+        config(displayModeBar = FALSE, displaylogo = FALSE)
 
-        ) %>%
-        plotly::layout(xaxis = list(title = ""), yaxis = list(title = ""))
+      #restore warnings
+      shinyjs::delay(expr = ({
+        options(warn = storeWarn)
+      }), ms = 100)
+
+      plot
     }
   ),
 
