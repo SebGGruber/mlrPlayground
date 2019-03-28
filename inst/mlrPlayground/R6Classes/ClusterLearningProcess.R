@@ -122,7 +122,7 @@ ClusterLearningProcess = R6Class(
       #   options(warn = storeWarn)
       # }), ms = 100)
 
-      plot
+      # plot
     }
   ),
 

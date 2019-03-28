@@ -21,7 +21,7 @@ require(mvtnorm)
 require(fpc)
 
 ## package RWeka including XMeans,but XMeans still needs to be installed with below instruction
-# WPM("refresh-cache") # Build Weka package metadata cache
+WPM("refresh-cache") # Build Weka package metadata cache
 WPM("install-package", "XMeans")
 
 

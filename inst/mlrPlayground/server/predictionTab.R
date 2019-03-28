@@ -35,12 +35,16 @@ output$measure_2_sel = renderUI({
 output$measure_1_value = renderUI({
   # once predictions are loaded, calculate performance measure based on chosen measure
   pred    = req(process$pred[["1"]]$test.set)
+  pred[["data"]][["response"]][is.na(pred[["data"]][["response"]])] = 3
   measure = req(input$measure_sel)
   task = req(process$task$train)
-  if (isolate(process$task$type) == "cluster")
-    perf = performance(pred, measures = dunn,task)
-  else
+  if (isolate(process$task$type) == "cluster"){
+    mod = train("cluster.dbscan",task)
+    pred = predict(mod, task)
+    perf = performance(pred, measures = dunn,task = task)}
+  else{
     perf = performance(pred, measures = get(measure)) # use "get" cause string gives error
+    }
   helpText(sprintf("%1.3f", perf), style = "font: 16px arial, sans-serif !important; margin-top: 11px;")
 })
 
