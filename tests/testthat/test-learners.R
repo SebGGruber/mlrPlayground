@@ -27,56 +27,56 @@ test_that("test learners", {
   learner_1 = app$getValue(name = "learner_1")
   plot = app$getAllValues()$output$predictionPlot_1
   expect_equal(learner_1, "logreg")
-  expect(plot != plot_old, failure_message = "No plot generated!")
+  expect(all(plot != plot_old), failure_message = "No plot generated!")
   plot_old = plot
 
   app$setInputs(learner_1 = "xgboost")
   learner_1 = app$getValue(name = "learner_1")
   plot = app$getAllValues()$output$predictionPlot_1
   expect_equal(learner_1, "xgboost")
-  expect(plot != plot_old, failure_message = "No plot generated!")
+  expect(all(plot != plot_old), failure_message = "No plot generated!")
   plot_old = plot
 
   app$setInputs(learner_1 = "rpart")
   learner_1 = app$getValue(name = "learner_1")
   plot = app$getAllValues()$output$predictionPlot_1
   expect_equal(learner_1, "rpart")
-  expect(plot != plot_old, failure_message = "No plot generated!")
+  expect(all(plot != plot_old), failure_message = "No plot generated!")
   plot_old = plot
 
   app$setInputs(learner_1 = "kknn")
   learner_1 = app$getValue(name = "learner_1")
   plot = app$getAllValues()$output$predictionPlot_1
   expect_equal(learner_1, "kknn")
-  expect(plot != plot_old, failure_message = "No plot generated!")
+  expect(all(plot != plot_old), failure_message = "No plot generated!")
   plot_old = plot
 
   app$setInputs(learner_1 = "nbayes")
   learner_1 = app$getValue(name = "learner_1")
   plot = app$getAllValues()$output$predictionPlot_1
   expect_equal(learner_1, "nbayes")
-  expect(plot != plot_old, failure_message = "No plot generated!")
+  expect(all(plot != plot_old), failure_message = "No plot generated!")
   plot_old = plot
 
   app$setInputs(learner_1 = "featureless")
   learner_1 = app$getValue(name = "learner_1")
   plot = app$getAllValues()$output$predictionPlot_1
   expect_equal(learner_1, "featureless")
-  expect(plot != plot_old, failure_message = "No plot generated!")
+  expect(all(plot != plot_old), failure_message = "No plot generated!")
   plot_old = plot
 
   app$setInputs(learner_1 = "svm")
   learner_1 = app$getValue(name = "learner_1")
   plot = app$getAllValues()$output$predictionPlot_1
   expect_equal(learner_1, "svm")
-  expect(plot != plot_old, failure_message = "No plot generated!")
+  expect(all(plot != plot_old), failure_message = "No plot generated!")
   plot_old = plot
 
   app$setInputs(learner_1 = "extraTrees")
   learner_1 = app$getValue(name = "learner_1")
   plot = app$getAllValues()$output$predictionPlot_1
   expect_equal(learner_1, "extraTrees")
-  expect(plot != plot_old, failure_message = "No plot generated!")
+  expect(all(plot != plot_old), failure_message = "No plot generated!")
   plot_old = plot
 
 
@@ -87,49 +87,49 @@ test_that("test learners", {
   learner_1 = app$getValue(name = "learner_1")
   plot = app$getAllValues()$output$predictionPlot_1
   expect_equal(learner_1, "ranger")
-  expect(plot != plot_old, failure_message = "No plot generated!")
+  expect(all(plot != plot_old), failure_message = "No plot generated!")
   plot_old = plot
 
   app$setInputs(learner_1 = "xgboost")
   learner_1 = app$getValue(name = "learner_1")
   plot = app$getAllValues()$output$predictionPlot_1
   expect_equal(learner_1, "xgboost")
-  expect(plot != plot_old, failure_message = "No plot generated!")
+  expect(all(plot != plot_old), failure_message = "No plot generated!")
   plot_old = plot
 
   app$setInputs(learner_1 = "rpart")
   learner_1 = app$getValue(name = "learner_1")
   plot = app$getAllValues()$output$predictionPlot_1
   expect_equal(learner_1, "rpart")
-  expect(plot != plot_old, failure_message = "No plot generated!")
+  expect(all(plot != plot_old), failure_message = "No plot generated!")
   plot_old = plot
 
   app$setInputs(learner_1 = "kknn")
   learner_1 = app$getValue(name = "learner_1")
   plot = app$getAllValues()$output$predictionPlot_1
   expect_equal(learner_1, "kknn")
-  expect(plot != plot_old, failure_message = "No plot generated!")
+  expect(all(plot != plot_old), failure_message = "No plot generated!")
   plot_old = plot
 
   app$setInputs(learner_1 = "featureless")
   learner_1 = app$getValue(name = "learner_1")
   plot = app$getAllValues()$output$predictionPlot_1
   expect_equal(learner_1, "featureless")
-  expect(plot != plot_old, failure_message = "No plot generated!")
+  expect(all(plot != plot_old), failure_message = "No plot generated!")
   plot_old = plot
 
   app$setInputs(learner_1 = "svm")
   learner_1 = app$getValue(name = "learner_1")
   plot = app$getAllValues()$output$predictionPlot_1
   expect_equal(learner_1, "svm")
-  expect(plot != plot_old, failure_message = "No plot generated!")
+  expect(all(plot != plot_old), failure_message = "No plot generated!")
   plot_old = plot
 
   app$setInputs(learner_1 = "extraTrees")
   learner_1 = app$getValue(name = "learner_1")
   plot = app$getAllValues()$output$predictionPlot_1
   expect_equal(learner_1, "extraTrees")
-  expect(plot != plot_old, failure_message = "No plot generated!")
+  expect(all(plot != plot_old), failure_message = "No plot generated!")
   plot_old = plot
 
 
@@ -139,7 +139,7 @@ test_that("test learners", {
   #learner_1 = app$getValue(name = "learner_1")
   #plot = app$getAllValues()$output$predictionPlot_1
   #expect_equal(learner_1, "kkmeans")
-  #expect(plot != plot_old, failure_message = "No plot generated!")
+  #expect(all(plot != plot_old), failure_message = "No plot generated!")
   #plot_old = plot
 
 })
