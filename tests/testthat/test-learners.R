@@ -5,7 +5,7 @@ context("learners")
 test_that("test learners", {
 
   # start app
-  app = shinytest::ShinyDriver$new('../../inst/mlrPlayground', loadTimeout = 15000)
+  app = shinytest::ShinyDriver$new('mlrPlayground', loadTimeout = 15000)
 
   learner_init = app$getValue(name = "learner_1")
   expect_equal(learner_init, "")
