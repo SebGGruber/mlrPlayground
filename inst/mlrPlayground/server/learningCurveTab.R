@@ -36,6 +36,6 @@ output$learningCurve = renderPlot({
     measures = measures,
     resampling = resampling
   )
-  plotLearningCurve(lc)
+  plotLearningCurve(lc) + theme_minimal()
 
 })

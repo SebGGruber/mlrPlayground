@@ -65,5 +65,5 @@ output$ROCPlot = renderPlot({
   # generate roc curve data
   roc_r = generateThreshVsPerfData(bmr, measures, aggregate = FALSE)
   # plot data
-  plotROCCurves(roc_r)
+  plotROCCurves(roc_r) + theme_minimal()
 })

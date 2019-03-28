@@ -253,6 +253,15 @@ select:hover {
 
 }
 
+/*Panel*/
+.panel {
+    margin-bottom: 0px;
+    border-radius: 0px;
+}
+
+.panel-heading {
+    padding: 0px 0px;
+}
 
 
 /* bsModal */
