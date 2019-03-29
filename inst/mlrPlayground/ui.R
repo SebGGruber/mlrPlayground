@@ -91,7 +91,7 @@ shinyUI(
             loop = NA,
             muted = NA,
             playsinline = NA,
-            src = "templated-industrious/images/banner.mp4"
+            src = "templated-industrious/images/banner1.mp4"
             # src: https://de.videezy.com/hintergrunde/5085-molecular-plex-4k-motion-hintergrundschleife
           )
         ),

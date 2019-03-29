@@ -4,8 +4,9 @@ context("learners")
 # ADJUST TESTS BASED ON CONFIG FILE IN THIS CASE
 test_that("test learners", {
 
+  appDir = system.file("mlrPlayground", package = "mlrPlayground")
   # start app
-  app = shinytest::ShinyDriver$new('../../inst/mlrPlayground', loadTimeout = 30000)
+  app = shinytest::ShinyDriver$new(appDir, loadTimeout = 30000)
 
   learner_init = app$getValue(name = "learner_1")
   expect_equal(learner_init, "")
@@ -32,6 +33,7 @@ test_that("test learners", {
 
   app$setInputs(learner_1 = "xgboost")
   learner_1 = app$getValue(name = "learner_1")
+  Sys.sleep(5)
   plot = app$getAllValues()$output$predictionPlot_1
   expect_equal(learner_1, "xgboost")
   expect(all(plot != plot_old), failure_message = "No plot generated!")
@@ -67,6 +69,7 @@ test_that("test learners", {
 
   app$setInputs(learner_1 = "svm")
   learner_1 = app$getValue(name = "learner_1")
+  Sys.sleep(5)
   plot = app$getAllValues()$output$predictionPlot_1
   expect_equal(learner_1, "svm")
   expect(all(plot != plot_old), failure_message = "No plot generated!")
