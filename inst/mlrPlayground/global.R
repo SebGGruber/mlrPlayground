@@ -23,8 +23,8 @@ require(clusterSim)
 require(clValid)
 
 ## package RWeka including XMeans,but XMeans still needs to be installed with below instruction
-WPM("refresh-cache") # Build Weka package metadata cache
-WPM("install-package", "XMeans")
+# WPM("refresh-cache") # Build Weka package metadata cache
+# WPM("install-package", "XMeans")
 
 
 # R6 classes definitions (one class per file, filename equals class name)
