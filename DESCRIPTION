@@ -35,7 +35,12 @@ Imports:
     kernlab,
     R.utils,
     shinytest,
-    extraTrees
+    extraTrees,
+    RWeka,
+    mvtnorm,
+    fpc,
+    clusterSim,
+    clValid
 Suggests: 
     testthat
 RoxygenNote: 6.1.1
