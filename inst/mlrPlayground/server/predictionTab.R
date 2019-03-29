@@ -42,6 +42,7 @@ output$measure_1_value = renderUI({
     mod = train("cluster.dbscan",task)
     pred = predict(mod, task)
     perf = performance(pred, measures = get(measure),task = task)
+    perf[is.na(perf)] = 0
   }
   else{
     perf = performance(pred, measures = get(measure)) # use "get" cause string gives error
