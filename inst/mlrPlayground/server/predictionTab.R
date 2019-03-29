@@ -41,14 +41,11 @@ output$measure_1_value = renderUI({
     pred[["data"]][["response"]][is.na(pred[["data"]][["response"]])] = 3
     mod = train("cluster.dbscan",task)
     pred = predict(mod, task)
-    if(measure == "dunn")
-      perf = performance(pred, measures = mlr::dunn,task = task)
-    else
-      perf = performance(pred, measures = get(measure),task = task)
+    perf = performance(pred, measures = get(measure),task = task)
   }
   else{
     perf = performance(pred, measures = get(measure)) # use "get" cause string gives error
-    }
+  }
   helpText(sprintf("%1.3f", perf), style = "font: 16px arial, sans-serif !important; margin-top: 11px;")
 })
 
@@ -57,7 +54,16 @@ output$measure_2_value = renderUI({
   # once predictions are loaded, calculate performance measure based on chosen measure
   pred = req(process$pred[["2"]]$test.set)
   measure = req(input$measure_sel)
-  perf = performance(pred, measures = get(measure)) # use "get" cause string gives error
+  task = req(process$task$train)
+  if (isolate(process$task$type) == "cluster"){
+    pred[["data"]][["response"]][is.na(pred[["data"]][["response"]])] = 3
+    mod = train("cluster.dbscan",task)
+    pred = predict(mod, task)
+    perf = performance(pred, measures = get(measure),task = task)
+  }
+  else{
+    perf = performance(pred, measures = get(measure)) # use "get" cause string gives error
+  }
   helpText(sprintf("%1.3f", perf), style = "font: 16px arial, sans-serif !important; margin-top: 11px;")
 })
 
