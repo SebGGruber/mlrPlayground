@@ -141,22 +141,25 @@ LearningProcess = R6Class(
       if (prob)
         learner = setPredictType(learner, "prob")
 
+      ### DEFINE VALID HYPERPARAMETERS
+
       valid_types = c("integer", "numeric", "discrete", "logical")
-      # only valid if param has default, is tunable and has type of integer/numeric/discrete/logical
+      blacklist   =
+        config$blacklist$param.name[config$blacklist$short.name == short.name]
+      # only valid if param has default, is tunable, has type of
+      # integer/numeric/discrete/logical and is not part of the blacklist
       is_valid    = sapply(
         learner$par.set$pars,
-        function(par) par$has.default & par$tunable & par$type %in% valid_types
+        function(par) par$has.default & par$tunable &
+          par$type %in% valid_types & !(par$id %in% blacklist)
       )
+      params      = learner$par.set$pars[is_valid]
       names       = names(learner$par.set$pars)[is_valid]
       # nameception
-      names(names) = names
+      names(params) = names
 
-      # remove this once cluster works
-      #browser()
-      #if (self$task$type == "cluster") names = list()
-
-      self$params[[i]]           = names
-      self$learners[[i]]         = learner
+      self$params[[i]]   = params
+      self$learners[[i]] = learner
 
       # no updated learner after init, except learner has no hyperparameters
       # (reason: "updateHyperparam" won't be triggered without hyperparameters)
@@ -214,8 +217,11 @@ LearningProcess = R6Class(
           self$updated_learners[[i]]
       }
 
-      # sanity parsing for values disguised as characters
-      par.vals = lapply(par.vals, function(val) if (is.character(val) & !is.na(as.integer(val))) as.integer(val) else val)
+      # NA warnings about NAs, that are not there ... :(
+      suppressWarnings({
+        # sanity parsing for values disguised as characters
+        par.vals = lapply(par.vals, function(val) if (is.character(val) & !is.na(as.integer(val))) as.integer(val) else val)
+      })
       self$updated_learners[[i]] = setHyperPars(learner, par.vals = par.vals)
     }
   ),
