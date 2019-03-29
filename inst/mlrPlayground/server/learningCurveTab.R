@@ -36,6 +36,7 @@ output$learningCurve = renderPlot({
     measures = measures,
     resampling = resampling
   )
+  # lc[["data"]][is.na(lc[["data"]][[measures]])] = 0
   plotLearningCurve(lc)
 
 })
