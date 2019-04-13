@@ -1,0 +1,12 @@
+name: mlrPlayground
+title: mlrPlayground
+username:
+account: seb-gruber
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 820786
+bundleId: 1970680
+url: https://seb-gruber.shinyapps.io/mlrPlayground/
+when: 1553781831.2397
+asMultiple: FALSE
+asStatic: FALSE

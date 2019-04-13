@@ -7,7 +7,8 @@ min_max_modals = function(parameter, i, learner) {
   #' @param learner learner mlr object
   #' @return UI element or NULL if parameter is invalid for plotting
 
-  id = paste0(parameter$id, i, learner$id)
+  # remove "." or tooltips wont work
+  id = gsub("\\.", "", paste0(parameter$id, i, learner$id))
   param_df = config$param_df
 
 
@@ -88,7 +89,8 @@ parameter_to_ui = function(parameter, i, learner) {
   #' @param learner learner mlr object
   #' @return UI element or NULL if parameter is invalid for plotting
 
-  id = paste0(parameter$id, i, learner$id)
+  # remove "." or tooltips wont work
+  id = gsub("\\.", "", paste0(parameter$id, i, learner$id))
   input_width    = 4
   helpText_width = 4
   param_df = config$param_df
@@ -114,6 +116,25 @@ parameter_to_ui = function(parameter, i, learner) {
     helpText(label, style = "float:right;")
   )
 
+  tooltip = {
+    # use config tooltip if unequal "NA"
+    if (
+      parameter$id %in% param_df$param.name[
+        param_df$short.name == learner$short.name & param_df$tooltip != "NA"
+        ]
+    )
+      param_df$tooltip[param_df$short.name == learner$short.name]
+
+    else {
+      # helptext parsing (if not working, return unparsed text)
+      text = gsub("\'", "\"", learner$help.list[[parameter$id]])
+      text = strsplit(text, "\n\n")
+      if (length(text) > 0 && length(text[[1]]) > 1) text[[1]][2]
+      else learner$help.list[[parameter$id]]
+    }
+  }
+
+
   if (!parameter$has.default | !parameter$tunable) {
     # missing default values are difficult :(
     # also skip not tunable parameters
@@ -137,6 +158,7 @@ parameter_to_ui = function(parameter, i, learner) {
     default =
       if (is.null(isolate(input[[inp_id]]))) parameter$default else as.numeric(isolate(input[[inp_id]]))
 
+    # UI element
     tags$p(
       helpText_col,
       column(
@@ -145,7 +167,9 @@ parameter_to_ui = function(parameter, i, learner) {
           inp_id, NULL, min_bound, max_bound, default, step = step
         )
       ),
-      actionButton(btn_id, "Min/Max")
+      actionButton(btn_id, "Min/Max"),
+      bsTooltip(inp_id, placement = "right", tooltip),
+      bsTooltip(btn_id, placement = "right", "Adjust unconstrained minimum/maximum of slider!")
     )
 
     # DISCRETE PARAMETERS
@@ -154,13 +178,15 @@ parameter_to_ui = function(parameter, i, learner) {
     default =
       if (is.null(isolate(input[[inp_id]]))) parameter$default else isolate(input[[inp_id]])
 
+    # UI element
     tags$p(
       helpText_col,
       column(
         input_width,
         selectInput(inp_id, NULL, parameter$values, default)
       ),
-      br()
+      br(),
+      bsTooltip(inp_id, placement = "right", tooltip)
     )
 
     # LOGICAL PARAMETERS
@@ -169,13 +195,15 @@ parameter_to_ui = function(parameter, i, learner) {
     default =
       if (is.null(isolate(input[[inp_id]]))) parameter$default else isolate(input[[inp_id]])
 
+    # UI element
     tags$p(
       helpText_col,
       column(
         input_width,
         custom_checkboxInput(inp_id, NULL, default)
       ),
-      br()
+      br(),
+      bsTooltip(inp_id, placement = "right", tooltip)
     )
 
   } else {
@@ -192,8 +220,9 @@ output$min_max_modals_1 = renderUI({
   # here, because we do only want
   # an execution when the learner changes - not its hyperparameters
   learner  = req(process$learners[["1"]])
+  params   = req(process$params[["1"]])
   # calculate the min/max modals for every hyperparameter (non numerics return NULL)
-  lapply(learner$par.set$pars, function(par) min_max_modals(par, 1, learner))
+  lapply(params, function(par) min_max_modals(par, 1, learner))
 })
 
 
@@ -204,8 +233,9 @@ output$min_max_modals_2 = renderUI({
   # here, because we do only want
   # an execution when the learner changes - not its hyperparameters
   learner  = req(process$learners[["2"]])
+  params   = req(process$params[["2"]])
   # calculate the min/max modals for every hyperparameter (non numerics return NULL)
-  lapply(learner$par.set$pars, function(par) min_max_modals(par, 2, learner))
+  lapply(params, function(par) min_max_modals(par, 2, learner))
 })
 
 
@@ -216,8 +246,9 @@ output$dynamicParameters_1 = renderUI({
   # here, because we do only want
   # an execution when the learner changes - not its hyperparameters
   learner  = req(process$learners[["1"]])
+  params   = req(process$params[["1"]])
   # sort parameter list by parameter type
-  par_list = learner$par.set$pars[order(sapply(learner$par.set$pars, function(par) par$type))]
+  par_list = params[order(sapply(params, function(par) par$type))]
   # for each parameter
   ui_list  = lapply(par_list, function(par) parameter_to_ui(par, 1, learner))
   # compute (hidden) parameter panel
@@ -239,8 +270,9 @@ output$dynamicParameters_2 = renderUI({
   # here, because we do only want
   # an execution when the learner changes - not its hyperparameters
   learner  = req(process$learners[["2"]])
+  params   = req(process$params[["2"]])
   # sort parameter list by parameter type
-  par_list = learner$par.set$pars[order(sapply(learner$par.set$pars, function(par) par$type))]
+  par_list = params[order(sapply(params, function(par) par$type))]
   # for each parameter
   ui_list  = lapply(par_list, function(par) parameter_to_ui(par, 2, learner))
   # compute (hidden) parameter panel
@@ -261,12 +293,13 @@ observe({
   # here, because we do only want
   # an execution when the learner changes - not its hyperparameters
   learner  = req(process$learners[["1"]])
+  params   = req(process$params[["1"]])
 
-  lapply(learner$par.set$pars, function(par) {
+  lapply(params, function(par) {
     if (par$type %in% c("integer", "numeric")) {
-
-      btn_id = paste0("btn_", par$id, 1, learner$id)
-      mod_id = paste0("mod_", par$id, 1, learner$id)
+      # remove "." or tooltips wont work
+      btn_id = gsub("\\.", "", paste0("btn_", par$id, 1, learner$id))
+      mod_id = gsub("\\.", "", paste0("mod_", par$id, 1, learner$id))
       observeEvent(req(input[[btn_id]]), {
         toggleModal(session, mod_id, "open")
       })
@@ -281,12 +314,13 @@ observe({
   # here, because we do only want
   # an execution when the learner changes - not its hyperparameters
   learner  = req(process$learners[["2"]])
+  params   = req(process$params[["2"]])
 
-  lapply(learner$par.set$pars, function(par) {
+  lapply(params, function(par) {
     if (par$type %in% c("integer", "numeric")) {
-
-      btn_id = paste0("btn_", par$id, 2, learner$id)
-      mod_id = paste0("mod_", par$id, 2, learner$id)
+      # remove "." or tooltips wont work
+      btn_id = gsub("\\.", "", paste0("btn_", par$id, 2, learner$id))
+      mod_id = gsub("\\.", "", paste0("mod_", par$id, 2, learner$id))
       observeEvent(req(input[[btn_id]]), {
         toggleModal(session, mod_id, "open")
       })

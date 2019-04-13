@@ -6,8 +6,8 @@ RegrLearningProcess = R6Class(
 
     initialize = function(valid.learners) {
       measures = c(
-        "mae", "mape", "medse", "msle", "rae", "spearmanrho", "rmsle", "medae", "sse", "expvar",
-        "kendalltau", "rmse", "mse", "rrse", "rsq", "sae", "arsq"
+        "mae", "mape", "medse", "rae", "spearmanrho", "medae", "sse", "expvar",
+        "kendalltau", "rmse", "mse", "rrse", "rsq", "sae", "arsq"#, "rmsle", "msle"#, not working
       )
       super$initialize(valid.learners, tasktype = "regr", measures = measures)
 
@@ -119,7 +119,14 @@ RegrLearningProcess = R6Class(
       ) %>%
         plotly::layout(
           xaxis = list(title = ""),
-          yaxis = list(title = "")
+          yaxis = list(title = ""),
+          margin = list(
+            l = 0,
+            r = 0,
+            b = 0,
+            t = 0,
+            pad = 0
+          )
       ) %>%
         config(displayModeBar = FALSE, displaylogo = FALSE)
 

@@ -13,24 +13,36 @@ read.config = function(file) {
   fst_index = which(text$V1 == "### Valid learners")
   # catch start of third section
   snd_index = which(text$V1 == "### Hyperparameter definitions")
+  # catch start of fourth section
+  trd_index = which(text$V1 == "### Hyperparameter blacklist")
   # character vector of valid learners (factor format)
   valid.learners  = text$V1[(fst_index + 1) : (snd_index - 1)]
   # character vector of hyperparameter redefinitions
-  hyperparameters = text$V1[(snd_index + 1) : nrow(text)]
+  hyperparameters = text$V1[(snd_index + 1) : (trd_index - 1)]
+  # character vector of blacklisted hyperparameters
+  blacklist = text$V1[(trd_index + 1) : nrow(text)]
 
   # transform to dataframe of hyperparameter configurations
-  param_df = read.table(text = as.character(hyperparameters),  header = TRUE, sep = ",", dec = ".")
+  param_df = read.table(text = as.character(hyperparameters), header = TRUE, sep = ",", dec = ".")
   # factor to character
   param_df = lapply(param_df, as.character)
   # whitespace trimming
-  param_df[c("short.name", "param.name", "new.name")] = lapply(param_df[c("short.name", "param.name", "new.name")], trimws)
+  param_df[c("short.name", "param.name", "new.name", "tooltip")] =
+    lapply(param_df[c("short.name", "param.name", "new.name", "tooltip")], trimws)
   # surpress warnings when transforming "NA" to NA
   suppressWarnings({
     # character to integer (don't skip as.character here!!!)
-    param_df[c("new.min", "new.max", "new.default")] = lapply(param_df[c("new.min", "new.max", "new.default")], as.integer)
+    param_df[c("new.min", "new.max", "new.default")] =
+      lapply(param_df[c("new.min", "new.max", "new.default")], as.integer)
   })
+  # transform to dataframe of hyperparameter configurations
+  bl_df = read.table(text = as.character(blacklist), header = TRUE, sep = ",", dec = ".")
+  # factor to character
+  bl_df = lapply(bl_df, as.character)
+  # whitespace trimming
+  bl_df = lapply(bl_df, trimws)
   # return
-  list(valid.learners = valid.learners, param_df = param_df)
+  list(valid.learners = valid.learners, param_df = param_df, blacklist = bl_df)
 
 }
 
@@ -90,6 +102,7 @@ custom_checkboxInput = function(id, label, value = FALSE){
     inp$attribs$checked = "checked"
 
   tags$label(
+    id = id, # required to make tooltips work - no bugs discovered until now
     class = "container",
     helpText(label),
     inp,
