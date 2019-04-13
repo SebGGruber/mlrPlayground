@@ -13,8 +13,8 @@ ClusterLearningProcess = R6Class(
     },
 
     setData = function(data, train.ratio) {
-      super$setData(data, train.ratio)
-      self$task$train = makeClusterTask(data = isolate(self$data$train.set))
+      self$task$object = makeClusterTask(data = data)
+      super$setData(train.ratio)
     },
 
     initLearner = function(short.name, i, prob) {

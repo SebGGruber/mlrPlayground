@@ -24,14 +24,7 @@ min_max_modals = function(parameter, i, learner) {
     max_id = paste0("max_", id)
 
     min_value = {
-      if (
-        parameter$id %in% param_df$param.name[
-          param_df$short.name == learner$short.name & !is.na(param_df$new.min)
-          ]
-      ) {
-        param_df$new.min[param_df$short.name == learner$short.name & !is.na(param_df$new.min)]
-
-      } else if (is.null(isolate(input[[min_id]]))) {
+      if (is.null(isolate(input[[min_id]]))) {
         parameter$default - 5 * abs(parameter$default)
 
       } else
@@ -39,14 +32,9 @@ min_max_modals = function(parameter, i, learner) {
     }
 
     max_value = {
-      if (
-        parameter$id %in% param_df$param.name[
-          param_df$short.name == learner$short.name & !is.na(param_df$new.max)
-          ]
-      ) {
-        param_df$new.max[param_df$short.name == learner$short.name & !is.na(param_df$new.max)]
-      } else if (is.null(isolate(input[[max_id]]))) {
+      if (is.null(isolate(input[[max_id]]))) {
         parameter$default + 5 * abs(parameter$default)
+
       } else
         as.numeric(isolate(input[[max_id]]))
     }
@@ -149,14 +137,57 @@ parameter_to_ui = function(parameter, i, learner) {
     step   = if (parameter$type == "integer") 1 else NULL
 
     # don't isolate here cause UI should change with min / max values
-    min_bound =
-      if (is.infinite(parameter$lower)) as.numeric(req(input[[min_id]])) else parameter$lower
 
-    max_bound =
-      if (is.infinite(parameter$upper)) as.numeric(req(input[[max_id]])) else parameter$upper
+    # if value is in config, use that value
+    # else given package default
+    # else min/max input value
+    min_bound = {
+      if (
+        parameter$id %in% param_df$param.name[
+          param_df$short.name == learner$short.name & !is.na(param_df$new.min)
+          ]
+      ) {
+        param_df$new.min[param_df$short.name == learner$short.name & !is.na(param_df$new.min)]
 
-    default =
-      if (is.null(isolate(input[[inp_id]]))) parameter$default else as.numeric(isolate(input[[inp_id]]))
+      } else if (is.infinite(parameter$lower)) {
+        as.numeric(req(input[[min_id]]))
+
+      } else parameter$lower
+    }
+
+    # if value is in config, use that value
+    # else given package default
+    # else min/max input value
+    max_bound = {
+      if (
+        parameter$id %in% param_df$param.name[
+          param_df$short.name == learner$short.name & !is.na(param_df$new.max)
+          ]
+      ) {
+        param_df$new.max[param_df$short.name == learner$short.name & !is.na(param_df$new.max)]
+
+      } else if (is.infinite(parameter$upper)) {
+        as.numeric(req(input[[max_id]]))
+
+      } else parameter$upper
+    }
+
+    # if value is in config, use that value
+    # else given package default
+    # else min/max input value
+    default = {
+      if (
+        parameter$id %in% param_df$param.name[
+          param_df$short.name == learner$short.name & !is.na(param_df$new.default)
+          ]
+      ) {
+        param_df$new.max[param_df$short.name == learner$short.name & !is.na(param_df$new.default)]
+
+      } else if (is.null(isolate(input[[inp_id]]))) {
+        parameter$default
+
+      } else as.numeric(isolate(input[[inp_id]]))
+    }
 
     # UI element
     tags$p(

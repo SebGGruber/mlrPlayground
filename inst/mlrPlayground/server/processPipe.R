@@ -25,12 +25,13 @@ observe({
     process <<- isolate(Regr3dLearningProcess$new(config$valid.learners))
   }
 
+  print("Process successfully initialized")
 })
 
 
 observe({
   # check if "process" is already initialized as class instance (NOT REACTIVE)
-  req(process$data)
+  #req(process$task)
   # Parameters for function call
   task        = req(input$task)
   amount      = req(input$datasize)
@@ -38,8 +39,9 @@ observe({
   noise       = req(input$noise)
 
   data = calculate_data(task, amount, noise, train.ratio)
+  isolate(process$setData(data, train.ratio))
 
-  process$setData(data, train.ratio)
+  print("Data/Task/ResamplingInstance successfully set")
 })
 
 
@@ -52,6 +54,8 @@ observe({
   else
     prob = NULL
   process$initLearner(learner, 1, prob)
+
+  print("Learner 1 successfully initializied")
 })
 
 
@@ -70,6 +74,8 @@ observe({
   })
 
   process$updateHyperparam(par.vals, 1)
+
+  print("Learner 1 successfully updated")
 })
 
 
@@ -82,6 +88,8 @@ observe({
   else
     prob = NULL
   process$initLearner(learner, 2, prob)
+
+  print("Learner 2 successfully initializied")
 })
 
 
@@ -101,21 +109,24 @@ observe({
 
   process$updateHyperparam(par.vals, 2)
 
+  print("Learner 2 successfully updated")
 })
 
 observe({
-  # whenever learner 1 or test set is updated, calculate predictions
-  req(process$data$test.set)
+  # whenever learner 1 or task is updated, calculate predictions
+  req(process$task$object)
   learner = req(process$updated_learners[["1"]])
-  process$calculatePred(1)
-  print("Preds 1 successfully calculated")
+  process$calculateResample(1)
+
+  print("Resampling 1 successfully calculated")
 })
 
 
 observe({
-  # whenever learner 2 or test set is updated, calculate predictions
-  req(process$data$test.set)
+  # whenever learner 2 or task is updated, calculate predictions
+  req(process$task$object)
   learner = req(process$updated_learners[["2"]])
-  process$calculatePred(2)
-  print("Preds 2 successfully calculated")
+  process$calculateResample(2)
+
+  print("Resampling 2 successfully calculated")
 })

@@ -60,11 +60,12 @@ output$taskSelection = renderUI({
 
 # plotly object in the UI showing the selected dataset
 output$datasetPlot = renderPlotly({
-  # check for process instance train set and then call getPlot method
-  req(process$data$train.set)
+  # check for process task and then call getPlot method
+  req(process$task$object)
   process$getDataPlot()
 
 })
+
 
 # small info text in the UI
 output$taskinfo = renderText(paste("Currently selected:", input$tasktype, "-", input$task))

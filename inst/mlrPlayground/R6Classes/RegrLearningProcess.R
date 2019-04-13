@@ -14,8 +14,8 @@ RegrLearningProcess = R6Class(
     },
 
     setData = function(data, train.ratio) {
-      super$setData(data, train.ratio)
-      self$task$train = makeRegrTask(data = isolate(self$data$train.set), target = "y")
+      self$task$object = makeRegrTask(data = data, target = "y")
+      super$setData(train.ratio)
     },
 
     initLearner = function(short.name, i, prob) {
@@ -26,8 +26,14 @@ RegrLearningProcess = R6Class(
     getDataPlot = function() {
       #' @description Method transforming the data into an interactive plot
       #' @return plotly plot object
+
+      data = isolate(self$task$object$env$data)
+      # define train and test data sets for plotting
+      train.set = data[isolate(self$resample$instance$train.inds[[1]]), ]
+      test.set  = data[isolate(self$resample$instance$test.inds[[1]]),  ]
+
       plotly::plot_ly(
-        data    = isolate(self$data$train.set),
+        data    = train.set,
         name    = "Train",
         x       = ~x,
         y       = ~y,
@@ -37,7 +43,7 @@ RegrLearningProcess = R6Class(
         symbol  = I('x')
       )%>%
       plotly::add_trace(
-        data    = isolate(self$data$test.set),
+        data    = test.set,
         name    = "Test",
         x       = ~x,
         y       = ~y,
@@ -49,27 +55,38 @@ RegrLearningProcess = R6Class(
       config(displayModeBar = FALSE, displaylogo = FALSE)
     },
 
-    calculatePred = function(i) {
+    calculateResample = function(i) {
       #' @description Method for calculating equidistant predictions in a 2D box
       #' @param i Index of the learner in self$learners to calculate the
       #' predictions for
-      #' @return list(x = <<x-coordinates>>, y = <<predictions>>)
+      #' @return NULL
+
+      # define data
+      data = isolate(self$task$object$env$data)
+      # define train and test data sets for plotting
+      train.set = data[isolate(self$resample$instance$train.inds[[1]]), ]
+      test.set  = data[isolate(self$resample$instance$test.inds[[1]]),  ]
 
       # Must use string to index into reactivevalues
       i = as.character(i)
 
-      trained = super$calculatePred(i)
+      measures    = isolate(self$task$measures)
+      # calculate the base resample results
+      isolate(super$calculateResample(i, measures))
+      # learner and model from resample are required
+      learner = isolate(self$updated_learners[[i]])
+      model   = isolate(self$resample[[i]]$models[[1]])
 
-      x_min = min(c(self$data$test.set$x, self$data$train.set$x)) * 1.1
-      x_max = max(c(self$data$test.set$x, self$data$train.set$x)) * 1.1
+      # set interval for 1D grid
+      x_min = min(c(test.set$x, train.set$x)) * 1.1
+      x_max = max(c(test.set$x, train.set$x)) * 1.1
       grid    = expand.grid(
         x = seq(x_min, x_max, length.out = 100)
       )
-      grid$y  = predictLearner(trained$learner, trained$model, grid)
+      grid$y  = predictLearner(learner, model, grid)
 
       self$pred[[i]]$grid = grid
 
-      return(trained)
     },
 
     getPredPlot = function(i) {
@@ -78,6 +95,12 @@ RegrLearningProcess = R6Class(
       #' @param i Index of the learner in self$learners to return the
       #' predictions plot for
       #' @return plotly plot object
+
+      # define data
+      data = isolate(self$task$object$env$data)
+      # define train and test data sets for plotting
+      train.set = data[isolate(self$resample$instance$train.inds[[1]]), ]
+      test.set  = data[isolate(self$resample$instance$test.inds[[1]]),  ]
 
       # Must use string to index into reactivevalues
       i = as.character(i)
@@ -88,7 +111,7 @@ RegrLearningProcess = R6Class(
       options(warn = -1)
 
       plot = plotly::plot_ly(
-        data = isolate(self$data$train.set),
+        data = train.set,
         name   = "Train",
         x      = ~x,
         y      = ~y,
@@ -98,7 +121,7 @@ RegrLearningProcess = R6Class(
         mode   = "markers"
       ) %>%
       plotly::add_trace(
-        data   = isolate(self$data$test.set),
+        data   = test.set,
         name   = "Test",
         x      = ~x,
         y      = ~y,

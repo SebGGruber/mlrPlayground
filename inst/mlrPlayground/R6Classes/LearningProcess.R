@@ -16,11 +16,28 @@ LearningProcess = R6Class(
     # currently only 2 learners are supported
     # element names are mandatory
     # "choices" is the list of selectable learners in the UI
-    learners = reactiveValues("1" = NULL, "2" = NULL, choices = NULL),
+    learners = reactiveValues(
+      "1"     = NULL,
+      "2"     = NULL,
+      choices = NULL
+    ),
     # list of valid hyperparameter per learner
-    params   = reactiveValues("1" = NULL, "2" = NULL),
-    data     = reactiveValues(train.set = NULL,  test.set = NULL),
-    task     = reactiveValues(train = NULL, measures = NULL, type = NULL),
+    params   = reactiveValues(
+      "1" = NULL,
+      "2" = NULL
+    ),
+    # resample instance, restample results for learner 1 and 2
+    resample = reactiveValues(
+      instance = NULL,
+      "1" = NULL,
+      "2" = NULL
+    ),
+    # task object, valid measures, task type
+    task     = reactiveValues(
+      object   = NULL,
+      measures = NULL,
+      type     = NULL
+    ),
     pred     = list(
       "1" = reactiveValues(grid = NULL, test.set = NULL),
       "2" = reactiveValues(grid = NULL, test.set = NULL)
@@ -30,14 +47,17 @@ LearningProcess = R6Class(
     updated_learners = reactiveValues("1" = NULL, "2" = NULL),
 
 
+    # initialize new class instance
     initialize = function(
         valid_learners,
         learner_1          = NULL,
         learner_2          = NULL,
         params_1           = NULL,
         params_2           = NULL,
-        train_set          = NULL,
-        test_set           = NULL,
+        data.set           = NULL,
+        resampleInstance   = NULL,
+        resampleResult_1   = NULL,
+        resampleResult_2   = NULL,
         task               = NULL,
         measures           = NULL,
         tasktype           = NULL,
@@ -55,8 +75,9 @@ LearningProcess = R6Class(
       #' @param learner_2 mlr learner object
       #' @param params_1 list of params for learner 1
       #' @param params_2 list of params for learner 2
-      #' @param train_set dataframe of train data
-      #' @param test_set dataframe of test data
+      #' @param resampleInstance mlr object of a resample instance
+      #' @param resampleResult_1 mlr object of the resample result for learner 1
+      #' @param resampleResult_2 mlr object of the resample result for learner 2
       #' @param task mlr task object stored in the instance
       #' @param measures character vector of valid measures
       #' @param tasktype tasktype of the used class ("classif", "regr", "cluster")
@@ -73,9 +94,10 @@ LearningProcess = R6Class(
       self$learners$"2"         = learner_2
       self$params$"1"           = params_1
       self$params$"2"           = params_2
-      self$data$train.set       = train_set
-      self$data$test.set        = test_set
-      self$task$train           = task
+      self$resample$instance    = resampleInstance
+      self$resample$"1"         = resampleResult_1
+      self$resample$"2"         = resampleResult_2
+      self$task$object          = task
       self$task$measures        = measures
       self$task$type            = tasktype
       self$pred$"1"$grid        = pred_1_grid
@@ -103,18 +125,21 @@ LearningProcess = R6Class(
       self$learners$choices = choices
     },
 
-    setData = function(data, train.ratio) {
-      #' @param data Dataframe
+    setData = function(train.ratio) {
+      #' @description Method for setting the resample instance
+      #' Same method in a subclass setting the task
+      #' (actually a really bad method name...)
+      #' @param task mlr task
       #' @param train.ratio Ratio of #train/#all (Numeric between 0 and 1)
+      #' @return NULL
 
       assert_that(train.ratio >= 0 && train.ratio <= 1)
 
       set.seed(123)
-      n      = nrow(data)
-      sample = sample(n, train.ratio * n)
+      task = self$task$object
+      resin = makeResampleInstance("Holdout", split = train.ratio, task = task)
 
-      self$data$train.set = data[ sample, ]
-      self$data$test.set  = data[-sample, ]
+      self$resample$instance = resin
     },
 
     initLearner = function(short.name, i, type, prob = FALSE) {
@@ -124,14 +149,17 @@ LearningProcess = R6Class(
       #' @param type Type of learner and task (classif, regr, cluster)
       #' @param prob Should probability values be used as predictions? (Bool)
       #' DON'T SET THIS TO 'TRUE' FOR NON CLASSIF LEARNERS
+      #' @return NULL
 
       # Must use string to index into reactivevalues
       i = as.character(i)
       assert_that(i %in% c("1", "2"))
       assert_that(type %in% c("classif", "regr", "cluster"))
 
+      # get all mlr learners once
       listLearners = listLearners(warn.missing.packages = FALSE)
 
+      # make learner based on selected shortname and task type
       learner = makeLearner({
         selected = listLearners$short.name == short.name & listLearners$type == type
         listLearners$class[selected]
@@ -169,25 +197,30 @@ LearningProcess = R6Class(
         self$updated_learners[[i]] = NULL
     },
 
-    calculatePred = function(i) {
-      #' @description Method for calculating and setting process predictions i
+    calculateResample = function(i, measures) {
+      #' @description Method for calculating resampling results for learner i
       #' once learner i is updated and task is loaded
       #' @param i Index of the learner/predictions in the list of learners/pred
       #' - only 1 and 2 are currently supported
-      #' @return named list of shape list(<<learner i>>, <<trained model>>)
+      #' @return NULL
 
       # Must use string to index into reactivevalues
       i = as.character(i)
 
-      learner = isolate(self$updated_learners[[i]])
-      model   = train(learner, isolate(self$task$train))
+      # get all required instance attributes
+      task        = isolate(self$task$object)
+      learner     = isolate(self$updated_learners[[i]])
+      resInstance = isolate(self$resample$instance)
 
-      # calculate test.set predictions
-      test.set = predict(model, newdata = isolate(self$data$test.set))
-      self$pred[[i]]$test.set = test.set
+      # most important function call of the whole backend
+      self$resample[[i]] = resample(
+        task       = task,
+        learner    = learner,
+        measures   = lapply(measures, get), # string -> function
+        resampling = resInstance,
+        models     = TRUE
+      )
 
-      # return learner and trained model
-      return(list(learner = learner, model = model))
     },
 
     getPredPlot = function(i) {

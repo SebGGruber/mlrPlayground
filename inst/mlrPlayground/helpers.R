@@ -31,9 +31,9 @@ read.config = function(file) {
     lapply(param_df[c("short.name", "param.name", "new.name", "tooltip")], trimws)
   # surpress warnings when transforming "NA" to NA
   suppressWarnings({
-    # character to integer (don't skip as.character here!!!)
+    # character to numeric (don't skip as.character here!!!)
     param_df[c("new.min", "new.max", "new.default")] =
-      lapply(param_df[c("new.min", "new.max", "new.default")], as.integer)
+      lapply(param_df[c("new.min", "new.max", "new.default")], as.numeric)
   })
   # transform to dataframe of hyperparameter configurations
   bl_df = read.table(text = as.character(blacklist), header = TRUE, sep = ",", dec = ".")

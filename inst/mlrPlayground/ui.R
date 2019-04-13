@@ -4,7 +4,6 @@ source("ui/plots_tabset.R",    local = TRUE) # importing: plots_tabset
 
 shinyUI(
   tagList(
-    #useShinyjs(),
     div(
       id = "app-content",
       tags$head(
@@ -83,7 +82,6 @@ shinyUI(
                 "as backend."
               )
             ),
-#            tags$button(type = "button", onclick = "smoothScroll(document.getElementById('main'))", "Click Me"),
             tags$a(class = "more", onclick = "smoothScroll(document.getElementById('main'))", "Learn More")
           ),
           tags$video(
@@ -104,6 +102,7 @@ shinyUI(
             class = "inner",
             tags$div(
               class = "highlights",
+              # first content box
               tags$section(
                 id = "main",
                 tags$div(
@@ -111,14 +110,16 @@ shinyUI(
                   fluidRow(
                     conditionalPanel(
                       "output.showLearners == true",
+                      # task icon and button
                       tags$a(
-                        class = "icon fa-qrcode",
+                        class = "icon fa-tasks",
                         style = "font-size: 6.0em !important; height:150px !important; width:150px !important;"
                       ),
                       tags$br(),
                       actionButton("taskBut", "Change task", icon = icon("sync")),
                       #textOutput("taskinfo"), # ugly
                       hr(),
+                      # learner icon and buttons
                       tags$a(
                         class = "icon fa-graduation-cap",
                         style = "font-size: 6.0em !important; height:150px !important; width:150px !important;"
@@ -132,6 +133,7 @@ shinyUI(
                       ),
                       style = "margin-left: auto; margin-right: auto"
                     ),
+                    # parameter panel
                     conditionalPanel(
                       "output.showLearners == false",
                       br(),
@@ -152,6 +154,7 @@ shinyUI(
                   )
                 )
               ),
+              # second content box
               tags$section(
                 tags$div(
                   class = "content",

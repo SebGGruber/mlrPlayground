@@ -43,7 +43,7 @@ output$measure_2_roc = renderUI({
 output$ROCPlot = renderPlot({
 
   # required reactive inputs
-  task      = req(process$task$train)#
+  task      = req(process$task$object)
   split     = req(input$test_ration)
   measure_1 = req(input$measure_1_roc)
   measure_2 = req(input$measure_2_roc)

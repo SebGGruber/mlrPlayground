@@ -1,20 +1,20 @@
 # render UI for the measure selection
 output$measure_multi_lc = renderUI({
   # measures need to be initialized
-  req(process$task$measures)
+  choices = req(process$task$measures)
   # only render when learner_1 is not NULL
   req(input$learner_1)
   # optional dependency: Only renders once plots
   # also render
   req(process$learners[["1"]])
-  selectInput("measure_multi_lc", "", multiple = TRUE, choices = process$task$measures)
+  selectInput("measure_multi_lc", "", multiple = TRUE, choices = choices)
 })
 
 # learning curve plot output object
 output$learningCurve = renderPlot({
 
   # required reactive inputs
-  task     = req(process$task$train)
+  task     = req(process$task$object)
   split    = req(input$test_ration)
   measures = lapply(req(input$measure_multi_lc), get)
 

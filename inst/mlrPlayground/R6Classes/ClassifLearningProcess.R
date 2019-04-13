@@ -15,8 +15,8 @@ ClassifLearningProcess = R6Class(
     },
 
     setData = function(data, train.ratio) {
-      super$setData(data, train.ratio)
-      self$task$train = makeClassifTask(data = isolate(self$data$train.set), target = "class")
+      self$task$object = makeClassifTask(data = data, target = "class")
+      super$setData(train.ratio)
     },
 
     initLearner = function(short.name, i, prob = FALSE) {
@@ -27,8 +27,13 @@ ClassifLearningProcess = R6Class(
       #' @description Method transforming the data into an interactive plot
       #' @return plotly plot object
 
-        plotly::plot_ly(
-          data   = isolate(self$data$train.set),
+      data = isolate(self$task$object$env$data)
+      # define train and test data sets for plotting
+      train.set = data[isolate(self$resample$instance$train.inds[[1]]), ]
+      test.set  = data[isolate(self$resample$instance$test.inds[[1]]),  ]
+
+      plotly::plot_ly(
+          data   = train.set,
           name   = "Train",
           x      = ~x1,
           y      = ~x2,
@@ -39,7 +44,7 @@ ClassifLearningProcess = R6Class(
           mode   = "markers"
         )%>%
         plotly::add_trace(
-          data   = isolate(self$data$test.set),
+          data   = test.set,
           name   = "Test",
           x      = ~x1,
           y      = ~x2,
@@ -53,39 +58,63 @@ ClassifLearningProcess = R6Class(
 
     },
 
-    calculatePred = function(i) {
+    calculateResample = function(i) {
       #' @description Method for calculating predictions of a grid data set used for plotting
       #'  and returning the trained model for further prediction calculations
       #' @param i Index of the learner in self$learners to calculate the
       #' predictions for
       #' @return list(learner, model)
 
+      # define data
+      data = isolate(self$task$object$env$data)
+      # define train and test data sets for plotting
+      train.set = data[isolate(self$resample$instance$train.inds[[1]]), ]
+      test.set  = data[isolate(self$resample$instance$test.inds[[1]]),  ]
 
       # Must use string to index into reactivevalues
       i = as.character(i)
 
-      trained = super$calculatePred(i)
+      learner = isolate(self$updated_learners[[i]])
+      measures    = {
+        # remove measures requiring probabilities if predict.type is "response"
+        if (learner$predict.type != "prob") {
+          meas = isolate(self$task$measures)
+          meas[
+            sapply(meas, function(x) !("req.prob" %in% getMeasureProperties(get(x))))
+          ]
 
-      x1_min = min(c(self$data$test.set$x1, self$data$train.set$x1)) * 1.1
-      x2_min = min(c(self$data$test.set$x2, self$data$train.set$x2)) * 1.1
-      x1_max = max(c(self$data$test.set$x1, self$data$train.set$x1)) * 1.1
-      x2_max = max(c(self$data$test.set$x2, self$data$train.set$x2)) * 1.1
-      # caluclate grid predictions
+        } else isolate(self$task$measures)
+      }
+
+      # calculate the base resample results
+      isolate(super$calculateResample(i, measures))
+      # model after resample
+      model   = isolate(self$resample[[i]]$models[[1]])
+
+      # calculate corners of a box with 10% margins around the data set
+      x1_min = min(c(test.set$x1, train.set$x1)) * 1.1
+      x2_min = min(c(test.set$x2, train.set$x2)) * 1.1
+      x1_max = max(c(test.set$x1, train.set$x1)) * 1.1
+      x2_max = max(c(test.set$x2, train.set$x2)) * 1.1
+      # caluclate grid predictions (length² data points)
       grid    = expand.grid(
-        x1 = seq(x1_min, x1_max, length.out = 100),
-        x2 = seq(x2_min, x2_max, length.out = 100)
+        x1 = seq(x1_min, x1_max, length.out = 50),
+        x2 = seq(x2_min, x2_max, length.out = 50)
       )
 
-      predictions = predictLearner(trained$learner, trained$model, grid)
+      # predictions for the defined grid
+      predictions = predictLearner(learner, model, grid)
 
-      # check if something went wrong (ranger for example doesn't understand "prob")
+      # check if something went wrong with the dimensions
+      # (ranger for example doesn't understand "prob")
       if (length(dim(predictions)) > 1) {
 
         predictions = predictions[, 2]
         # if prediction is equal 0.5, no class can be predicted
         class = ifelse(
-          predictions < 0.5, "Class 1",
-          ifelse(predictions > 0.5, "Class 2", "No Class")
+          predictions <= 0.5,
+          "Class 1",
+          "Class 2"
         )
 
       } else {
@@ -93,9 +122,8 @@ ClassifLearningProcess = R6Class(
         predictions = as.numeric(predictions)
       }
 
+      # set instance attribute for grid preds
       self$pred[[i]]$grid = cbind(grid, predictions = predictions, class = class)
-
-      return(trained)
     },
 
 
@@ -106,6 +134,12 @@ ClassifLearningProcess = R6Class(
       #' predictions plot for
       #' @return plotly plot object
 
+      # define data
+      data = isolate(self$task$object$env$data)
+      # define train and test data sets for plotting
+      train.set = data[isolate(self$resample$instance$train.inds[[1]]), ]
+      test.set  = data[isolate(self$resample$instance$test.inds[[1]]),  ]
+
       # Must use string to index into reactivevalues
       i         = as.character(i)
 
@@ -115,7 +149,7 @@ ClassifLearningProcess = R6Class(
       options(warn = -1)
 
       plot = plotly::plot_ly(
-        data    = isolate(self$data$train.set),
+        data    = train.set,
         name    = "Train",
         x       = ~x1,
         y       = ~x2,
@@ -126,7 +160,7 @@ ClassifLearningProcess = R6Class(
         mode    = "markers"
       ) %>%
         plotly::add_trace(
-          data   = isolate(self$data$test.set),
+          data   = test.set,
           name    = "Test",
           x       = ~x1,
           y       = ~x2,

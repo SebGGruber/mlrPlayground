@@ -2,28 +2,14 @@
 prediction_tab = tabPanel(
   "Predictions",
   uiOutput("prob_sel"),
-  bsCollapsePanel(
-    #tags$span(
-      #tags$a(
-      #  class = "icon fa-arrow-down", style = "font-size: 17px"),
-    tags$b("> Learner 1 <"),
-    #),
-    tableOutput("table_measures_1")
-  ),
   withSpinner(
-    plotly::plotlyOutput("predictionPlot_1", width = "90%", height = "450px")
+    uiOutput("learner_1_preds")
   ),
-  bsTooltip("predictionPlot_1", "Drag box to zoom. Double click to reset.", placement = "right"),
   conditionalPanel(
     "output.learner_amount > 1",
-    bsCollapsePanel(
-      tags$b("> Learner 2 <"),
-      tableOutput("table_measures_2")
-    ),
     withSpinner(
-      plotly::plotlyOutput("predictionPlot_2", width = "90%", height = "450px")
-    ),
-    bsTooltip("predictionPlot_2", "Drag box to zoom. Double click to reset.", placement = "right")
+      uiOutput("learner_2_preds")
+    )
   )
 )
 
