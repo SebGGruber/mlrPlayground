@@ -10,6 +10,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
   #1.add Circle data sets
   if (task == "Circle") {
 
+    amount        = amount / 2
     angle         = runif(2 * amount, 0, 360)
     radius_class1 = rexp(amount, 1 / (5 *  noise))
     radius_class2 = rnorm(amount, 16, 10 * noise)
@@ -23,7 +24,8 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     #2.add two-circle data sets
   } else if (task == "Two Circle") {
 
-    angle           = runif(amount * 2, 0, 360)
+    amount        = amount / 2
+    angle         = runif(amount * 2, 0, 360)
     radius_class1 = rnorm(amount, 6, 10 * noise)
     radius_class2 = rnorm(amount, 16, 10 * noise)
     radius_class  = c(radius_class1, radius_class2)
@@ -40,76 +42,83 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     #3.add two-circle-2 data sets
   } else if (task == "Two Circle + Point") {
 
-    angle           = runif(amount * 2, 0, 360)
-    radius_class1   = rnorm(amount, 6, 10 * noise)
-    amount2_1       = round(amount / 4)
-    radius_class2_1 = rexp(amount2_1, 1 / (5 *  noise))
-    radius_class2_2 = rnorm(amount, 16, 10 * noise)
+    amount1         = round(amount / 2)
+    angle           = runif(amount, 0, 360)
+    radius_class1   = rnorm(amount1, 6, 10 * noise)
+    amount2         = amount - amount1
+    amount2_1       = round(amount2/2)
+    amount2_2       = amount2 - amount2_1
+    radius_class2_1 = rexp(amount2_1, 1 / (5 * noise))
+    radius_class2_2 = rnorm(amount2_2, 16, 10 * noise)
     radius_class    = c(radius_class2_1,radius_class1, radius_class2_2)
     x1              = sqrt(abs(radius_class)) * cos(2*pi*angle) * rescope
     x2              = sqrt(abs(radius_class)) * sin(2*pi*angle) * rescope
-    class_1         = c(rep("Class 2",amount2_1),rep("Class 1", amount))
-    class           = c(class_1, rep("Class 2", amount))
+    class_1         = c(rep("Class 2",amount2_1),rep("Class 1", amount1))
+    class           = c(class_1, rep("Class 2", amount2_2))
 
     data.frame(x1, x2, class)
 
     #4.add XOR data sets
   } else if (task == "XOR") {
 
+    amount  = amount / 2
     rescope = 0.8
-    x1    = runif(amount * 2, -5, 5)
-    x2    = runif(amount * 2, -5, 5)
-    xor   = (x1 < 0 | x2 < 0) & !(x1 < 0 & x2 < 0)
-    class = ifelse(xor, "Class 1", "Class 2")
+    x1      = runif(amount, -5, 5)
+    x2      = runif(amount, -5, 5)
+    xor     = (x1 < 0 | x2 < 0) & !(x1 < 0 & x2 < 0)
+    class   = ifelse(xor, "Class 1", "Class 2")
 
-    x1    = (x1 + rnom_noise) * rescope
-    x2    = (x2 + rnom_noise) * rescope
+    x1      = (x1 + rnom_noise) * rescope
+    x2      = (x2 + rnom_noise) * rescope
 
     data.frame(x1, x2, class)
 
     #5.add Gaussian data sets
   } else if(task == "Gaussian"){
 
+    amount  = amount / 2
     rescope = 0.8
-    x1    = c(rnorm(amount, 2, 1), rnorm(amount, -2, 1)) - 0.5
-    x2    = c(rnorm(amount, 2, 1), rnorm(amount, -2, 1))
-    class = c(rep("Class 1", amount), rep("Class 2", amount))
+    x1      = c(rnorm(amount, 2, 1), rnorm(amount, -2, 1)) - 0.5
+    x2      = c(rnorm(amount, 2, 1), rnorm(amount, -2, 1))
+    class   = c(rep("Class 1", amount), rep("Class 2", amount))
 
-    x1    = (x1 + rnom_noise) * rescope
-    x2    = (x2 + rnom_noise) * rescope
+    x1      = (x1 + rnom_noise) * rescope
+    x2      = (x2 + rnom_noise) * rescope
 
     data.frame(x1, x2, class)
 
     #6.add Across Spiral data sets
   } else if(task == "Across Spiral"){
 
-    rescope = 1.5
-    r     = c(1 : amount) / amount * 5
-    angle = 1.75 * c(1 : amount)  / amount * 2 * pi
-    x1    = c(sin(angle), sin(angle + pi)) * r
-    x2    = c(cos(angle), cos(angle + pi)) * r
-    class = c(rep("Class 1",amount),rep("Class 2",amount))
+    amount   = amount / 2
+    rescope  = 1.5
+    r        = c(1 : amount) / amount * 5
+    angle    = 1.75 * c(1 : amount)  / amount * 2 * pi
+    x1       = c(sin(angle), sin(angle + pi)) * r
+    x2       = c(cos(angle), cos(angle + pi)) * r
+    class    = c(rep("Class 1",amount),rep("Class 2",amount))
 
-    x1    = (x1 / 2 + runif_noise) * rescope
-    x2    = (x2 / 2 - runif_noise) * rescope
+    x1       = (x1 / 2 + runif_noise) * rescope
+    x2       = (x2 / 2 - runif_noise) * rescope
 
     data.frame(x1, x2, class)
 
     #7. add Opposite Arc data sets
   } else if(task == "Opposite Arc"){
 
-    rescope = 1.5
-    range1 = runif(amount,0,1) * pi
-    range2 = runif(amount,0.5,1.5) * pi
-    x1     = c(range1, range2)
+    amount   = amount / 2
+    rescope  = 1.5
+    range1   = runif(amount,0,1) * pi
+    range2   = runif(amount,0.5,1.5) * pi
+    x1       = c(range1, range2)
 
-    arc1   = sin(range1)
-    arc2   = cos(range2) + 0.5
-    x2     = c(arc1, arc2) * 2
-    class  = c(rep("Class 1", amount), rep("Class 2", amount))
+    arc1     = sin(range1)
+    arc2     = cos(range2) + 0.5
+    x2       = c(arc1, arc2) * 2
+    class    = c(rep("Class 1", amount), rep("Class 2", amount))
 
-    x1     = (x1 - runif_noise * 1.5) * rescope - 2
-    x2     = (x2 - runif_noise * 1.5) * rescope
+    x1       = (x1 - runif_noise * 1.5) * rescope - 2
+    x2       = (x2 - runif_noise * 1.5) * rescope
 
     data.frame(x1, x2, class)
 
@@ -117,13 +126,13 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
   } else if (task == "Cross Sector") {
 
     rescope = 0.8
-
+    amount        = amount / 2
     part          = c(0 : 9)
-    angle         = runif(amount * 5, 0, 36)
+    angle         = runif(amount, 0, 36)
     angle_class1  = 2 * pi * (angle + 36 * 2 * part) / 360
     angle_class2  = 2 * pi * (angle  + 36 * (2 * part + 1)) / 360
-    radius_class1 = rexp(amount * 5, 1)
-    radius_class2 = rexp(amount * 5, 2)
+    radius_class1 = rexp(amount, 1)
+    radius_class2 = rexp(amount, 2)
 
     x1_class1     = sqrt(radius_class1) * cos(angle_class1)
     x1_class2     = sqrt(radius_class2) * cos(angle_class2)
@@ -132,7 +141,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     x2_class1     = sqrt(radius_class1) * sin(angle_class1)
     x2_class2     = sqrt(radius_class2) * sin(angle_class2)
     x2            = c(x2_class1, x2_class2)
-    class         = c(rep("Class 1", amount * 5), rep("Class 2", amount * 5))
+    class         = c(rep("Class 1", amount), rep("Class 2", amount))
 
     x1            = (x1 + rnom_noise/5) * 2 * rescope
     x2            = (x2 + rnom_noise/5) * 2 * rescope
@@ -142,6 +151,7 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     #9.add Wavy surface(3D) data sets
   } else if(task == "Wavy surface"){
 
+    amount= amount / 2
     kern  = runif(amount,-20,20) * pi /5
     x     = (rep(kern,41) + runif_noise) * rescope /2
     y     = (rep(kern,each=41) + runif_noise) * rescope /2
@@ -153,10 +163,10 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
 
     #10.add Sphere (3D) data sets
   } else if(task == "Sphere"){
-
+    amount   = amount / 2
     R        = 2
-    alfa     = runif(amount / 4, 0, 50)* pi
-    sita     = runif(amount / 4, 0, 50)* pi * 2
+    alfa     = runif(amount, 0, 50)* pi
+    sita     = runif(amount, 0, 50)* pi * 2
 
     num_alfa = length(alfa)
     num_sita = length(sita)
@@ -222,8 +232,9 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     x5       = runif(x_amount,-2,-1.5)
     x6       = runif(x_amount,-1.5,-1)
     x7       = runif(x_amount,-1,-0.5)
-    x8       = runif(x_amount,-0.5,0)
-    x9       = runif(8*x_amount,0.1,5)
+    x8_amount= amount-round(amount/2)-7*x_amount
+    x8       = runif(x8_amount,-0.5,0)
+    x9       = runif(round(amount/2),0.1,5)
     x        = c(x1,x2,x3,x4,x5,x6,x7,x8,x9)
 
 
@@ -281,18 +292,19 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
     #7. add Three Line data sets
   } else if(task == "Three Line"){
 
-    x_amount = round(amount/3)
-    x1 = runif(x_amount,-5,-1)
-    x2 = runif(x_amount,-1,2)
-    x3 = runif(x_amount,2,5)
-    x  = c(x1,x2,x3)
-    y1 = runif(x_amount,3,3.5)
-    y2 = runif(x_amount,-3.5,-3)
-    y3 = runif(x_amount,0.5,0.8)
-    y  = c(y1,y2,y3) + rnorm(3*x_amount, 0, noise)
+    x_amount  = round(amount/3)
+    x3_amount = amount - x_amount * 2
+    x1        = runif(x_amount,-5,-1)
+    x2        = runif(x_amount,-1,2)
+    x3        = runif(x3_amount,2,5)
+    x         = c(x1,x2,x3)
+    y1        = runif(x_amount,3,3.5)
+    y2        = runif(x_amount,-3.5,-3)
+    y3        = runif(x3_amount,0.5,0.8)
+    y         = c(y1,y2,y3) + rnorm(amount, 0, noise)
 
-    x  = x * rescope
-    y  = y * rescope
+    x         = x * rescope
+    y         = y * rescope
 
     data.frame(x,y)
 
@@ -312,32 +324,30 @@ calculate_data = function(task, amount, noise, train.ratio, seed = 123, rescope 
 
     #9. add Parabola To Right data sets
   } else if(task == "Parabola To Right"){
-
-    x  = rexp(amount, 1)%%5
-    y1 = sqrt( x) + rnom_noise /2
-    y2 = -sqrt( x) + rnom_noise /2
-    y  = c(y1,y2)
-
-    x  = x * rescope
-    y  = y * rescope
+    x_amount = amount / 2 
+    x        = abs(rexp(x_amount, 1))
+    y1       = sqrt( x)
+    y2       = -sqrt( x)
+    y        = c(y1,y2) + rnom_noise
 
     data.frame( x, y)
 
     #10. add Precipice data sets
   } else if(task == "Precipice"){
 
-    x_amount = round(amount/7)
-    x1       = c(runif(x_amount,-5,-3),runif(x_amount,-2,-1))
-    x2       = runif(x_amount,-3,-2.5)
-    x3       = runif(x_amount,-2.5,-2)
-    x4       = runif(x_amount*3,-1,5)
-    x        = c(x1,x2,x3,x4)
+    x_amount  = round(amount/7)
+    x4_amount = amount - x_amount * 4
+    x1        = c(runif(x_amount,-5,-3),runif(x_amount,-2,-1))
+    x2        = runif(x_amount,-3,-2.5)
+    x3        = runif(x_amount,-2.5,-2)
+    x4        = runif(x4_amount,-1,5)
+    x         = c(x1,x2,x3,x4)
 
-    y1       = c(runif(x_amount,2.5,3),runif(x_amount,2.5,3))
-    y2       = -10* x2 - 27
-    y3       = 10 * x3 + 23
-    y4       = 1.5*cos((x4 + 1)*2* pi/6) + 1.2
-    y        = c(y1,y2,y3,y4) + rnorm(7*x_amount, 0, noise)
+    y1        = c(runif(x_amount,2.5,3),runif(x_amount,2.5,3))
+    y2        = -10* x2 - 27
+    y3        = 10 * x3 + 23
+    y4        = 1.5*cos((x4 + 1)*2* pi/6) + 1.2
+    y          = c(y1,y2,y3,y4) + rnorm(amount, 0, noise)
 
     data.frame( x, y)
 
