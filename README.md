@@ -31,7 +31,7 @@ Interactive machine learning playground for the mlr package done in shiny.
 
 ## How to start:
 Use this link:
-http://sebastian-gruber.shinyapps.io/mlrPlayground
+https://seb-gruber.shinyapps.io/mlrPlayground/
 
 ###### Or:
 Install the package and execute ``mlrPlayground::start()``.
