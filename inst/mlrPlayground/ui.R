@@ -84,14 +84,15 @@ shinyUI(
             ),
             tags$a(class = "more", onclick = "smoothScroll(document.getElementById('main'))", "Learn More")
           ),
-          tags$video(
-            autoplay = NA,
-            loop = NA,
-            muted = NA,
-            playsinline = NA,
-            src = "templated-industrious/images/banner1.mp4"
-            # src: https://de.videezy.com/hintergrunde/5085-molecular-plex-4k-motion-hintergrundschleife
-          )
+          HTML('<iframe src="https://www.youtube.com/embed/2WsoYgF0FgM?playlist=2WsoYgF0FgM&loop=1&autoplay=1&mute=1&enablejsapi=1"></iframe>')
+          #tags$video(
+          #  autoplay = NA,
+          #  loop = NA,
+          #  muted = NA,
+          #  playsinline = NA,
+            #src = "templated-industrious/images/banner1.mp4"
+            #src = "https://youtu.be/2WsoYgF0FgM"
+          #)
         ),
 
         #### MAIN

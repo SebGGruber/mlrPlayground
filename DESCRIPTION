@@ -37,9 +37,6 @@ Imports:
     shinytest,
     extraTrees,
     RWeka,
-    mvtnorm,
-    fpc,
-    clusterSim,
     clValid
 Suggests: 
     testthat

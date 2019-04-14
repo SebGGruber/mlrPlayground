@@ -3,7 +3,7 @@ output$prob_sel = renderUI({
   req(input$learner_1)
   req(req(input$tasktype) == "classif")
   # don't change value once learner changes
-  value = if (is.null(isolate(input$prob))) TRUE else isolate(input$prob)
+  value = if (is.null(isolate(input$prob))) FALSE else isolate(input$prob)
 
   tags$p(
     column(4, custom_checkboxInput("prob", "Use probabilities", value = value)),
@@ -38,7 +38,7 @@ output$learner_1_preds = renderUI({
 #  else{
 #    perf = performance(pred, measures = get(measure)) # use "get" cause string gives error
 #  }
-#  
+#
 #  len = length(perf)
 #  i1 = 1                  : ceiling(len/3)
 #  i2 = ceiling(len/3+1)   : ceiling(len*2/3)
@@ -64,7 +64,7 @@ output$learner_1_preds = renderUI({
     i1 = 1                  : ceiling(len/3)
     i2 = ceiling(len/3+1)   : ceiling(len*2/3)
     i3 = ceiling(len*2/3+1) : len
-
+    # create 3 tables
     splitLayout(
       renderTable({
         data.frame(Measure = names(perf)[i1], Value = perf[i1])
@@ -152,7 +152,7 @@ output$learner_2_preds = renderUI({
     i1 = 1                  : ceiling(len/3)
     i2 = ceiling(len/3+1)   : ceiling(len*2/3)
     i3 = ceiling(len*2/3+1) : len
-
+    # create 3 tables
     splitLayout(
       renderTable({
         data.frame(Measure = names(perf)[i1], Value = perf[i1])
