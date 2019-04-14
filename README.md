@@ -4,20 +4,28 @@
 Interactive machine learning playground for the mlr package done in shiny.
 
 
-Select predefined (but tunable) tasks:
 
-![Screenshot](https://i.imgur.com/aq5is74.png)
+#### Select predefined (but tunable) tasks:
 
-
-
-Select learner and plot prediction plane:
-
-![Screenshot](https://i.imgur.com/YxQunIa.png)
+<img src="https://i.imgur.com/BVxxNQx.gif" width="550">
 
 
-Adjust hyperparameters of learner and see the change in the predictions:
 
-![Screenshot](https://i.imgur.com/H1GdsGh.png)
+#### Select learner and its hyperparameters to view prediction plane:
+
+![Screenshot](https://i.imgur.com/vR5UWyN.gif)
+
+
+
+#### Compare different learners:
+
+![Screenshot](https://i.imgur.com/SzPSFle.gif)
+
+
+
+#### View learning curve and ROC plot:
+
+![Screenshot](https://i.imgur.com/WGdOKeJ.gif)
 
 
 
