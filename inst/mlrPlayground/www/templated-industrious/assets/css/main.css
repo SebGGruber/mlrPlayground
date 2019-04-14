@@ -1278,7 +1278,9 @@ ul.actions {
     flex-wrap: wrap;
     box-sizing: border-box; }
     .row > * {
-      box-sizing: border-box; }
+      box-sizing: border-box;
+      /*width: 100%;*/
+    }
     .row.gtr-uniform > * > :last-child {
       margin-bottom: 0; }
 

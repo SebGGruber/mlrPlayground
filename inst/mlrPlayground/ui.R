@@ -149,7 +149,8 @@ shinyUI(
                       hr(),
                       # separated for independent reactivity
                       uiOutput("min_max_modals_1"),
-                      uiOutput("min_max_modals_2")
+                      uiOutput("min_max_modals_2"),
+                      style = "width: 100%;"
                     )
                   )
                 )
