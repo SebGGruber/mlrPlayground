@@ -2134,7 +2134,7 @@ ul.icons {
     display: block;
     height: 100%;
     left: 0;
-    opacity: 0.45;
+    opacity: 0.25;
     position: absolute;
     top: 0;
     width: 100%;
@@ -2145,7 +2145,7 @@ ul.icons {
     display: block;
     height: 100%;
     left: 0;
-    opacity: 0.6;
+    opacity: 0.45;
     position: absolute;
     top: 0;
     webkit-linear-gradientidth: 100%;
@@ -2154,9 +2154,9 @@ ul.icons {
   #banner.small {
     height: 30vh !important;
     min-height: 30vh; }
-  @media screen and (max-width: 1280px) {
+  /*@media screen and (max-width: 1280px) {
     #banner video {
-      display: none; } }
+      display: none; } }*/
   @media screen and (max-width: 736px) {
     #banner {
       height: auto !important;
