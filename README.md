@@ -18,13 +18,14 @@ Select learner and its hyperparameters to view prediction plane:
 
 Compare different learners:
 
-![Screenshot](https://i.imgur.com/N652vbS.gifv)
+![Imgur](https://i.imgur.com/SzPSFle.gif)
 
 
 
 View learning curve and ROC plot:
 
 ![Screenshot](https://i.imgur.com/WGdOKeJ.gif)
+
 
 
 ## How to start:
