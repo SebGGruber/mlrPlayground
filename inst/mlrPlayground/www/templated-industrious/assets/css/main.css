@@ -1150,6 +1150,12 @@ ul.actions {
 }
 
 
+/*
+@media (min-width: 768px)
+.col-sm-4 {
+    width: 50% !important;
+}
+*/
 
 /* Grid */
 .row {

@@ -131,7 +131,7 @@ shinyUI(
                         "output.learner_amount < 2",
                         actionButton("addLearner", "add Learner", icon = icon("plus"))
                       ),
-                      style = "margin-left: auto; margin-right: auto"
+                      style = "margin-left: auto; margin-right: auto;"
                     ),
                     # parameter panel
                     conditionalPanel(

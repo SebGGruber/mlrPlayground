@@ -16,9 +16,9 @@ require(assertthat)
 require(kernlab)
 require(extraTrees)
 require(RWeka)
-require(mvtnorm)
-require(fpc)
-require(clusterSim)
+#require(mvtnorm) # can we not use this? R 3.5 is required
+#require(fpc)
+#require(clusterSim)
 require(clValid)
 require(testthat)
 
