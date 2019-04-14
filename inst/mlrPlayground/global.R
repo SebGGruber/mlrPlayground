@@ -15,6 +15,11 @@ require(R6)
 require(assertthat)
 require(kernlab)
 require(extraTrees)
+require(RWeka)
+require(mvtnorm)
+require(fpc)
+require(clusterSim)
+require(clValid)
 require(testthat)
 
 
@@ -53,3 +58,6 @@ color_2 = "#428bca"
 color_11 = "#d74852"
 # pred class 2
 color_21 = "#67a2d4"
+
+# there are two packages include dunn
+dunn = mlr::dunn

@@ -105,7 +105,24 @@ ClusterLearningProcess = R6Class(
           hoverinfo = "x+y+skip",
           showscale = FALSE
         ) %>%
-        plotly::layout(xaxis = list(title = "X"), yaxis = list(title = "Y"))
+        plotly::layout(
+          xaxis = list(title = ""),
+          yaxis = list(title = ""),
+          margin = list(
+            l = 0,
+            r = 0,
+            b = 0,
+            t = 0,
+            pad = 0
+          )
+        ) %>%
+        config(displayModeBar = FALSE, displaylogo = FALSE)
+        #restore warnings
+      # shinyjs::delay(expr = ({
+      #   options(warn = storeWarn)
+      # }), ms = 100)
+
+      # plot
     }
   ),
 

@@ -16,9 +16,19 @@ output$predictionPlot_2 = renderPlotly({
 
 output$table_measures_1 = renderUI({
   pred    = req(process$pred[["1"]]$test.set)
-  measures = lapply(req(process$task$measures), get)
-
-  perf = performance(pred, measures = measures)
+  measure = req(input$measure_sel)
+  task = req(process$task$train)
+  if (isolate(process$task$type) == "cluster"){
+    pred[["data"]][["response"]][is.na(pred[["data"]][["response"]])] = 3
+    mod = train("cluster.dbscan",task)
+    pred = predict(mod, task)
+    perf = performance(pred, measures = get(measure),task = task)
+    perf[is.na(perf)] = 0
+  }
+  else{
+    perf = performance(pred, measures = get(measure)) # use "get" cause string gives error
+  }
+  
   len = length(perf)
   i1 = 1                  : ceiling(len/3)
   i2 = ceiling(len/3+1)   : ceiling(len*2/3)
@@ -40,9 +50,19 @@ output$table_measures_1 = renderUI({
 
 
 output$table_measures_2 = renderUI({
-  pred    = req(process$pred[["2"]]$test.set)
-  measures = lapply(req(process$task$measures), get)
-  perf = performance(pred, measures = measures)
+  pred = req(process$pred[["2"]]$test.set)
+  measure = req(input$measure_sel)
+  task = req(process$task$train)
+  if (isolate(process$task$type) == "cluster"){
+    pred[["data"]][["response"]][is.na(pred[["data"]][["response"]])] = 3
+    mod = train("cluster.dbscan",task)
+    pred = predict(mod, task)
+    perf = performance(pred, measures = get(measure),task = task)
+    perf[is.na(perf)] = 0
+  }
+  else{
+    perf = performance(pred, measures = get(measure)) # use "get" cause string gives error
+  }
   len = length(perf)
   i1 = 1                  : ceiling(len/3)
   i2 = ceiling(len/3+1)   : ceiling(len*2/3)

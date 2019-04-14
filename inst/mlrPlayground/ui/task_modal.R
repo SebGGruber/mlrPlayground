@@ -5,7 +5,7 @@ modal_body = fluidRow(
     selectInput(
       "tasktype",
       label = "Select task type",
-      choices = list("Classification" = "classif", "Regression" = "regr")
+      choices = list("Classification" = "classif", "Regression" = "regr", "Clustering" = "cluster")
       #choices = list("Classification" = "classif", "Regression" = "regr", "Clustering" = "cluster", "Regression 3D" = "regr3d", "Classification 3D" = "classif3d")
     ),
     br(),
