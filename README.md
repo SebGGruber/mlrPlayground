@@ -1,8 +1,9 @@
 [![Build Status](https://travis-ci.com/SebGruber1996/mlrPlayground.svg?token=aseAdkuRs3BN4g6uWRsf&branch=dev)](https://travis-ci.com/SebGruber1996/mlrPlayground)
 
 # mlrPlayground
-Interactive machine learning playground for the mlr package done in shiny.
-
+The mlrPlayground is an interactive web application allowing the user to explore different kinds of machine learning datasets on predefined, but miscellaneous and customizable toy datasets in the domain of classification and regression. Information about the performance of each learner is given reactively in the form of prediction planes/lines, an high amount of different measures, a learning curve and an ROC plot.
+Additionally the hyperparameters of each learner can be changed to observe the change learner behaviour.
+In general the app is designed to work fully in real time, meaning every button acts as a trigger for an action. This improves the user experience hugely in most cases, but only if the dataset size is chosen appropriately based on the running machines performance. Plotting probabilities instead of classes also has a negative effect on the latter.
 
 
 #### Select predefined (but tunable) tasks:
