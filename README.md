@@ -35,7 +35,7 @@ Use this link:
 https://seb-gruber.shinyapps.io/mlrPlayground/
 
 ###### Or:
-Install the package and execute ``mlrPlayground::start()``.
+Install the package with ``devtools::install_github("SebGruber1996/mlrPlayground")`` and execute ``mlrPlayground::start()``.
 
 ###### Or:
 Clone the git, open the file ``inst/mlrPlayground/global.R`` in Rstudio and press the "start app" button.
