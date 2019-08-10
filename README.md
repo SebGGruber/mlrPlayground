@@ -2,7 +2,7 @@
 
 # mlrPlayground
 
-<img src="https://imgur.com/8ggI7qg" width="550">
+![](/images/07_welcome.gif)
 
 ## Quickstart:
 Use this link:
