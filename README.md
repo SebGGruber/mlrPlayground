@@ -1,6 +1,18 @@
 [![Build Status](https://travis-ci.com/SebGruber1996/mlrPlayground.svg?token=aseAdkuRs3BN4g6uWRsf&branch=dev)](https://travis-ci.com/SebGruber1996/mlrPlayground)
 
 # mlrPlayground
+
+<img src="https://imgur.com/8ggI7qg" width="550">
+
+## Quickstart:
+Use this link:
+https://compstat-lmu.shinyapps.io/mlrPlayground/
+
+###### Or:
+Install the package in R with ``devtools::install_github("SebGruber1996/mlrPlayground")`` and execute ``mlrPlayground::start()``.
+
+
+## Introduction
 The mlrPlayground is an interactive web application allowing the user to explore different kinds of machine learning datasets on predefined, but miscellaneous and customizable toy datasets in the domain of classification and regression. Information about the performance of each learner is given reactively in the form of prediction planes/lines, an high amount of different measures, a learning curve and an ROC plot.
 Additionally the hyperparameters of each learner can be changed to observe the change learner behaviour.
 In general the app is designed to work fully in real time, meaning every button acts as a trigger for an action. This improves the user experience hugely in most cases, but only if the dataset size is chosen appropriately based on the running machines performance. Plotting probabilities instead of classes also has a negative effect on the latter.
@@ -28,17 +40,6 @@ In general the app is designed to work fully in real time, meaning every button 
 
 ![Screenshot](https://i.imgur.com/WGdOKeJ.gif)
 
-
-
-## How to start:
-Use this link:
-https://seb-gruber.shinyapps.io/mlrPlayground/
-
-###### Or:
-Install the package with ``devtools::install_github("SebGruber1996/mlrPlayground")`` and execute ``mlrPlayground::start()``.
-
-###### Or:
-Clone the git, open the file ``inst/mlrPlayground/global.R`` in Rstudio and press the "start app" button.
 
 ## About the learner.config file (only for advanced users):
 The file is located in ``inst/mlrPlayground`` and offers highy adaptability for the learners and its hyperparameters.
