@@ -14,8 +14,8 @@ require(class)
 require(R6)
 require(assertthat)
 require(kernlab)
-require(extraTrees)
-require(RWeka)
+#require(extraTrees)
+#require(RWeka)
 #require(mvtnorm) # can we not use this? R 3.5 is required
 #require(fpc)
 #require(clusterSim)
@@ -60,4 +60,4 @@ color_11 = "#d74852"
 color_21 = "#67a2d4"
 
 # there are two packages include dunn
-dunn = mlr::dunn
+#dunn = mlr::dunn

@@ -98,8 +98,8 @@ ClassifLearningProcess = R6Class(
       x2_max = max(c(test.set$x2, train.set$x2)) * 1.1
       # caluclate grid predictions (length² data points)
       grid    = expand.grid(
-        x1 = seq(x1_min, x1_max, length.out = 50),
-        x2 = seq(x2_min, x2_max, length.out = 50)
+        x1 = seq(x1_min, x1_max, length.out = 49),
+        x2 = seq(x2_min, x2_max, length.out = 49)
       )
 
       # predictions for the defined grid

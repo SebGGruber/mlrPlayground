@@ -6,13 +6,13 @@ output$taskSelection = renderUI({
     choices = list(#"Circle", "XOR",
     #Classification
       "Circle",
-      "Two Circle",
+      #"Two Circle",
       "Two Circle + Point",
       "XOR",
-      "Gaussian",
+      #"Gaussian",
       "Across Spiral",
-      "Opposite Arc",
-      "Cross Sector"
+      "Opposite Arc"#,
+      #"Cross Sector"
     )
 
   } else if (input$tasktype == "classif3d") {
@@ -26,12 +26,12 @@ output$taskSelection = renderUI({
     #Regression
       "Linear ascend",
       "Log linear",
-      "Polyline",
+      #"Polyline",
       "Ascend Cosine",
-      "Tangent",
+      #"Tangent",
       "Sigmoid",
       "Three Line",
-      "Amplification Sine",
+      #"Amplification Sine",
       "Parabola To Right",
       "Precipice"
     )

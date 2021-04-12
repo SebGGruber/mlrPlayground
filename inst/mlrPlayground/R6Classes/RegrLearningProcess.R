@@ -7,7 +7,7 @@ RegrLearningProcess = R6Class(
     initialize = function(valid.learners) {
       measures = c(
         "mae", "mape", "medse", "rae", "spearmanrho", "medae", "sse", "expvar",
-        "kendalltau", "rmse", "mse", "rrse", "rsq", "sae", "arsq"#, "rmsle", "msle"#, not working
+        "kendalltau", "rmse", "mse", "rrse", "rsq", "sae"#, "arsq", "rmsle", "msle"#, not working
       )
       super$initialize(valid.learners, tasktype = "regr", measures = measures)
 

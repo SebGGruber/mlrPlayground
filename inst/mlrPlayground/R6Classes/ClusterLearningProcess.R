@@ -6,7 +6,7 @@ ClusterLearningProcess = R6Class(
 
     initialize = function(valid.learners) {
       measures = c(
-        "db", "dunn", "G1", "G2"
+        "db", "G1", "G2" # , "dunn"
       )
       super$initialize(valid.learners, tasktype = "cluster", measures = measures)
 

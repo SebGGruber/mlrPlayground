@@ -67,7 +67,7 @@ custom_radioButtons = function(id, label, choices){
   div(
     id = id,
     class="form-group shiny-input-radiogroup shiny-input-container",
-    shiny:::controlLabel(id, label),
+    shiny:::shinyInputLabel(id, label),
     #tags$h3(label),
     div(
       class = "radio",
