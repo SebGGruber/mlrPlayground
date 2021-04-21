@@ -101,11 +101,15 @@ custom_checkboxInput = function(id, label, value = FALSE){
   if (!is.null(value) && value)
     inp$attribs$checked = "checked"
 
-  tags$label(
-    id = id, # required to make tooltips work - no bugs discovered until now
-    class = "container",
-    helpText(label),
-    inp,
-    tags$span(class = "checkmark")
-  )
+  #fluidRow(
+    tags$label(
+      id = id, # required to make tooltips work - no bugs discovered until now
+      class = "container",
+      helpText(label),
+      inp,
+      tags$span(class = "checkmark")
+    )#,
+    #br(),
+    #br()
+  #)
 }

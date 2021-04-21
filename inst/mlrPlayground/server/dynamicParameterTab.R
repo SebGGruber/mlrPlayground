@@ -80,7 +80,7 @@ parameter_to_ui = function(parameter, i, learner) {
   # remove "." or tooltips wont work
   id = gsub("\\.", "", paste0(parameter$id, i, learner$id))
   input_width    = 4
-  helpText_width = 4
+  helpText_width = 5
   param_df = config$param_df
 
 
@@ -190,7 +190,7 @@ parameter_to_ui = function(parameter, i, learner) {
     }
 
     # UI element
-    tags$p(
+    fluidRow(
       helpText_col,
       column(
         input_width,
@@ -210,13 +210,13 @@ parameter_to_ui = function(parameter, i, learner) {
       if (is.null(isolate(input[[inp_id]]))) parameter$default else isolate(input[[inp_id]])
 
     # UI element
-    tags$p(
+    fluidRow(
       helpText_col,
       column(
         input_width,
         selectInput(inp_id, NULL, parameter$values, default)
       ),
-      br(),
+      #br(),
       bsTooltip(inp_id, placement = "right", tooltip)
     )
 
@@ -227,14 +227,16 @@ parameter_to_ui = function(parameter, i, learner) {
       if (is.null(isolate(input[[inp_id]]))) parameter$default else isolate(input[[inp_id]])
 
     # UI element
-    tags$p(
+    fluidRow(
       helpText_col,
       column(
         input_width,
         custom_checkboxInput(inp_id, NULL, default)
       ),
+      bsTooltip(inp_id, placement = "right", tooltip),
       br(),
-      bsTooltip(inp_id, placement = "right", tooltip)
+      br(),
+      br()
     )
 
   } else {
@@ -285,8 +287,7 @@ output$dynamicParameters_1 = renderUI({
   # compute (hidden) parameter panel
   conditionalPanel(
     paste0("output.showParam", 1, " == true"),
-    fluidRow(
-      br(),
+    fluidPage(
       ui_list
     ),
     style = "overflow-y:scroll; overflow-x:hidden; max-height: 800px; min-height: 800px"
@@ -309,8 +310,7 @@ output$dynamicParameters_2 = renderUI({
   # compute (hidden) parameter panel
   conditionalPanel(
     paste0("output.showParam", 2, " == true"),
-    fluidRow(
-      br(),
+    fluidPage(
       ui_list
     ),
     style = "overflow-y:scroll; overflow-x:hidden; max-height: 800px; min-height: 800px"
