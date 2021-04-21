@@ -9,7 +9,7 @@ output$taskSelection = renderUI({
       #"Two Circle",
       "Two Circle + Point",
       "XOR",
-      #"Gaussian",
+      "Gaussian",
       "Across Spiral",
       "Opposite Arc"#,
       #"Cross Sector"
@@ -29,7 +29,7 @@ output$taskSelection = renderUI({
       #"Polyline",
       "Ascend Cosine",
       #"Tangent",
-      "Sigmoid",
+      #"Sigmoid",
       "Three Line",
       #"Amplification Sine",
       "Parabola To Right",
