@@ -6,7 +6,7 @@
 
 ## Quickstart:
 Use this link:
-https://compstat-lmu.shinyapps.io/mlrPlayground/
+https://sebastian-gruber.shinyapps.io/mlrPlayground/
 
 ###### Or:
 Install the package in R with ``devtools::install_github("SebGruber1996/mlrPlayground")`` and execute ``mlrPlayground::start()``.
